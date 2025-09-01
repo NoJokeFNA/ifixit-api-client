@@ -141,7 +141,7 @@
         if (!res.ok) throw new Error('Failed to fetch data');
         devicesData = await res.json();
         renderTable();
-        renderChart(devicesData);
+        populateBrandFilter();
     }
 
     function getFilteredData() {
@@ -348,8 +348,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         loadData()
-        populateBrandFilter();
-        renderTable();
         document.getElementById('searchInput').addEventListener('input', renderTable);
         document.getElementById('brandFilter').addEventListener('change', renderTable);
         document.querySelectorAll('th[data-sort-key]').forEach(th => {

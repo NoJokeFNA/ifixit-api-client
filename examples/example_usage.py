@@ -1,5 +1,4 @@
 """Example usage of the iFixit API Client."""
-import json
 import logging
 
 from ifixit_api_client import IFixitAPIClient

@@ -1,8 +1,11 @@
 import logging
-import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+import os
 from typing import Any, Dict, List, Optional
+
+import requests
+import urllib3
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
 
 logger = logging.getLogger(__name__)
 
@@ -26,13 +29,15 @@ class IFixitAPIClient:
     BASE_URL = 'https://www.ifixit.com/api/2.0'
 
     def __init__(
-        self,
-        auth_token: Optional[str] = None,
-        app_id: Optional[str] = None,
-        retries: int = 3,
-        backoff_factor: float = 0.5,
-        timeout: int = 30,
-        log_level: int = logging.INFO,
+            self,
+            auth_token: Optional[str] = None,
+            app_id: Optional[str] = None,
+            retries: int = 3,
+            backoff_factor: float = 0.5,
+            timeout: int = 30,
+            log_level: int = logging.INFO,
+            proxy: bool = False,
+            allow_http: bool = False
     ):
         """Initialize the client.
 
@@ -55,10 +60,20 @@ class IFixitAPIClient:
             backoff_factor=backoff_factor,
             status_forcelist=[429, 500, 502, 503, 504],
             allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT',
-                             'DELETE'],
+                             'DELETE']
         )
+
         adapter = HTTPAdapter(max_retries=retry_strategy)
-        self.session.mount('https://', adapter)
+        if proxy:
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+            self.session.mount('https://', adapter)
+            if allow_http:
+                self.session.mount('http://', adapter)
+            self.session.proxies = {
+                "http": os.getenv("HTTP_PROXY"),
+                "https": os.getenv("HTTPS_PROXY")
+            }
 
     def _build_headers(self) -> Dict[str, str]:
         """Build headers for API requests.
@@ -77,12 +92,13 @@ class IFixitAPIClient:
         return headers
 
     def _request(
-        self,
-        method: str,
-        endpoint: str,
-        params: Optional[Dict[str, Any]] = None,
-        json: Optional[Dict[str, Any]] = None,
-        **kwargs,
+            self,
+            method: str,
+            endpoint: str,
+            params: Optional[Dict[str, Any]] = None,
+            json: Optional[Dict[str, Any]] = None,
+            proxy: bool = False,
+            **kwargs,
     ) -> Any:
         """Make an API request.
 
@@ -103,7 +119,7 @@ class IFixitAPIClient:
         url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
         logger.debug(f'Making {method} request to {url} with params={params}, '
-                     f'json={json}')
+                    f'json={json}')
 
         try:
             response = self.session.request(
@@ -113,6 +129,7 @@ class IFixitAPIClient:
                 params=params,
                 json=json,
                 timeout=self.timeout,
+                verify=False if proxy else True,
                 **kwargs,
             )
             response.raise_for_status()
@@ -252,6 +269,28 @@ class IFixitAPIClient:
         if offset is not None:
             params['offset'] = offset
         return self._request('GET', '/guides', params=params)
+
+    def get_all_guides(self, page_size: int = 100) -> List[Dict]:
+        """Get all guides by handling pagination.
+
+        Args:
+            page_size: Number of results per page.
+
+        Returns:
+            List of all guides.
+        """
+        all_guides: List[Dict] = []
+        offset = 0
+        while True:
+            batch = self.get_guides(limit=page_size, offset=offset)
+            if not batch:
+                break
+            all_guides.extend(batch)
+            offset += len(batch)
+            logger.info("Fetched %d guides, total so far: %d", len(batch), len(all_guides))
+            if len(batch) < page_size:
+                break
+        return all_guides
 
     def get_guide(self, guideid: int) -> Dict:
         """Get a specific guide.
@@ -964,14 +1003,22 @@ class IFixitAPIClient:
 
     # --- Wikis Endpoints ---
 
-    def get_category_hierarchy(self) -> Dict:
+    def get_category(self, device_name: Optional[str] = None, params: Optional[dict] = None) -> Dict:
         """Get the category hierarchy.
+
+        Args:
+            device_name: Optional device name to filter the hierarchy.
+            params: Optional parameters to customize the response.
 
         Returns:
             Hierarchy details.
         """
-        return self._request('GET', '/wikis/CATEGORY',
-                             params={'display': 'hierarchy'})
+        endpoint = '/wikis/CATEGORY'
+        if device_name:
+            endpoint += f'/{device_name}'
+        if not params:
+            params = {'display': 'hierarchy'}
+        return self._request('GET', endpoint, params=params)
 
     def get_wikis(self, namespace: str) -> List[Dict]:
         """Get wikis in a namespace.

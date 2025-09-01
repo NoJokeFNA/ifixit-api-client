@@ -1,0 +1,55 @@
+name: Update JSON Data
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight UTC
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  generate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tqdm requests
+
+      - name: Copy local ifixit_api_client
+        run: |
+          cp src/ifixit_api_client.py examples/ || echo "Local ifixit_api_client.py not found, assuming PyPI package"
+
+      - name: Debug directory structure
+        run: |
+          ls -R examples/
+          pwd
+
+      - name: Run example_categories.py
+        run: |
+          python examples/example_categories.py || {
+            echo "Script failed, check logs for details"
+            exit 1
+          }
+
+      - name: Verify output file
+        run: |
+          ls -l examples/devices_with_scores.json || echo "Output file not found"
+
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add examples/devices_with_scores.json
+          git commit -m "change(datasource): update devices_with_scores.json" || echo "change(datasource): no changes to commit"
+          git push

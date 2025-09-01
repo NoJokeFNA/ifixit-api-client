@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='ifixit-api-client',
@@ -11,7 +11,7 @@ setup(
     url='https://github.com/NoJokeFNA/ifixit-api-client',
     py_modules=['ifixit_api_client'],
     install_requires=[
-        'requests',
+        'setuptools', 'requests', 'urllib3'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',

@@ -1003,7 +1003,7 @@ class IFixitAPIClient:
 
     # --- Wikis Endpoints ---
 
-    def get_category_hierarchy(self, device_name: Optional[str] = None, params: Optional[dict] = None) -> Dict:
+    def get_category(self, device_name: Optional[str] = None, params: Optional[dict] = None) -> Dict:
         """Get the category hierarchy.
 
         Args:

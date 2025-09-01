@@ -45,7 +45,7 @@ def main():
     # print('Suggest:', json.dumps(suggest, indent=2, ensure_ascii=False))
 
     # Example: Durability score
-    device_data = client.get_category_hierarchy(device_name='Samsung_Galaxy_S22_Ultra', params=None)
+    device_data = client.get_category(device_name='Samsung_Galaxy_S22_Ultra', params=None)
     score = device_data.get("repairability_score", None)
     # print('Device data:', json.dumps(device_data, indent=2, ensure_ascii=False))
     # print('Repairability Score:', score)

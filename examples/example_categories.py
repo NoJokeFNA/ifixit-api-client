@@ -192,16 +192,16 @@ def get_child_devices_for_categories(
         exclude_subtrees: Mapping of target_category -> keys to skip.
     """
     try:
-        logger.info("Fetching category hierarchy...")
-        data = client.get_category_hierarchy(params={"display": "hierarchy"})
-        logger.debug("Category hierarchy fetched successfully")
+        logger.info("Fetching category...")
+        data = client.get_category(params={"display": "hierarchy"})
+        logger.debug("Category fetched successfully")
     except Exception as exc:
         status = getattr(getattr(exc, "response", None), "status_code", None)
         if status == 404:
-            logger.debug("Category hierarchy not found (404), returning empty results")
+            logger.debug("Category not found (404), returning empty results")
             data = {}
         else:
-            logger.error("Failed to fetch category hierarchy: %s", exc, exc_info=True)
+            logger.error("Failed to fetch category: %s", exc, exc_info=True)
             data = {}
 
     logger.info("Collecting child devices...")
@@ -298,26 +298,26 @@ def print_device_data(
         Returns:
             Tuple of (device_name, title, score_or_none, brand_or_none, link_or_none, error_message_or_none).
         """
-        title = _to_ifixit_title(device_name)
+        ifixit_title = _to_ifixit_title(device_name)
         for attempt in range(max_retries):
             try:
                 limiter.acquire()
-                data = client.get_category_hierarchy(device_name=title, params=None)
-                score = data.get("repairability_score")
-                brand = next(
+                data = client.get_category(device_name=ifixit_title, params=None)
+                repairability_score = data.get("repairability_score")
+                manufacturer = next(
                     (entry.get("value") for entry in data.get("info", []) if entry.get("name") == "Device Brand"),
                     None,
                 )
-                link = f"https://www.ifixit.com/Device/{title}"
-                return device_name, title, score, brand, link, None
-            except Exception as exc:
-                status = getattr(getattr(exc, "response", None), "status_code", None)
-                retry_after = getattr(getattr(exc, "response", None), "headers", {}).get("Retry-After")
+                repair_link = f"https://www.ifixit.com/Device/{ifixit_title}"
+                return device_name, ifixit_title, repairability_score, manufacturer, repair_link, None
+            except Exception as e:
+                status = getattr(getattr(e, "response", None), "status_code", None)
+                retry_after = getattr(getattr(e, "response", None), "headers", {}).get("Retry-After")
                 sleep_s = float(retry_after) if retry_after else base_backoff * (2 ** attempt)
                 transient = status in {429, 500, 502, 503, 504} or status is None
 
                 if status == 404:
-                    return device_name, title, None, None, None, str(exc)
+                    return device_name, ifixit_title, None, None, None, str(e)
 
                 if attempt < max_retries - 1 and transient:
                     time.sleep(sleep_s)
@@ -325,12 +325,12 @@ def print_device_data(
 
                 logger.error(
                     "Failed to fetch repairability score",
-                    exc_info=exc,
+                    exc_info=e,
                     extra={"device": device_name},
                 )
-                return device_name, title, None, None, None, str(exc)
+                return device_name, ifixit_title, None, None, None, str(e)
 
-        return device_name, title, None, None, None, "Max retries exceeded"
+        return device_name, ifixit_title, None, None, None, "Max retries exceeded"
 
     max_workers = 8
     requests_per_second = 4

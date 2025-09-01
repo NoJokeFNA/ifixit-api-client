@@ -3,7 +3,6 @@ import json
 import logging
 
 from ifixit_api_client import IFixitAPIClient
-from ifixit_utils import IFixitUtils
 
 
 def main():
@@ -15,8 +14,6 @@ def main():
         # app_id='your_app_id',  # Optional
         log_level=logging.DEBUG,
     )
-
-    ifixit_utils = IFixitUtils(client)
 
     # Example: Fetch guides
     guides = client.get_guides(limit=1)
@@ -52,10 +49,6 @@ def main():
     score = device_data.get("repairability_score", None)
     # print('Device data:', json.dumps(device_data, indent=2, ensure_ascii=False))
     # print('Repairability Score:', score)
-
-    # Example: Get all devices in a category
-    devices = ifixit_utils.get_device_list()
-    print('Devices:', json.dumps(devices, indent=2, ensure_ascii=False))
 
     # Example: Get current user (requires auth)
     # current_user = client.get_current_user()

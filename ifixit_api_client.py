@@ -114,7 +114,7 @@ class IFixitAPIClient:
         """
         url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
-        logger.info(f'Making {method} request to {url} with params={params}, '
+        logger.debug(f'Making {method} request to {url} with params={params}, '
                     f'json={json}')
 
         try:

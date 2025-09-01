@@ -1,11 +1,12 @@
 import json
 import logging
+import sys
 from typing import Dict, Iterable, List, Set, Union
 
 from ifixit_api_client import IFixitAPIClient
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 JsonValue = Union[None, Dict[str, "JsonValue"], List["JsonValue"], str, int, float, bool]
@@ -216,9 +217,209 @@ def get_child_devices_for_categories(
         logger.info("Empty device lists written to %s due to error", output_file)
 
 
+def _to_ifixit_title(name: str) -> str:
+    """Converts a human-readable device name into a baseline iFixit wiki title.
+
+    This is a baseline conversion; certain models (e.g., 'Plus') may require
+    special handling (see _candidate_titles_for_device).
+
+    Args:
+        name: Human-readable device name (e.g., 'Samsung Galaxy S22 Ultra').
+
+    Returns:
+        A baseline iFixit title format (e.g., 'Samsung_Galaxy_S22_Ultra').
+    """
+    import re
+
+    s = re.sub(r"\s+", "_", name.strip())
+    s = re.sub(r"[^A-Za-z0-9_]+", "_", s)
+    s = re.sub(r"_+", "_", s)
+    return s
+
+
+def print_repairability_scores(client: IFixitAPIClient, devices: List[str], output_file: str | None = None) -> None:
+    """Fetches and prints the repairability_score for each device, concurrently.
+
+    Uses a simple thread pool with a lightweight token-bucket style rate limiter
+    and retry with backoff to avoid hitting rate limits. Displays a progress bar.
+    Optionally writes all devices that have a score to a JSON file.
+
+    Args:
+        client: The IFixitAPIClient instance.
+        devices: List of human-readable device names.
+        output_file: Optional path to write devices with scores as JSON.
+            The JSON schema is a list of objects:
+            [{"name": str, "title": str, "repairability_score": number}, ...]
+    """
+    import time
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from typing import Optional, Tuple
+
+    class _RateLimiter:
+        """Simple token-bucket-like limiter for N requests per second."""
+
+        def __init__(self, rate_per_sec: int, burst: int | None = None) -> None:
+            self.rate = max(1, rate_per_sec)
+            self.capacity = burst if burst is not None else self.rate
+            self._tokens = float(self.capacity)
+            self._last = time.perf_counter()
+            self._lock = __import__("threading").Lock()
+
+        def acquire(self) -> None:
+            with self._lock:
+                now = time.perf_counter()
+                elapsed = now - self._last
+                self._last = now
+                # Refill tokens
+                self._tokens = min(self.capacity, self._tokens + elapsed * self.rate)
+                if self._tokens < 1.0:
+                    # Need to wait for next token
+                    needed = (1.0 - self._tokens) / self.rate
+                    time.sleep(needed)
+                    # After sleeping, assume exactly 1 token available
+                    self._last = time.perf_counter()
+                    self._tokens = max(0.0, self._tokens + needed * self.rate)
+                # Consume one token
+                self._tokens -= 1.0
+
+    def _fetch_score(device_name: str,
+                     max_retries: int = 3,
+                     base_backoff: float = 0.75) -> Tuple[str, str, Optional[float], Optional[str]]:
+        """Worker to fetch a single device's score with retries.
+
+        Returns:
+            (device_name, title, score_or_none, error_message_or_none)
+        """
+        title = _to_ifixit_title(device_name)
+        for attempt in range(max_retries):
+            try:
+                limiter.acquire()
+                data = client.get_category_hierarchy(device_name=title, params=None)
+                score = data.get("repairability_score")
+                return device_name, title, score, None
+            except Exception as exc:
+                # Try to read HTTP status if available
+                status = None
+                retry_after = None
+                resp = getattr(exc, "response", None)
+                if resp is not None:
+                    try:
+                        status = getattr(resp, "status_code", None)
+                        retry_after = resp.headers.get("Retry-After")
+                    except Exception:
+                        pass
+
+                # Respect Retry-After when present
+                if retry_after:
+                    try:
+                        sleep_s = float(retry_after)
+                    except ValueError:
+                        sleep_s = base_backoff * (2 ** attempt)
+                else:
+                    sleep_s = base_backoff * (2 ** attempt)
+
+                transient = status in {429, 500, 502, 503, 504} or status is None
+                if attempt < max_retries - 1 and transient:
+                    time.sleep(sleep_s)
+                    continue
+
+                logger.error("Failed to fetch repairability score for %s: %s", device_name, str(exc))
+                return device_name, title, None, str(exc)
+
+        return device_name, title, None, "Unknown error"
+
+    # De-duplicate while preserving order
+    seen: Set[str] = set()
+    unique_devices = [d for d in devices if not (d in seen or seen.add(d))]
+
+    if not unique_devices:
+        print("No devices provided.")
+        return
+
+    # Progress bar helper
+    def _render_progress(done: int, total: int, width: int = 30) -> str:
+        ratio = 0 if total == 0 else done / total
+        filled = int(round(width * ratio))
+        bar = "#" * filled + "-" * (width - filled)
+        percent = int(ratio * 100)
+        return f"[{bar}] {done}/{total} ({percent}%)"
+
+    def _print_progress(done: int, total: int, is_tty: bool, every_n: int = 0) -> None:
+        """Print progress either in-place (TTY) or periodically on new lines (non-TTY)."""
+        if is_tty:
+            # \x1b[K clears the line to the right of the cursor for clean updates
+            sys.stdout.write("\r" + _render_progress(done, total) + "\x1b[K")
+            sys.stdout.flush()
+        else:
+            # Fallback: print every N updates on a new line
+            if every_n <= 1 or done == 0 or done == total or (done % every_n == 0):
+                percent = 0 if total == 0 else int(done * 100 / total)
+                print(f"Progress: {done}/{total} ({percent}%)")
+
+    # Tune these values to your API allowance
+    max_workers = 8
+    requests_per_second = 4
+    limiter = _RateLimiter(rate_per_sec=requests_per_second)
+
+    print("\nRepairability scores for demo devices:")
+    total = len(unique_devices)
+    done = 0
+    is_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+    # For non-TTY, print roughly 20 updates
+    step_n = max(1, total // 20)
+    _print_progress(done, total, is_tty=is_tty, every_n=step_n)
+
+    results: List[Tuple[str, str, Optional[float], Optional[str]]] = []
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_map = {executor.submit(_fetch_score, name): name for name in unique_devices}
+        for fut in as_completed(future_map):
+            results.append(fut.result())
+            done += 1
+            _print_progress(done, total, is_tty=is_tty, every_n=step_n)
+
+    # Finalize progress line (ensure newline after last update)
+    if is_tty:
+        sys.stdout.write("\n")
+        sys.stdout.flush()
+
+    # Partition results
+    with_score = [(n, t, s) for n, t, s, err in results if s is not None]
+    without_score = [(n, t) for n, t, s, err in results if s is None]
+
+    # Sort devices with score by name for stable output
+    with_score.sort(key=lambda x: x[0])
+
+    # Output
+    if without_score:
+        print("\nDevices without a repairability score (or failed to fetch):")
+        for name, title in sorted(without_score, key=lambda x: x[0]):
+            print(f"- {name} ({title})")
+
+    print("\nRepairability scores for demo devices:")
+    for name, title, score in with_score:
+        print(f"- {name} ({title}): {score}")
+
+    print("\nSummary:")
+    print(f"- Devices with a repairability score: {len(with_score)}")
+    print(f"- Total devices processed: {len(results)}")
+
+    # Optionally write JSON with all devices that have a score
+    if output_file:
+        try:
+            payload = [
+                {"name": name, "title": title, "repairability_score": score}
+                for name, title, score in with_score
+            ]
+            with open(output_file, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2, ensure_ascii=False)
+            print(f"\nWrote {len(payload)} devices with a repairability score to: {output_file}")
+        except Exception as exc:
+            logger.error("Failed to write results to %s: %s", output_file, exc)
+
+
 def main():
     """Entry point for manual execution."""
-    client = IFixitAPIClient(log_level=logging.DEBUG)
+    client = IFixitAPIClient(log_level=logging.INFO)
     categories = ["iPhone", "Android Phone"]
     exclude_subtrees = {
         "iPhone": {"iPhone Accessories"},
@@ -227,6 +428,26 @@ def main():
     }
     output_file = "child_devices.json"
     get_child_devices_for_categories(client, categories, output_file, exclude_subtrees=exclude_subtrees)
+
+    # Go through the output file and execute the method below for both parent nodes
+    try:
+        with open(output_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        logger.error("Output file %s not found.", output_file)
+        return
+    except json.JSONDecodeError as e:
+        logger.error("Invalid JSON in %s: %s", output_file, e)
+        return
+
+    demo_devices = list(dict.fromkeys(data.get("iPhone", []) + data.get("Android Phone", [])))
+    if not demo_devices:
+        print("No demo devices found.")
+        return
+
+    # Write all devices with score to this file
+    scores_output_file = "devices_with_scores.json"
+    print_repairability_scores(client, demo_devices, output_file=scores_output_file)
 
 
 if __name__ == "__main__":

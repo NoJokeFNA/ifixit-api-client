@@ -195,13 +195,13 @@ def get_child_devices_for_categories(
         logger.info("Fetching category...")
         data = client.get_category(params={"display": "hierarchy"})
         logger.debug("Category fetched successfully")
-    except Exception as exc:
-        status = getattr(getattr(exc, "response", None), "status_code", None)
+    except Exception as e:
+        status = getattr(getattr(e, "response", None), "status_code", None)
         if status == 404:
             logger.debug("Category not found (404), returning empty results")
             data = {}
         else:
-            logger.error("Failed to fetch category: %s", exc, exc_info=True)
+            logger.error("Failed to fetch category: %s", e, exc_info=True)
             data = {}
 
     logger.info("Collecting child devices...")
@@ -211,8 +211,8 @@ def get_child_devices_for_categories(
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(child_devices, f, indent=2, ensure_ascii=False)
         logger.info("Child devices written to %s", output_file)
-    except Exception as exc:
-        logger.error("Failed to write to %s: %s", output_file, exc, exc_info=True)
+    except Exception as e:
+        logger.error("Failed to write to %s: %s", output_file, e, exc_info=True)
 
     for category, devices in child_devices.items():
         print(f"\nChild devices for {category}:")
@@ -375,9 +375,10 @@ def print_device_data(
             ]
             with open(output_file, "w", encoding="utf-8") as f:
                 json.dump(payload, f, indent=2, ensure_ascii=False)
-            print(f"\nWrote {len(payload)} devices with scores to: {output_file}")
-        except Exception as exc:
-            logger.error("Failed to write results to %s: %s", output_file, exc, exc_info=True)
+            logger.info("Wrote %d devices with scores to: %s", len(payload), output_file)
+        except Exception as e:
+            logger.error("Failed to write results to %s: %s", output_file, e, exc_info=True)
+            raise
 
 
 def main() -> None:
@@ -398,8 +399,8 @@ def main() -> None:
     except FileNotFoundError:
         logger.error("Output file %s not found", args.output)
         return
-    except json.JSONDecodeError as exc:
-        logger.error("Invalid JSON in %s: %s", args.output, exc)
+    except json.JSONDecodeError as e:
+        logger.error("Invalid JSON in %s: %s", args.output, e)
         return
 
     demo_devices = list(dict.fromkeys(data.get("iPhone", []) + data.get("Android Phone", [])))

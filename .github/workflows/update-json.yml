@@ -24,7 +24,9 @@ jobs:
           pip install tqdm requests
 
       - name: Run example_categories.py
-        run: python examples/example_categories.py
+        run: |
+          cp src/ifixit_api_client.py examples/
+          python examples/example_categories.py
 
       - name: Commit changes
         run: |

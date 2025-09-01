@@ -1,10 +1,6 @@
 """Example usage of the iFixit API Client."""
 import json
 import logging
-import time
-from typing import List
-
-from requests import RequestException
 
 from ifixit_api_client import IFixitAPIClient
 from ifixit_utils import IFixitUtils
@@ -71,68 +67,6 @@ def main():
     #     "password": ""
     # })
     # print('Token:', token)
-
-
-def get_device_list(
-    client: IFixitAPIClient,
-    limit: int = 100,
-    sleep_interval: float = 5.0
-) -> List[str]:
-    """Fetch a list of device titles from the iFixit API with pagination.
-
-    Args:
-        client: The iFixit API client instance.
-        limit: Number of results per page (default: 100).
-        sleep_interval: Seconds to wait between requests to avoid rate limits
-            (default: 5.0).
-
-    Returns:
-        A list of device titles (strings) that have associated wikis.
-
-    Raises:
-        RequestException: If an API request fails.
-        ValueError: If the JSON response cannot be parsed or is malformed.
-    """
-    devices: List[str] = []
-    offset: int = 0
-
-    while True:
-        try:
-            # Fetch the current page of devices
-            params = {"limit": limit, "offset": offset}
-            data = client.get_category_hierarchy(params=params)
-
-            # Extract device titles from the response
-            items = data.get("data", []) if isinstance(data, dict) else data
-            if not isinstance(items, list):
-                print("Unexpected response format: 'data' is not a list")
-                break
-
-            current_devices = [
-                item["title"] for item in items
-                if isinstance(item, dict) and "title" in item
-            ]
-            devices.extend(current_devices)
-
-            print(
-                f"Fetched {len(current_devices)} devices at offset {offset} "
-                f"(total: {len(devices)})"
-            )
-
-            # Check if there are more pages
-            if len(current_devices) < limit:
-                break
-
-            offset += limit
-            time.sleep(sleep_interval)
-        except RequestException as e:
-            print(f"API request failed at offset {offset}: {e}")
-            break
-        except ValueError as e:
-            print(f"Failed to parse JSON response at offset {offset}: {e}")
-            break
-
-    return devices
 
 
 if __name__ == '__main__':

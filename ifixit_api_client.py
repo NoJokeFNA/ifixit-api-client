@@ -1,6 +1,5 @@
 import logging
 import os
-from json import JSONDecodeError
 from typing import Any, Dict, List, Optional
 
 import requests
@@ -9,7 +8,6 @@ from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
 logger = logging.getLogger(__name__)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class IFixitAPIClient:
@@ -37,7 +35,8 @@ class IFixitAPIClient:
             retries: int = 3,
             backoff_factor: float = 0.5,
             timeout: int = 30,
-            log_level: int = logging.INFO
+            log_level: int = logging.INFO,
+            proxy: bool = False
     ):
         """Initialize the client.
 
@@ -60,14 +59,17 @@ class IFixitAPIClient:
             backoff_factor=backoff_factor,
             status_forcelist=[429, 500, 502, 503, 504],
             allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT',
-                             'DELETE'],
+                             'DELETE']
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
-        self.session.mount('https://', adapter)
-        self.session.proxies = {
-            "http": os.getenv("HTTP_PROXY"),
-            "https": os.getenv("HTTPS_PROXY")
-        }
+        if proxy:
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+            self.session.mount('https://', adapter)
+            self.session.proxies = {
+                "http": os.getenv("HTTP_PROXY"),
+                "https": os.getenv("HTTPS_PROXY")
+            }
 
     def _build_headers(self) -> Dict[str, str]:
         """Build headers for API requests.
@@ -91,6 +93,7 @@ class IFixitAPIClient:
             endpoint: str,
             params: Optional[Dict[str, Any]] = None,
             json: Optional[Dict[str, Any]] = None,
+            proxy: bool = False,
             **kwargs,
     ) -> Any:
         """Make an API request.
@@ -112,7 +115,7 @@ class IFixitAPIClient:
         url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
         logger.info(f'Making {method} request to {url} with params={params}, '
-                     f'json={json}')
+                    f'json={json}')
 
         try:
             response = self.session.request(
@@ -122,7 +125,7 @@ class IFixitAPIClient:
                 params=params,
                 json=json,
                 timeout=self.timeout,
-                verify=False,
+                verify=False if proxy else True,
                 **kwargs,
             )
             response.raise_for_status()

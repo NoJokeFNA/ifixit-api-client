@@ -63,4 +63,4 @@ jobs:
         env:
           GIT_AUTHOR_NAME: "GitHub Action"
           GIT_AUTHOR_EMAIL: "action@github.com"
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

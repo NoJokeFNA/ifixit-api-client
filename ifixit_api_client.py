@@ -211,13 +211,13 @@ class IFixitAPIClient:
 
     # --- Content Hierarchy Endpoints ---
 
-    def get_categories(self, params: Optional[dict] = None) -> List[Dict]:
+    def get_categories(self) -> List[Dict]:
         """Get all categories.
 
         Returns:
             List of categories.
         """
-        return self._request('GET', '/categories', params=params)
+        return self._request('GET', '/categories')
 
     # --- Media Endpoints ---
 

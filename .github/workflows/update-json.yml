@@ -54,7 +54,7 @@ jobs:
           git add examples/devices_with_scores.json
           git commit -m "change(datasource): update devices_with_scores.json" || echo "change(datasource): no changes to commit"
           # Attempt to pull and rebase
-          if ! git pull --rebase origin master; then
+          if ! git pull --rebase origin develop; then
             echo "Rebase failed, resetting changes and skipping push"
             git rebase --abort || true
             exit 0  # Exit gracefully to avoid failing the workflow

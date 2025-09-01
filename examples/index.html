@@ -140,7 +140,7 @@
         const res = await fetch('devices_with_scores.json');
         if (!res.ok) throw new Error('Failed to fetch data');
         devicesData = await res.json();
-        sortAndRender();
+        renderTable();
         renderChart(devicesData);
     }
 

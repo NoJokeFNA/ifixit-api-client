@@ -36,7 +36,8 @@ class IFixitAPIClient:
             backoff_factor: float = 0.5,
             timeout: int = 30,
             log_level: int = logging.INFO,
-            proxy: bool = False
+            proxy: bool = False,
+            allow_http: bool = False
     ):
         """Initialize the client.
 
@@ -61,11 +62,14 @@ class IFixitAPIClient:
             allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT',
                              'DELETE']
         )
+
         adapter = HTTPAdapter(max_retries=retry_strategy)
         if proxy:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
             self.session.mount('https://', adapter)
+            if allow_http:
+                self.session.mount('http://', adapter)
             self.session.proxies = {
                 "http": os.getenv("HTTP_PROXY"),
                 "https": os.getenv("HTTPS_PROXY")
@@ -283,7 +287,7 @@ class IFixitAPIClient:
                 break
             all_guides.extend(batch)
             offset += len(batch)
-            print("Fetched", len(batch), "guides, total so far:", len(all_guides))
+            logger.info("Fetched %d guides, total so far: %d", len(batch), len(all_guides))
             if len(batch) < page_size:
                 break
         return all_guides

@@ -1,6 +1,8 @@
 name: Update Devices JSON to gh-pages
 
 on:
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight UTC
   push:
     branches: [ master ]
   workflow_dispatch:
@@ -62,6 +64,8 @@ jobs:
 
       - name: Initialize gh-pages branch if it does not exist
         run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
           git fetch origin
           if ! git ls-remote --heads origin gh-pages | grep -q "gh-pages"; then
             echo "gh-pages branch does not exist, creating it..."

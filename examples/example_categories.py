@@ -229,49 +229,62 @@ def _to_ifixit_title(name: str) -> str:
     return s
 
 
-def fetch_teardown_guides(client: IFixitAPIClient) -> List[Dict[str, str | int]]:
-    """Fetches all teardown guide IDs and categories from iFixit API.
+def fetch_teardown_guides(client: IFixitAPIClient) -> Dict[str, List[Dict[str, str]]]:
+    """Fetches all teardown guides from iFixit API, grouped by category.
 
     Iteratively retrieves guides from offset=0 until no more entries are found,
-    collecting teardown_url (str) and category (string) in a thread-safe manner.
+    collecting teardown_url (str), title (str), and category (str) in a thread-safe manner.
+    Returns a dictionary mapping categories to lists of teardown guides, with the main
+    teardown (matching '<category> Teardown') as the first entry if available.
 
     Args:
         client: The IFixitAPIClient instance.
 
     Returns:
-        List of dictionaries, each containing 'teardown_url' (str) and 'category' (str).
-
-    Raises:
-        Exception: If an API request fails critically.
+        Dictionary mapping category to list of {'title': str, 'url': str}.
     """
     params = {"filter": "teardown", "limit": 200}
-    results: List[Dict[str, str | int]] = []
+    results: Dict[str, List[Dict[str, str]]] = {}
     lock = __import__("threading").Lock()
     offset = 0
     max_workers = 8
     batch_size = 200
 
-    def fetch_page(page_offset: int) -> List[Dict[str, str | int]]:
+    def is_main_teardown(category: str, title: str) -> bool:
+        """Checks if the guide title matches '<category> Teardown' pattern."""
+        normalized_category = _to_ifixit_title(category).lower()
+        normalized_title = _to_ifixit_title(title).lower()
+        expected_title = f"{normalized_category}_teardown"
+        return normalized_title == expected_title
+
+    def fetch_page(page_offset: int) -> Dict[str, List[Dict[str, str]]]:
         """Fetches a single page of guides for the given offset."""
         try:
             page_params = params.copy()
             page_params["offset"] = page_offset
             guides = client.get_guides(params=page_params)
-            return [
-                {"teardown_url": guide["url"], "category": guide["category"]}
-                for guide in guides
-                if guide.get("url") is not None and guide.get("category")
-            ]
+            page_results: Dict[str, List[Dict[str, str]]] = {}
+            for guide in guides:
+                if guide.get("url") is None or guide.get("category") is None or guide.get("title") is None:
+                    continue
+                category = guide["category"]
+                if category not in page_results:
+                    page_results[category] = []
+                page_results[category].append({
+                    "title": guide["title"],
+                    "url": guide["url"]
+                })
+            return page_results
         except Exception as e:
             status = getattr(getattr(e, "response", None), "status_code", None)
             logger.error("Failed to fetch offset %d: %s", page_offset, e)
-            return []
+            return {}
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         while True:
             offsets = list(range(offset, offset + batch_size * max_workers, batch_size))
             futures = {executor.submit(fetch_page, off): off for off in offsets}
-            page_results = []
+            page_results: Dict[str, List[Dict[str, str]]] = {}
 
             for future in tqdm.tqdm(
                     as_completed(futures),
@@ -282,18 +295,37 @@ def fetch_teardown_guides(client: IFixitAPIClient) -> List[Dict[str, str | int]]
             ):
                 page_guides = future.result()
                 with lock:
-                    page_results.extend(page_guides)
+                    for category, guides in page_guides.items():
+                        if category not in page_results:
+                            page_results[category] = []
+                        page_results[category].extend(guides)
 
             if not page_results:
                 break
 
             with lock:
-                results.extend(page_results)
+                for category, guides in page_results.items():
+                    if category not in results:
+                        results[category] = []
+                    results[category].extend(guides)
 
             offset += batch_size * max_workers
             logger.debug("Processed batch, new offset: %d", offset)
 
-    logger.info("Fetched %d teardown guides", len(results))
+    # Sort guides for each category, prioritizing main teardown
+    for category in results:
+        main_teardown = None
+        sub_teardowns = []
+        for guide in results[category]:
+            if is_main_teardown(category, guide["title"]):
+                main_teardown = guide
+            else:
+                sub_teardowns.append(guide)
+        # Sort sub_teardowns by title for consistency
+        sub_teardowns.sort(key=lambda x: x["title"])
+        results[category] = ([main_teardown] if main_teardown else []) + sub_teardowns
+
+    logger.info("Fetched %d categories with teardown guides", len(results))
     return results
 
 
@@ -302,25 +334,9 @@ def print_device_data(
         devices: List[str],
         output_file: Optional[str] = None,
 ) -> None:
-    """Fetches and prints device repairability scores and guide IDs concurrently.
-
-    Uses a thread pool with rate limiting to fetch data for each device.
-    Matches devices with teardown guides by name=category to include teardown_url.
-    Displays a progress bar using tqdm. Non-critical errors (e.g., 404) are
-    suppressed from console output. Optionally writes devices with scores to a JSON file.
-
-    Args:
-        client: The IFixitAPIClient instance.
-        devices: List of human-readable device names.
-        output_file: Optional path to write devices with scores as JSON.
-            Format: [{"name": str, "title": str, "repairability_score": number,
-                      "brand": str, "link": str, "teardown_url": str}, ...]
-    """
-    # Fetch teardown guides
+    """Fetches and prints device repairability scores and guide URLs concurrently."""
     logger.info("Fetching teardown guides for matching...")
     teardown_guides = fetch_teardown_guides(client)
-    # Create a mapping of category (device name) to url
-    guide_map = {guide["category"]: guide["teardown_url"] for guide in teardown_guides}
 
     # Deduplicate while preserving order
     seen: Set[str] = set()
@@ -356,16 +372,7 @@ def print_device_data(
     def _fetch_score(
             device_name: str, max_retries: int = 3, base_backoff: float = 0.75
     ) -> Tuple[str, str, Optional[float], Optional[str], Optional[str], Optional[str]]:
-        """Fetches a single device's score with retries.
-
-        Args:
-            device_name: Human-readable device name.
-            max_retries: Maximum number of retry attempts.
-            base_backoff: Base backoff time in seconds for exponential retry.
-
-        Returns:
-            Tuple of (device_name, title, score_or_none, brand_or_none, link_or_none, error_message_or_none).
-        """
+        """Fetches a single device's score with retries."""
         ifixit_title = _to_ifixit_title(device_name)
         for attempt in range(max_retries):
             try:
@@ -379,26 +386,21 @@ def print_device_data(
                 repair_link = f"https://www.ifixit.com/Device/{ifixit_title}"
                 return device_name, ifixit_title, repairability_score, manufacturer, repair_link, None
             except Exception as e:
-                # Check for HTTP status code
                 response = getattr(e, "response", None)
                 status_code = getattr(response, "status_code", None) if response else None
                 retry_after = getattr(response, "headers", {}).get("Retry-After") if response else None
                 sleep_s = float(retry_after) if retry_after else base_backoff * (2 ** attempt)
-                # Retry on transient errors (429, 500, 502, 503, 504)
                 if status_code in {429, 500, 502, 503, 504} and attempt < max_retries - 1:
                     time.sleep(sleep_s)
                     continue
-                # Handle 404 specifically
                 if status_code == 404:
                     return device_name, ifixit_title, None, None, None, str(e)
-                # Log other errors and return failure
                 logger.error(
                     "Failed to fetch repairability score",
                     exc_info=e,
                     extra={"device": device_name},
                 )
                 return device_name, ifixit_title, None, None, None, str(e)
-
         return device_name, ifixit_title, None, None, None, "Max retries exceeded"
 
     max_workers = 8
@@ -430,14 +432,18 @@ def print_device_data(
 
     print("\nRepairability scores for devices:")
     for name, title, score, brand, link in with_score:
-        teardown_url = guide_map.get(name)
-        guide_str = f", Teardown URL: {teardown_url}" if teardown_url is not None else ""
-        print(f"- {name} ({title}): {score}{guide_str}")
+        teardown_urls = teardown_guides.get(name, [])
+        if teardown_urls:
+            print(
+                f"- {name} ({title}): {score}, Teardown URLs: {[g['title'] + ': ' + g['url'] for g in teardown_urls]}")
+        else:
+            print(f"- {name} ({title}): {score}, No teardown URLs found")
 
     print("\nSummary:")
     print(f"- Devices with a repairability score: {len(with_score)}")
     print(f"- Total devices processed: {len(results)}")
-    print(f"- Devices with matched guide IDs: {sum(1 for name, _, _, _, _ in with_score if name in guide_map)}")
+    print(
+        f"- Devices with matched teardown URLs: {sum(1 for name, _, _, _, _ in with_score if name in teardown_guides)}")
 
     if output_file:
         try:
@@ -448,7 +454,10 @@ def print_device_data(
                     "repairability_score": score,
                     "brand": brand,
                     "link": link,
-                    "teardown_url": guide_map.get(name)
+                    "teardown_urls": [
+                        {"title": guide["title"], "url": guide["url"]}
+                        for guide in teardown_guides.get(name, [])
+                    ]
                 }
                 for name, title, score, brand, link in with_score
             ]

@@ -1,6 +1,8 @@
 name: Update Devices JSON to gh-pages
 
 on:
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight UTC
   push:
     branches: [ master ]
   workflow_dispatch:

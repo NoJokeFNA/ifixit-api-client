@@ -37,13 +37,13 @@ jobs:
       - name: Copy local ifixit_api_client
         run: |
           if [ -f src/ifixit_api_client.py ]; then
-            cp src/ifixit_api_client.py examples/
+            cp src/ifixit_api_client.py web/
           else
             echo "Local ifixit_api_client.py not found, assuming PyPI package"
           fi
 
-      - name: Run example_categories.py
-        working-directory: examples
+      - name: Run fetch_device_data.py
+        working-directory: web
         run: |
           python example_categories.py > example_categories.log 2>&1 || {
             echo "Script failed, check logs for details"
@@ -52,7 +52,7 @@ jobs:
           }
 
       - name: Verify output file
-        working-directory: examples
+        working-directory: web
         run: |
           ls -l devices_with_scores.json || echo "Output file not found"
 
@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: script-logs
-          path: examples/example_categories.log
+          path: web/example_categories.log
 
       - name: Initialize gh-pages branch if it does not exist
         run: |
@@ -97,9 +97,9 @@ jobs:
       - name: Copy JSON to gh-pages branch
         run: |
           mkdir -p gh-pages
-          cp examples/devices_with_scores.json gh-pages/devices_with_scores.json
-          cp examples/index.html gh-pages/index.html
-          cp examples/favicon.png gh-pages/favicon.png
+          cp web/devices_with_scores.json gh-pages/devices_with_scores.json
+          cp web/index.html gh-pages/index.html
+          cp web/favicon.png gh-pages/favicon.png
 
       - name: Commit and push to gh-pages
         run: |

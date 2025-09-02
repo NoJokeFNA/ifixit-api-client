@@ -1,15 +1,16 @@
-name: Update JSON Data
+name: Update Devices JSON
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Daily at midnight UTC
+    - cron: '0 0 * * 0' # Every Sunday at midnight
   push:
     branches: [ master ]
   workflow_dispatch:
 
 jobs:
-  generate-json:
+  update-devices-json:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.13.0'
 
       - name: Install dependencies
         run: |
@@ -29,7 +30,11 @@ jobs:
 
       - name: Copy local ifixit_api_client
         run: |
-          cp src/ifixit_api_client.py examples/ || echo "Local ifixit_api_client.py not found, assuming PyPI package"
+          if [ -f src/ifixit_api_client.py ]; then
+            cp src/ifixit_api_client.py examples/
+          else
+            echo "Local ifixit_api_client.py not found, assuming PyPI package"
+          fi
 
       - name: Debug directory structure
         run: |
@@ -37,30 +42,41 @@ jobs:
           pwd
 
       - name: Run example_categories.py
+        working-directory: examples
         run: |
-          python examples/example_categories.py || {
+          python example_categories.py > example_categories.log 2>&1 || {
             echo "Script failed, check logs for details"
+            cat example_categories.log
             exit 1
           }
 
       - name: Verify output file
+        working-directory: examples
         run: |
-          ls -l examples/devices_with_scores.json || echo "Output file not found"
+          ls -l devices_with_scores.json || echo "Output file not found"
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: script-logs
+          path: examples/example_categories.log
 
       - name: Commit changes
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add examples/devices_with_scores.json
-          git commit -m "change(datasource): update devices_with_scores.json" || echo "change(datasource): no changes to commit"
-          # Attempt to pull and rebase
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "change(datasource): update devices_with_scores.json"
           if ! git pull --rebase origin master; then
             echo "Rebase failed, resetting changes and skipping push"
             git rebase --abort || true
-            exit 0  # Exit gracefully to avoid failing the workflow
+            exit 0
           fi
           git push
         env:
-          GIT_AUTHOR_NAME: "GitHub Action"
-          GIT_AUTHOR_EMAIL: "action@github.com"
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}

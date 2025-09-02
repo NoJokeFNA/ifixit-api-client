@@ -45,9 +45,9 @@ jobs:
       - name: Run fetch_device_data.py
         working-directory: web
         run: |
-          python example_categories.py > example_categories.log 2>&1 || {
+          python fetch_device_data.py > fetch_device_data.log 2>&1 || {
             echo "Script failed, check logs for details"
-            cat example_categories.log
+            cat fetch_device_data.log
             exit 1
           }
 
@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: script-logs
-          path: web/example_categories.log
+          path: web/fetch_device_data.log
 
       - name: Initialize gh-pages branch if it does not exist
         run: |

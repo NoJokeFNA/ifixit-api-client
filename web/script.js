@@ -87,12 +87,10 @@ function populateTable(data) {
 
         let teardownHtml = '—';
         if (d.teardown_urls && d.teardown_urls.length > 0) {
-            teardownHtml = `<span class="teardown-toggle" data-index="${index}">[Teardowns] x${d.teardown_urls.length}</span>
-        <div class="teardown-dropdown" data-index="${index}">
-            ${d.teardown_urls.map(g =>
-                `<a href="${g.url}" target="_blank">${g.title}</a>`
-            ).join('')}
-        </div>`;
+            teardownHtml = `<span class="teardown-toggle" data-index="${index}">[Teardowns]<span class="teardown-count"> x${d.teardown_urls.length}</span></span>
+            <div class="teardown-dropdown" data-index="${index}">
+                ${d.teardown_urls.map(g => `<a href="${g.url}" target="_blank">${g.title}</a>`).join('')}
+            </div>`;
         }
 
         tr.innerHTML = `

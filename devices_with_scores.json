@@ -997,7 +997,7 @@
     "repairability_score": 5,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+Teardown/24016"
+    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+camera+Teardown/53645"
   },
   {
     "name": "Samsung Galaxy S5 Active",
@@ -1349,7 +1349,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_5",
-    "teardown_url": "https://www.ifixit.com/Teardown/Apple+A6+Teardown/10528"
+    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+5+Teardown/42582"
   },
   {
     "name": "iPhone 5c",
@@ -1365,7 +1365,7 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_5s",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+5s+Teardown/73010"
+    "teardown_url": "https://www.ifixit.com/Teardown/Apple+A7+Teardown/17682"
   },
   {
     "name": "iPhone 6",
@@ -1373,7 +1373,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_6",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+6+Teardown/131237"
+    "teardown_url": "https://www.ifixit.com/Teardown/Apple+iPhone+6+Teardown+by+X-ray/29640"
   },
   {
     "name": "iPhone 6 Plus",

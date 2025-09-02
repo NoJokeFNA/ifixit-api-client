@@ -4,1294 +4,1479 @@
     "title": "Amazon_Fire_Phone",
     "repairability_score": 3,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Amazon_Fire_Phone"
+    "link": "https://www.ifixit.com/Device/Amazon_Fire_Phone",
+    "guideid": 27458
   },
   {
     "name": "Asus Zenfone 3 Max",
     "title": "Asus_Zenfone_3_Max",
     "repairability_score": 6,
     "brand": "Asus",
-    "link": "https://www.ifixit.com/Device/Asus_Zenfone_3_Max"
+    "link": "https://www.ifixit.com/Device/Asus_Zenfone_3_Max",
+    "guideid": null
   },
   {
     "name": "Coolpad 3300A",
     "title": "Coolpad_3300A",
     "repairability_score": 5,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Coolpad_3300A"
+    "link": "https://www.ifixit.com/Device/Coolpad_3300A",
+    "guideid": null
   },
   {
     "name": "Essential Phone",
     "title": "Essential_Phone",
     "repairability_score": 1,
     "brand": "Essential",
-    "link": "https://www.ifixit.com/Device/Essential_Phone"
+    "link": "https://www.ifixit.com/Device/Essential_Phone",
+    "guideid": 96764
   },
   {
     "name": "Fairphone 1",
     "title": "Fairphone_1",
     "repairability_score": 7,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Fairphone_1"
+    "link": "https://www.ifixit.com/Device/Fairphone_1",
+    "guideid": 20527
   },
   {
     "name": "Fairphone 2",
     "title": "Fairphone_2",
     "repairability_score": 10,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Fairphone_2"
+    "link": "https://www.ifixit.com/Device/Fairphone_2",
+    "guideid": 52523
   },
   {
     "name": "Fairphone 3",
     "title": "Fairphone_3",
     "repairability_score": 10,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Fairphone_3"
+    "link": "https://www.ifixit.com/Device/Fairphone_3",
+    "guideid": 125573
   },
   {
     "name": "Fairphone 4",
     "title": "Fairphone_4",
     "repairability_score": 10,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Fairphone_4"
+    "link": "https://www.ifixit.com/Device/Fairphone_4",
+    "guideid": null
   },
   {
     "name": "Fairphone 5",
     "title": "Fairphone_5",
     "repairability_score": 10,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Fairphone_5"
+    "link": "https://www.ifixit.com/Device/Fairphone_5",
+    "guideid": null
   },
   {
     "name": "Galaxy Note10 Plus",
     "title": "Galaxy_Note10_Plus",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Galaxy_Note10_Plus"
+    "link": "https://www.ifixit.com/Device/Galaxy_Note10_Plus",
+    "guideid": 125616
   },
   {
     "name": "Google Pixel",
     "title": "Google_Pixel",
     "repairability_score": 7,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel"
+    "link": "https://www.ifixit.com/Device/Google_Pixel",
+    "guideid": null
   },
   {
     "name": "Google Pixel 2 XL",
     "title": "Google_Pixel_2_XL",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_2_XL"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_2_XL",
+    "guideid": 98093
   },
   {
     "name": "Google Pixel 3",
     "title": "Google_Pixel_3",
     "repairability_score": 4,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_3"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_3",
+    "guideid": 113763
   },
   {
     "name": "Google Pixel 3 XL",
     "title": "Google_Pixel_3_XL",
     "repairability_score": 4,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_3_XL"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_3_XL",
+    "guideid": 113656
   },
   {
     "name": "Google Pixel 3a",
     "title": "Google_Pixel_3a",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_3a"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_3a",
+    "guideid": 123256
   },
   {
     "name": "Google Pixel 3a XL",
     "title": "Google_Pixel_3a_XL",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_3a_XL"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_3a_XL",
+    "guideid": 123297
   },
   {
     "name": "Google Pixel 4",
     "title": "Google_Pixel_4",
     "repairability_score": 4,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_4"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_4",
+    "guideid": null
   },
   {
     "name": "Google Pixel 4 XL",
     "title": "Google_Pixel_4_XL",
     "repairability_score": 4,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_4_XL"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_4_XL",
+    "guideid": 127320
   },
   {
     "name": "Google Pixel 4a",
     "title": "Google_Pixel_4a",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_4a"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_4a",
+    "guideid": null
   },
   {
     "name": "Google Pixel 5",
     "title": "Google_Pixel_5",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_5"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_5",
+    "guideid": null
   },
   {
     "name": "Google Pixel 5a",
     "title": "Google_Pixel_5a",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_5a"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_5a",
+    "guideid": null
   },
   {
     "name": "Google Pixel 6",
     "title": "Google_Pixel_6",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_6"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_6",
+    "guideid": null
   },
   {
     "name": "Google Pixel 6 Pro",
     "title": "Google_Pixel_6_Pro",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_6_Pro"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_6_Pro",
+    "guideid": null
   },
   {
     "name": "Google Pixel 6a",
     "title": "Google_Pixel_6a",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_6a"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_6a",
+    "guideid": null
   },
   {
     "name": "Google Pixel 7",
     "title": "Google_Pixel_7",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_7"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_7",
+    "guideid": null
   },
   {
     "name": "Google Pixel 7 Pro",
     "title": "Google_Pixel_7_Pro",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_7_Pro"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_7_Pro",
+    "guideid": null
   },
   {
     "name": "Google Pixel 7a",
     "title": "Google_Pixel_7a",
     "repairability_score": 4,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_7a"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_7a",
+    "guideid": null
   },
   {
     "name": "Google Pixel 8",
     "title": "Google_Pixel_8",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_8"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_8",
+    "guideid": null
   },
   {
     "name": "Google Pixel 8 Pro",
     "title": "Google_Pixel_8_Pro",
     "repairability_score": 6,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_8_Pro"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_8_Pro",
+    "guideid": null
   },
   {
     "name": "Google Pixel 9",
     "title": "Google_Pixel_9",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_9"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_9",
+    "guideid": null
   },
   {
     "name": "Google Pixel 9 Pro",
     "title": "Google_Pixel_9_Pro",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro",
+    "guideid": null
   },
   {
     "name": "Google Pixel 9 Pro Fold",
     "title": "Google_Pixel_9_Pro_Fold",
     "repairability_score": 4,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro_Fold"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro_Fold",
+    "guideid": null
   },
   {
     "name": "Google Pixel 9 Pro XL",
     "title": "Google_Pixel_9_Pro_XL",
     "repairability_score": 5,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro_XL"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro_XL",
+    "guideid": 176196
   },
   {
     "name": "Google Pixel Fold",
     "title": "Google_Pixel_Fold",
     "repairability_score": 3,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_Fold"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_Fold",
+    "guideid": null
   },
   {
     "name": "Google Pixel XL",
     "title": "Google_Pixel_XL",
     "repairability_score": 7,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Google_Pixel_XL"
+    "link": "https://www.ifixit.com/Device/Google_Pixel_XL",
+    "guideid": 71237
   },
   {
     "name": "HMD Fusion",
     "title": "HMD_Fusion",
     "repairability_score": 9,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/HMD_Fusion"
+    "link": "https://www.ifixit.com/Device/HMD_Fusion",
+    "guideid": null
   },
   {
     "name": "HMD Skyline",
     "title": "HMD_Skyline",
     "repairability_score": 9,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/HMD_Skyline"
+    "link": "https://www.ifixit.com/Device/HMD_Skyline",
+    "guideid": null
   },
   {
     "name": "HMD Skyline Business",
     "title": "HMD_Skyline_Business",
     "repairability_score": 9,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/HMD_Skyline_Business"
+    "link": "https://www.ifixit.com/Device/HMD_Skyline_Business",
+    "guideid": null
   },
   {
     "name": "HTC Desire 700 Dual Sim",
     "title": "HTC_Desire_700_Dual_Sim",
     "repairability_score": 8,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_Desire_700_Dual_Sim"
+    "link": "https://www.ifixit.com/Device/HTC_Desire_700_Dual_Sim",
+    "guideid": null
   },
   {
     "name": "HTC MyTouch 4G",
     "title": "HTC_MyTouch_4G",
     "repairability_score": 6,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_MyTouch_4G"
+    "link": "https://www.ifixit.com/Device/HTC_MyTouch_4G",
+    "guideid": null
   },
   {
     "name": "HTC One",
     "title": "HTC_One",
     "repairability_score": 1,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_One"
+    "link": "https://www.ifixit.com/Device/HTC_One",
+    "guideid": 13494
   },
   {
     "name": "HTC One M8",
     "title": "HTC_One_M8",
     "repairability_score": 2,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_One_M8"
+    "link": "https://www.ifixit.com/Device/HTC_One_M8",
+    "guideid": 23615
   },
   {
     "name": "HTC One M9",
     "title": "HTC_One_M9",
     "repairability_score": 2,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_One_M9"
+    "link": "https://www.ifixit.com/Device/HTC_One_M9",
+    "guideid": 39166
   },
   {
     "name": "HTC One Mini 2",
     "title": "HTC_One_Mini_2",
     "repairability_score": 5,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_One_Mini_2"
+    "link": "https://www.ifixit.com/Device/HTC_One_Mini_2",
+    "guideid": null
   },
   {
     "name": "HTC One X",
     "title": "HTC_One_X",
     "repairability_score": 3,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_One_X"
+    "link": "https://www.ifixit.com/Device/HTC_One_X",
+    "guideid": null
   },
   {
     "name": "HTC Surround",
     "title": "HTC_Surround",
     "repairability_score": 5,
     "brand": "HTC",
-    "link": "https://www.ifixit.com/Device/HTC_Surround"
+    "link": "https://www.ifixit.com/Device/HTC_Surround",
+    "guideid": 4469
   },
   {
     "name": "Huawei Ascend W1",
     "title": "Huawei_Ascend_W1",
     "repairability_score": 7,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Ascend_W1"
+    "link": "https://www.ifixit.com/Device/Huawei_Ascend_W1",
+    "guideid": null
   },
   {
     "name": "Huawei Mate 10 Pro",
     "title": "Huawei_Mate_10_Pro",
     "repairability_score": 4,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_10_Pro"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_10_Pro",
+    "guideid": 100096
   },
   {
     "name": "Huawei Mate 20 Pro",
     "title": "Huawei_Mate_20_Pro",
     "repairability_score": 4,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_20_Pro"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_20_Pro",
+    "guideid": 114159
   },
   {
     "name": "Huawei Mate 20 X 5G",
     "title": "Huawei_Mate_20_X_5G",
     "repairability_score": 4,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_20_X_5G"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_20_X_5G",
+    "guideid": 124808
   },
   {
     "name": "Huawei Mate 30 Pro",
     "title": "Huawei_Mate_30_Pro",
     "repairability_score": 5,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_30_Pro"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_30_Pro",
+    "guideid": 129894
   },
   {
     "name": "Huawei Mate 40 Pro",
     "title": "Huawei_Mate_40_Pro",
     "repairability_score": 4,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_40_Pro"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_40_Pro",
+    "guideid": 138729
   },
   {
     "name": "Huawei Mate 8",
     "title": "Huawei_Mate_8",
     "repairability_score": 6,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_8"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_8",
+    "guideid": 64920
   },
   {
     "name": "Huawei Mate 9",
     "title": "Huawei_Mate_9",
     "repairability_score": 5,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_9"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_9",
+    "guideid": 98335
   },
   {
     "name": "Huawei Mate Xs",
     "title": "Huawei_Mate_Xs",
     "repairability_score": 2,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Mate_Xs"
+    "link": "https://www.ifixit.com/Device/Huawei_Mate_Xs",
+    "guideid": 132809
   },
   {
     "name": "Huawei P20 Pro",
     "title": "Huawei_P20_Pro",
     "repairability_score": 4,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_P20_Pro"
+    "link": "https://www.ifixit.com/Device/Huawei_P20_Pro",
+    "guideid": 104605
   },
   {
     "name": "Huawei P30 Pro",
     "title": "Huawei_P30_Pro",
     "repairability_score": 4,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_P30_Pro"
+    "link": "https://www.ifixit.com/Device/Huawei_P30_Pro",
+    "guideid": 122028
   },
   {
     "name": "Huawei P9",
     "title": "Huawei_P9",
     "repairability_score": 7,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_P9"
+    "link": "https://www.ifixit.com/Device/Huawei_P9",
+    "guideid": 64558
   },
   {
     "name": "Huawei Union",
     "title": "Huawei_Union",
     "repairability_score": 8,
     "brand": "Huawei",
-    "link": "https://www.ifixit.com/Device/Huawei_Union"
+    "link": "https://www.ifixit.com/Device/Huawei_Union",
+    "guideid": null
   },
   {
     "name": "LG G4",
     "title": "LG_G4",
     "repairability_score": 8,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/LG_G4"
+    "link": "https://www.ifixit.com/Device/LG_G4",
+    "guideid": 42705
   },
   {
     "name": "LG G5",
     "title": "LG_G5",
     "repairability_score": 8,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/LG_G5"
+    "link": "https://www.ifixit.com/Device/LG_G5",
+    "guideid": 61205
   },
   {
     "name": "LG G6",
     "title": "LG_G6",
     "repairability_score": 5,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/LG_G6"
+    "link": "https://www.ifixit.com/Device/LG_G6",
+    "guideid": null
   },
   {
     "name": "LG G7 Thin Q",
     "title": "LG_G7_Thin_Q",
     "repairability_score": 4,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/LG_G7_Thin_Q"
+    "link": "https://www.ifixit.com/Device/LG_G7_Thin_Q",
+    "guideid": 110419
   },
   {
     "name": "Lenovo K5 Note",
     "title": "Lenovo_K5_Note",
     "repairability_score": 6,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Lenovo_K5_Note"
+    "link": "https://www.ifixit.com/Device/Lenovo_K5_Note",
+    "guideid": null
   },
   {
     "name": "Meizu MX6",
     "title": "Meizu_MX6",
     "repairability_score": 7,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Meizu_MX6"
+    "link": "https://www.ifixit.com/Device/Meizu_MX6",
+    "guideid": 65393
   },
   {
     "name": "Mi 11",
     "title": "Mi_11",
     "repairability_score": 4,
     "brand": "Xiaomi",
-    "link": "https://www.ifixit.com/Device/Mi_11"
+    "link": "https://www.ifixit.com/Device/Mi_11",
+    "guideid": 141047
   },
   {
     "name": "Micromax Canvas A1",
     "title": "Micromax_Canvas_A1",
     "repairability_score": 8,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Micromax_Canvas_A1"
+    "link": "https://www.ifixit.com/Device/Micromax_Canvas_A1",
+    "guideid": null
   },
   {
     "name": "Microsoft Surface Duo",
     "title": "Microsoft_Surface_Duo",
     "repairability_score": 2,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Microsoft_Surface_Duo"
+    "link": "https://www.ifixit.com/Device/Microsoft_Surface_Duo",
+    "guideid": 136576
   },
   {
     "name": "Moto Z",
     "title": "Moto_Z",
     "repairability_score": 7,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Moto_Z"
+    "link": "https://www.ifixit.com/Device/Moto_Z",
+    "guideid": 144150
   },
   {
     "name": "Motorola Atrix 4G",
     "title": "Motorola_Atrix_4G",
     "repairability_score": 9,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Atrix_4G"
+    "link": "https://www.ifixit.com/Device/Motorola_Atrix_4G",
+    "guideid": 4964
   },
   {
     "name": "Motorola Droid 3",
     "title": "Motorola_Droid_3",
     "repairability_score": 6,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Droid_3"
+    "link": "https://www.ifixit.com/Device/Motorola_Droid_3",
+    "guideid": 6108
   },
   {
     "name": "Motorola Droid 4",
     "title": "Motorola_Droid_4",
     "repairability_score": 4,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Droid_4"
+    "link": "https://www.ifixit.com/Device/Motorola_Droid_4",
+    "guideid": 7759
   },
   {
     "name": "Motorola Droid Bionic",
     "title": "Motorola_Droid_Bionic",
     "repairability_score": 9,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Droid_Bionic"
+    "link": "https://www.ifixit.com/Device/Motorola_Droid_Bionic",
+    "guideid": 6449
   },
   {
     "name": "Motorola Droid Mini",
     "title": "Motorola_Droid_Mini",
     "repairability_score": 8,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Droid_Mini"
+    "link": "https://www.ifixit.com/Device/Motorola_Droid_Mini",
+    "guideid": null
   },
   {
     "name": "Motorola Droid RAZR",
     "title": "Motorola_Droid_RAZR",
     "repairability_score": 4,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Droid_RAZR"
+    "link": "https://www.ifixit.com/Device/Motorola_Droid_RAZR",
+    "guideid": 7048
   },
   {
     "name": "Motorola Moto X 1st Generation",
     "title": "Motorola_Moto_X_1st_Generation",
     "repairability_score": 7,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Moto_X_1st_Generation"
+    "link": "https://www.ifixit.com/Device/Motorola_Moto_X_1st_Generation",
+    "guideid": 16867
   },
   {
     "name": "Motorola Photon 4G MB855",
     "title": "Motorola_Photon_4G_MB855",
     "repairability_score": 7,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_Photon_4G_MB855"
+    "link": "https://www.ifixit.com/Device/Motorola_Photon_4G_MB855",
+    "guideid": null
   },
   {
     "name": "Motorola razr",
     "title": "Motorola_razr",
     "repairability_score": 1,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Motorola_razr"
+    "link": "https://www.ifixit.com/Device/Motorola_razr",
+    "guideid": 130414
   },
   {
     "name": "Nexus 4",
     "title": "Nexus_4",
     "repairability_score": 7,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/Nexus_4"
+    "link": "https://www.ifixit.com/Device/Nexus_4",
+    "guideid": 11781
   },
   {
     "name": "Nexus 5",
     "title": "Nexus_5",
     "repairability_score": 8,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/Nexus_5"
+    "link": "https://www.ifixit.com/Device/Nexus_5",
+    "guideid": 19016
   },
   {
     "name": "Nexus 5X",
     "title": "Nexus_5X",
     "repairability_score": 7,
     "brand": "LG",
-    "link": "https://www.ifixit.com/Device/Nexus_5X"
+    "link": "https://www.ifixit.com/Device/Nexus_5X",
+    "guideid": 54403
   },
   {
     "name": "Nexus 6",
     "title": "Nexus_6",
     "repairability_score": 7,
     "brand": "Motorola",
-    "link": "https://www.ifixit.com/Device/Nexus_6"
+    "link": "https://www.ifixit.com/Device/Nexus_6",
+    "guideid": 32877
   },
   {
     "name": "Nexus 6P",
     "title": "Nexus_6P",
     "repairability_score": 2,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Nexus_6P"
+    "link": "https://www.ifixit.com/Device/Nexus_6P",
+    "guideid": 53965
   },
   {
     "name": "Nexus S",
     "title": "Nexus_S",
     "repairability_score": 7,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Nexus_S"
+    "link": "https://www.ifixit.com/Device/Nexus_S",
+    "guideid": 4365
   },
   {
     "name": "Nokia G22",
     "title": "Nokia_G22",
     "repairability_score": 8,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Nokia_G22"
+    "link": "https://www.ifixit.com/Device/Nokia_G22",
+    "guideid": null
   },
   {
     "name": "OnePlus 2",
     "title": "OnePlus_2",
     "repairability_score": 7,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_2"
+    "link": "https://www.ifixit.com/Device/OnePlus_2",
+    "guideid": 45352
   },
   {
     "name": "OnePlus 5",
     "title": "OnePlus_5",
     "repairability_score": 7,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_5"
+    "link": "https://www.ifixit.com/Device/OnePlus_5",
+    "guideid": 94173
   },
   {
     "name": "OnePlus 6",
     "title": "OnePlus_6",
     "repairability_score": 5,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_6"
+    "link": "https://www.ifixit.com/Device/OnePlus_6",
+    "guideid": 109826
   },
   {
     "name": "OnePlus 6T",
     "title": "OnePlus_6T",
     "repairability_score": 5,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_6T"
+    "link": "https://www.ifixit.com/Device/OnePlus_6T",
+    "guideid": 115698
   },
   {
     "name": "OnePlus 7 Pro",
     "title": "OnePlus_7_Pro",
     "repairability_score": 4,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_7_Pro"
+    "link": "https://www.ifixit.com/Device/OnePlus_7_Pro",
+    "guideid": 123656
   },
   {
     "name": "OnePlus 7T",
     "title": "OnePlus_7T",
     "repairability_score": 5,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_7T"
+    "link": "https://www.ifixit.com/Device/OnePlus_7T",
+    "guideid": 127509
   },
   {
     "name": "OnePlus 8 Pro",
     "title": "OnePlus_8_Pro",
     "repairability_score": 4,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_8_Pro"
+    "link": "https://www.ifixit.com/Device/OnePlus_8_Pro",
+    "guideid": 133351
   },
   {
     "name": "OnePlus Nord",
     "title": "OnePlus_Nord",
     "repairability_score": 6,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_Nord"
+    "link": "https://www.ifixit.com/Device/OnePlus_Nord",
+    "guideid": 135734
   },
   {
     "name": "OnePlus One",
     "title": "OnePlus_One",
     "repairability_score": 5,
     "brand": "OnePlus",
-    "link": "https://www.ifixit.com/Device/OnePlus_One"
+    "link": "https://www.ifixit.com/Device/OnePlus_One",
+    "guideid": 26484
   },
   {
     "name": "Oppo R9m",
     "title": "Oppo_R9m",
     "repairability_score": 7,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Oppo_R9m"
+    "link": "https://www.ifixit.com/Device/Oppo_R9m",
+    "guideid": null
   },
   {
     "name": "Project Tango",
     "title": "Project_Tango",
     "repairability_score": 9,
     "brand": "Google",
-    "link": "https://www.ifixit.com/Device/Project_Tango"
+    "link": "https://www.ifixit.com/Device/Project_Tango",
+    "guideid": 23835
   },
   {
     "name": "Samsung Epic 4G Touch",
     "title": "Samsung_Epic_4G_Touch",
     "repairability_score": 7,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Epic_4G_Touch"
+    "link": "https://www.ifixit.com/Device/Samsung_Epic_4G_Touch",
+    "guideid": 6481
   },
   {
     "name": "Samsung Galaxy A51",
     "title": "Samsung_Galaxy_A51",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_A51"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_A51",
+    "guideid": 131053
   },
   {
     "name": "Samsung Galaxy Alpha",
     "title": "Samsung_Galaxy_Alpha",
     "repairability_score": 5,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Alpha"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Alpha",
+    "guideid": 29604
   },
   {
     "name": "Samsung Galaxy Centura",
     "title": "Samsung_Galaxy_Centura",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Centura"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Centura",
+    "guideid": 44393
   },
   {
     "name": "Samsung Galaxy Fold",
     "title": "Samsung_Galaxy_Fold",
     "repairability_score": 2,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Fold"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Fold",
+    "guideid": 122600
   },
   {
     "name": "Samsung Galaxy J6",
     "title": "Samsung_Galaxy_J6",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_J6"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_J6",
+    "guideid": 112383
   },
   {
     "name": "Samsung Galaxy Nexus",
     "title": "Samsung_Galaxy_Nexus",
     "repairability_score": 7,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Nexus"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Nexus",
+    "guideid": 7182
   },
   {
     "name": "Samsung Galaxy Note",
     "title": "Samsung_Galaxy_Note",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note",
+    "guideid": null
   },
   {
     "name": "Samsung Galaxy Note 20 Ultra",
     "title": "Samsung_Galaxy_Note_20_Ultra",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_20_Ultra"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_20_Ultra",
+    "guideid": 136102
   },
   {
     "name": "Samsung Galaxy Note 3",
     "title": "Samsung_Galaxy_Note_3",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_3"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_3",
+    "guideid": 19209
   },
   {
     "name": "Samsung Galaxy Note Fan Edition",
     "title": "Samsung_Galaxy_Note_Fan_Edition",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_Fan_Edition"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_Fan_Edition",
+    "guideid": 95451
   },
   {
     "name": "Samsung Galaxy Note II",
     "title": "Samsung_Galaxy_Note_II",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_II"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_II",
+    "guideid": null
   },
   {
     "name": "Samsung Galaxy Note10 Plus 5G",
     "title": "Samsung_Galaxy_Note10_Plus_5G",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note10_Plus_5G"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note10_Plus_5G",
+    "guideid": 125590
   },
   {
     "name": "Samsung Galaxy Note7",
     "title": "Samsung_Galaxy_Note7",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note7"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note7",
+    "guideid": 66389
   },
   {
     "name": "Samsung Galaxy Note8",
     "title": "Samsung_Galaxy_Note8",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note8"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note8",
+    "guideid": 97071
   },
   {
     "name": "Samsung Galaxy Note9",
     "title": "Samsung_Galaxy_Note9",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note9"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note9",
+    "guideid": 112412
   },
   {
     "name": "Samsung Galaxy S 4G",
     "title": "Samsung_Galaxy_S_4G",
     "repairability_score": 6,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_4G"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_4G",
+    "guideid": 4977
   },
   {
     "name": "Samsung Galaxy S II",
     "title": "Samsung_Galaxy_S_II",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_II"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_II",
+    "guideid": 73002
   },
   {
     "name": "Samsung Galaxy S III",
     "title": "Samsung_Galaxy_S_III",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_III"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_III",
+    "guideid": 73106
   },
   {
     "name": "Samsung Galaxy S10",
     "title": "Samsung_Galaxy_S10",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10",
+    "guideid": 120331
   },
   {
     "name": "Samsung Galaxy S10 Plus",
     "title": "Samsung_Galaxy_S10_Plus",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10_Plus"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10_Plus",
+    "guideid": 120436
   },
   {
     "name": "Samsung Galaxy S10e",
     "title": "Samsung_Galaxy_S10e",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10e"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10e",
+    "guideid": null
   },
   {
     "name": "Samsung Galaxy S20 Ultra",
     "title": "Samsung_Galaxy_S20_Ultra",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S20_Ultra"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S20_Ultra",
+    "guideid": 131607
   },
   {
     "name": "Samsung Galaxy S21",
     "title": "Samsung_Galaxy_S21",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S21"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S21",
+    "guideid": 140337
   },
   {
     "name": "Samsung Galaxy S21 Ultra",
     "title": "Samsung_Galaxy_S21_Ultra",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S21_Ultra"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S21_Ultra",
+    "guideid": 141188
   },
   {
     "name": "Samsung Galaxy S22",
     "title": "Samsung_Galaxy_S22",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S22"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S22",
+    "guideid": 148710
   },
   {
     "name": "Samsung Galaxy S22 Ultra",
     "title": "Samsung_Galaxy_S22_Ultra",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S22_Ultra"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S22_Ultra",
+    "guideid": 148073
   },
   {
     "name": "Samsung Galaxy S4",
     "title": "Samsung_Galaxy_S4",
     "repairability_score": 8,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S4"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S4",
+    "guideid": 13947
   },
   {
     "name": "Samsung Galaxy S5",
     "title": "Samsung_Galaxy_S5",
     "repairability_score": 5,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5",
+    "guideid": 24016
   },
   {
     "name": "Samsung Galaxy S5 Active",
     "title": "Samsung_Galaxy_S5_Active",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5_Active"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5_Active",
+    "guideid": null
   },
   {
     "name": "Samsung Galaxy S5 Mini",
     "title": "Samsung_Galaxy_S5_Mini",
     "repairability_score": 5,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5_Mini"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5_Mini",
+    "guideid": 27579
   },
   {
     "name": "Samsung Galaxy S6",
     "title": "Samsung_Galaxy_S6",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S6"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S6",
+    "guideid": 39174
   },
   {
     "name": "Samsung Galaxy S6 Edge",
     "title": "Samsung_Galaxy_S6_Edge",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S6_Edge"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S6_Edge",
+    "guideid": 39158
   },
   {
     "name": "Samsung Galaxy S7",
     "title": "Samsung_Galaxy_S7",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S7"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S7",
+    "guideid": 56686
   },
   {
     "name": "Samsung Galaxy S7 Edge",
     "title": "Samsung_Galaxy_S7_Edge",
     "repairability_score": 3,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S7_Edge"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S7_Edge",
+    "guideid": 56845
   },
   {
     "name": "Samsung Galaxy S8",
     "title": "Samsung_Galaxy_S8",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S8"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S8",
+    "guideid": 87136
   },
   {
     "name": "Samsung Galaxy S8 Plus",
     "title": "Samsung_Galaxy_S8_Plus",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S8_Plus"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S8_Plus",
+    "guideid": 87086
   },
   {
     "name": "Samsung Galaxy S9",
     "title": "Samsung_Galaxy_S9",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S9"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S9",
+    "guideid": 104322
   },
   {
     "name": "Samsung Galaxy S9 Plus",
     "title": "Samsung_Galaxy_S9_Plus",
     "repairability_score": 4,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S9_Plus"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S9_Plus",
+    "guideid": 104308
   },
   {
     "name": "Samsung Galaxy Z Flip",
     "title": "Samsung_Galaxy_Z_Flip",
     "repairability_score": 2,
     "brand": "Samsung",
-    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Z_Flip"
+    "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Z_Flip",
+    "guideid": 131002
   },
   {
     "name": "Shift 6m",
     "title": "Shift_6m",
     "repairability_score": 9,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Shift_6m"
+    "link": "https://www.ifixit.com/Device/Shift_6m",
+    "guideid": null
   },
   {
     "name": "Sony Xperia X Compact",
     "title": "Sony_Xperia_X_Compact",
     "repairability_score": 6,
     "brand": "Sony Ericsson",
-    "link": "https://www.ifixit.com/Device/Sony_Xperia_X_Compact"
+    "link": "https://www.ifixit.com/Device/Sony_Xperia_X_Compact",
+    "guideid": null
   },
   {
     "name": "Vivo X7",
     "title": "Vivo_X7",
     "repairability_score": 6,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Vivo_X7"
+    "link": "https://www.ifixit.com/Device/Vivo_X7",
+    "guideid": null
   },
   {
     "name": "Vivo X7 Plus",
     "title": "Vivo_X7_Plus",
     "repairability_score": 7,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Vivo_X7_Plus"
+    "link": "https://www.ifixit.com/Device/Vivo_X7_Plus",
+    "guideid": null
   },
   {
     "name": "Wiko Pulp 4G Phone",
     "title": "Wiko_Pulp_4G_Phone",
     "repairability_score": 7,
     "brand": null,
-    "link": "https://www.ifixit.com/Device/Wiko_Pulp_4G_Phone"
+    "link": "https://www.ifixit.com/Device/Wiko_Pulp_4G_Phone",
+    "guideid": 64584
   },
   {
     "name": "Xiaomi Mi 5",
     "title": "Xiaomi_Mi_5",
     "repairability_score": 6,
     "brand": "Xiaomi",
-    "link": "https://www.ifixit.com/Device/Xiaomi_Mi_5"
+    "link": "https://www.ifixit.com/Device/Xiaomi_Mi_5",
+    "guideid": null
   },
   {
     "name": "Xiaomi Redmi Note 3",
     "title": "Xiaomi_Redmi_Note_3",
     "repairability_score": 8,
     "brand": "Xiaomi",
-    "link": "https://www.ifixit.com/Device/Xiaomi_Redmi_Note_3"
+    "link": "https://www.ifixit.com/Device/Xiaomi_Redmi_Note_3",
+    "guideid": null
   },
   {
     "name": "ZTE Blade Z Max",
     "title": "ZTE_Blade_Z_Max",
     "repairability_score": 4,
     "brand": "ZTE",
-    "link": "https://www.ifixit.com/Device/ZTE_Blade_Z_Max"
+    "link": "https://www.ifixit.com/Device/ZTE_Blade_Z_Max",
+    "guideid": null
   },
   {
     "name": "ZTE ZFive G LTE",
     "title": "ZTE_ZFive_G_LTE",
     "repairability_score": 6,
     "brand": "ZTE",
-    "link": "https://www.ifixit.com/Device/ZTE_ZFive_G_LTE"
+    "link": "https://www.ifixit.com/Device/ZTE_ZFive_G_LTE",
+    "guideid": null
   },
   {
     "name": "ZTE ZMax Pro",
     "title": "ZTE_ZMax_Pro",
     "repairability_score": 5,
     "brand": "ZTE",
-    "link": "https://www.ifixit.com/Device/ZTE_ZMax_Pro"
+    "link": "https://www.ifixit.com/Device/ZTE_ZMax_Pro",
+    "guideid": null
   },
   {
     "name": "iPhone 11",
     "title": "iPhone_11",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_11"
+    "link": "https://www.ifixit.com/Device/iPhone_11",
+    "guideid": 126192
   },
   {
     "name": "iPhone 11 Pro Max",
     "title": "iPhone_11_Pro_Max",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_11_Pro_Max"
+    "link": "https://www.ifixit.com/Device/iPhone_11_Pro_Max",
+    "guideid": 173388
   },
   {
     "name": "iPhone 12",
     "title": "iPhone_12",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_12"
+    "link": "https://www.ifixit.com/Device/iPhone_12",
+    "guideid": 152903
   },
   {
     "name": "iPhone 12 Pro",
     "title": "iPhone_12_Pro",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_12_Pro"
+    "link": "https://www.ifixit.com/Device/iPhone_12_Pro",
+    "guideid": 137669
   },
   {
     "name": "iPhone 12 Pro Max",
     "title": "iPhone_12_Pro_Max",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_12_Pro_Max"
+    "link": "https://www.ifixit.com/Device/iPhone_12_Pro_Max",
+    "guideid": 138640
   },
   {
     "name": "iPhone 12 mini",
     "title": "iPhone_12_mini",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_12_mini"
+    "link": "https://www.ifixit.com/Device/iPhone_12_mini",
+    "guideid": 138505
   },
   {
     "name": "iPhone 13 Pro",
     "title": "iPhone_13_Pro",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_13_Pro"
+    "link": "https://www.ifixit.com/Device/iPhone_13_Pro",
+    "guideid": 145019
   },
   {
     "name": "iPhone 14",
     "title": "iPhone_14",
     "repairability_score": 4,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_14"
+    "link": "https://www.ifixit.com/Device/iPhone_14",
+    "guideid": null
   },
   {
     "name": "iPhone 15",
     "title": "iPhone_15",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_15"
+    "link": "https://www.ifixit.com/Device/iPhone_15",
+    "guideid": null
   },
   {
     "name": "iPhone 15 Plus",
     "title": "iPhone_15_Plus",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_15_Plus"
+    "link": "https://www.ifixit.com/Device/iPhone_15_Plus",
+    "guideid": null
   },
   {
     "name": "iPhone 15 Pro",
     "title": "iPhone_15_Pro",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_15_Pro"
+    "link": "https://www.ifixit.com/Device/iPhone_15_Pro",
+    "guideid": null
   },
   {
     "name": "iPhone 15 Pro Max",
     "title": "iPhone_15_Pro_Max",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_15_Pro_Max"
+    "link": "https://www.ifixit.com/Device/iPhone_15_Pro_Max",
+    "guideid": 165320
   },
   {
     "name": "iPhone 16",
     "title": "iPhone_16",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_16"
+    "link": "https://www.ifixit.com/Device/iPhone_16",
+    "guideid": 177222
   },
   {
     "name": "iPhone 16 Plus",
     "title": "iPhone_16_Plus",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_16_Plus"
+    "link": "https://www.ifixit.com/Device/iPhone_16_Plus",
+    "guideid": null
   },
   {
     "name": "iPhone 16 Pro",
     "title": "iPhone_16_Pro",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_16_Pro"
+    "link": "https://www.ifixit.com/Device/iPhone_16_Pro",
+    "guideid": 177358
   },
   {
     "name": "iPhone 16 Pro Max",
     "title": "iPhone_16_Pro_Max",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_16_Pro_Max"
+    "link": "https://www.ifixit.com/Device/iPhone_16_Pro_Max",
+    "guideid": null
   },
   {
     "name": "iPhone 1st Generation",
     "title": "iPhone_1st_Generation",
     "repairability_score": 2,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_1st_Generation"
+    "link": "https://www.ifixit.com/Device/iPhone_1st_Generation",
+    "guideid": 599
   },
   {
     "name": "iPhone 3G",
     "title": "iPhone_3G",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_3G"
+    "link": "https://www.ifixit.com/Device/iPhone_3G",
+    "guideid": 600
   },
   {
     "name": "iPhone 3GS",
     "title": "iPhone_3GS",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_3GS"
+    "link": "https://www.ifixit.com/Device/iPhone_3GS",
+    "guideid": 817
   },
   {
     "name": "iPhone 4",
     "title": "iPhone_4",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_4"
+    "link": "https://www.ifixit.com/Device/iPhone_4",
+    "guideid": 73133
   },
   {
     "name": "iPhone 4 Verizon",
     "title": "iPhone_4_Verizon",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_4_Verizon"
+    "link": "https://www.ifixit.com/Device/iPhone_4_Verizon",
+    "guideid": 4693
   },
   {
     "name": "iPhone 4S",
     "title": "iPhone_4S",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_4S"
+    "link": "https://www.ifixit.com/Device/iPhone_4S",
+    "guideid": 6610
   },
   {
     "name": "iPhone 5",
     "title": "iPhone_5",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_5"
+    "link": "https://www.ifixit.com/Device/iPhone_5",
+    "guideid": 10528
   },
   {
     "name": "iPhone 5c",
     "title": "iPhone_5c",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_5c"
+    "link": "https://www.ifixit.com/Device/iPhone_5c",
+    "guideid": 17382
   },
   {
     "name": "iPhone 5s",
     "title": "iPhone_5s",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_5s"
+    "link": "https://www.ifixit.com/Device/iPhone_5s",
+    "guideid": 17682
   },
   {
     "name": "iPhone 6",
     "title": "iPhone_6",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_6"
+    "link": "https://www.ifixit.com/Device/iPhone_6",
+    "guideid": 29640
   },
   {
     "name": "iPhone 6 Plus",
     "title": "iPhone_6_Plus",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_6_Plus"
+    "link": "https://www.ifixit.com/Device/iPhone_6_Plus",
+    "guideid": 29211
   },
   {
     "name": "iPhone 6s",
     "title": "iPhone_6s",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_6s"
+    "link": "https://www.ifixit.com/Device/iPhone_6s",
+    "guideid": 49951
   },
   {
     "name": "iPhone 6s Plus",
     "title": "iPhone_6s_Plus",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_6s_Plus"
+    "link": "https://www.ifixit.com/Device/iPhone_6s_Plus",
+    "guideid": 48171
   },
   {
     "name": "iPhone 7",
     "title": "iPhone_7",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_7"
+    "link": "https://www.ifixit.com/Device/iPhone_7",
+    "guideid": 67382
   },
   {
     "name": "iPhone 7 Plus",
     "title": "iPhone_7_Plus",
     "repairability_score": 7,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_7_Plus"
+    "link": "https://www.ifixit.com/Device/iPhone_7_Plus",
+    "guideid": 67384
   },
   {
     "name": "iPhone 8",
     "title": "iPhone_8",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_8"
+    "link": "https://www.ifixit.com/Device/iPhone_8",
+    "guideid": 97481
   },
   {
     "name": "iPhone 8 Plus",
     "title": "iPhone_8_Plus",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_8_Plus"
+    "link": "https://www.ifixit.com/Device/iPhone_8_Plus",
+    "guideid": 97482
   },
   {
     "name": "iPhone SE",
     "title": "iPhone_SE",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_SE"
+    "link": "https://www.ifixit.com/Device/iPhone_SE",
+    "guideid": 60902
   },
   {
     "name": "iPhone SE 2020",
     "title": "iPhone_SE_2020",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_SE_2020"
+    "link": "https://www.ifixit.com/Device/iPhone_SE_2020",
+    "guideid": 133066
   },
   {
     "name": "iPhone X",
     "title": "iPhone_X",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_X"
+    "link": "https://www.ifixit.com/Device/iPhone_X",
+    "guideid": 98975
   },
   {
     "name": "iPhone XR",
     "title": "iPhone_XR",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_XR"
+    "link": "https://www.ifixit.com/Device/iPhone_XR",
+    "guideid": 114123
   },
   {
     "name": "iPhone XS",
     "title": "iPhone_XS",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_XS"
+    "link": "https://www.ifixit.com/Device/iPhone_XS",
+    "guideid": 113021
   },
   {
     "name": "iPhone XS Max",
     "title": "iPhone_XS_Max",
     "repairability_score": 6,
     "brand": "Apple",
-    "link": "https://www.ifixit.com/Device/iPhone_XS_Max"
+    "link": "https://www.ifixit.com/Device/iPhone_XS_Max",
+    "guideid": null
   }
 ]

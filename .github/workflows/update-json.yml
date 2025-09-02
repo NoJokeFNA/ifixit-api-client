@@ -99,6 +99,8 @@ jobs:
           mkdir -p gh-pages
           cp web/devices_with_scores.json gh-pages/devices_with_scores.json
           cp web/index.html gh-pages/index.html
+          cp web/script.js gh-pages/script.js
+          cp web/styles.css gh-pages/styles.css
           cp web/favicon.png gh-pages/favicon.png
 
       - name: Commit and push to gh-pages
@@ -108,6 +110,8 @@ jobs:
           git config user.email "action@github.com"
           git add devices_with_scores.json
           git add index.html
+          git add script.css
+          git add styles.js
           git add favicon.png
           if git diff --staged --quiet; then
             echo "No changes to commit in gh-pages"

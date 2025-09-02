@@ -233,13 +233,13 @@ def fetch_teardown_guides(client: IFixitAPIClient) -> List[Dict[str, str | int]]
     """Fetches all teardown guide IDs and categories from iFixit API.
 
     Iteratively retrieves guides from offset=0 until no more entries are found,
-    collecting guideid (int) and category (string) in a thread-safe manner.
+    collecting teardown_url (str) and category (string) in a thread-safe manner.
 
     Args:
         client: The IFixitAPIClient instance.
 
     Returns:
-        List of dictionaries, each containing 'guideid' (int) and 'category' (str).
+        List of dictionaries, each containing 'teardown_url' (str) and 'category' (str).
 
     Raises:
         Exception: If an API request fails critically.
@@ -258,9 +258,9 @@ def fetch_teardown_guides(client: IFixitAPIClient) -> List[Dict[str, str | int]]
             page_params["offset"] = page_offset
             guides = client.get_guides(params=page_params)
             return [
-                {"guideid": guide["guideid"], "category": guide["category"]}
+                {"teardown_url": guide["url"], "category": guide["category"]}
                 for guide in guides
-                if guide.get("guideid") is not None and guide.get("category")
+                if guide.get("url") is not None and guide.get("category")
             ]
         except Exception as e:
             status = getattr(getattr(e, "response", None), "status_code", None)
@@ -305,7 +305,7 @@ def print_device_data(
     """Fetches and prints device repairability scores and guide IDs concurrently.
 
     Uses a thread pool with rate limiting to fetch data for each device.
-    Matches devices with teardown guides by name=category to include guideid.
+    Matches devices with teardown guides by name=category to include teardown_url.
     Displays a progress bar using tqdm. Non-critical errors (e.g., 404) are
     suppressed from console output. Optionally writes devices with scores to a JSON file.
 
@@ -314,13 +314,13 @@ def print_device_data(
         devices: List of human-readable device names.
         output_file: Optional path to write devices with scores as JSON.
             Format: [{"name": str, "title": str, "repairability_score": number,
-                      "brand": str, "link": str, "guideid": number}, ...]
+                      "brand": str, "link": str, "teardown_url": str}, ...]
     """
     # Fetch teardown guides
     logger.info("Fetching teardown guides for matching...")
     teardown_guides = fetch_teardown_guides(client)
-    # Create a mapping of category (device name) to guideid
-    guideid_map = {guide["category"]: guide["guideid"] for guide in teardown_guides}
+    # Create a mapping of category (device name) to url
+    guide_map = {guide["category"]: guide["teardown_url"] for guide in teardown_guides}
 
     # Deduplicate while preserving order
     seen: Set[str] = set()
@@ -430,14 +430,14 @@ def print_device_data(
 
     print("\nRepairability scores for devices:")
     for name, title, score, brand, link in with_score:
-        guideid = guideid_map.get(name)
-        guide_str = f", Guide ID: {guideid}" if guideid is not None else ""
+        teardown_url = guide_map.get(name)
+        guide_str = f", Teardown URL: {teardown_url}" if teardown_url is not None else ""
         print(f"- {name} ({title}): {score}{guide_str}")
 
     print("\nSummary:")
     print(f"- Devices with a repairability score: {len(with_score)}")
     print(f"- Total devices processed: {len(results)}")
-    print(f"- Devices with matched guide IDs: {sum(1 for name, _, _, _, _ in with_score if name in guideid_map)}")
+    print(f"- Devices with matched guide IDs: {sum(1 for name, _, _, _, _ in with_score if name in guide_map)}")
 
     if output_file:
         try:
@@ -448,7 +448,7 @@ def print_device_data(
                     "repairability_score": score,
                     "brand": brand,
                     "link": link,
-                    "guideid": guideid_map.get(name)
+                    "teardown_url": guide_map.get(name)
                 }
                 for name, title, score, brand, link in with_score
             ]
@@ -468,7 +468,7 @@ def main() -> None:
     parser.add_argument("--scores-output", default="devices_with_scores.json", help="Output file for scores")
     args = parser.parse_args()
 
-    client = IFixitAPIClient(log_level=log_level)
+    client = IFixitAPIClient(log_level=log_level, proxy=True, raise_for_status=False)
     exclude_subtrees = {"iPhone": {"iPhone Accessories"}}
 
     # Fetch and save child devices

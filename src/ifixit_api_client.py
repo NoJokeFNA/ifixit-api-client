@@ -27,6 +27,7 @@ class IFixitAPIClient:
     """
 
     BASE_URL = 'https://www.ifixit.com/api/2.0'
+    PROXY = True
 
     def __init__(
             self,
@@ -36,7 +37,6 @@ class IFixitAPIClient:
             backoff_factor: float = 0.5,
             timeout: int = 30,
             log_level: int = logging.INFO,
-            proxy: bool = False,
             allow_http: bool = False
     ):
         """Initialize the client.
@@ -64,7 +64,7 @@ class IFixitAPIClient:
         )
 
         adapter = HTTPAdapter(max_retries=retry_strategy)
-        if proxy:
+        if self.PROXY:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
             self.session.mount('https://', adapter)
@@ -97,7 +97,6 @@ class IFixitAPIClient:
             endpoint: str,
             params: Optional[Dict[str, Any]] = None,
             json: Optional[Dict[str, Any]] = None,
-            proxy: bool = False,
             **kwargs,
     ) -> Any:
         """Make an API request.
@@ -119,7 +118,7 @@ class IFixitAPIClient:
         url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
         logger.debug(f'Making {method} request to {url} with params={params}, '
-                    f'json={json}')
+                     f'json={json}')
 
         try:
             response = self.session.request(
@@ -129,7 +128,7 @@ class IFixitAPIClient:
                 params=params,
                 json=json,
                 timeout=self.timeout,
-                verify=False if proxy else True,
+                verify=False if self.PROXY else True,
                 **kwargs,
             )
             response.raise_for_status()
@@ -252,22 +251,15 @@ class IFixitAPIClient:
 
     # --- Guides Endpoints ---
 
-    def get_guides(self, limit: Optional[int] = None,
-                   offset: Optional[int] = None) -> List[Dict]:
+    def get_guides(self, params: Optional[Dict] = None) -> List[Dict]:
         """Get a list of guides.
 
         Args:
-            limit: Number of results to return.
-            offset: Offset for pagination.
+            params: Query parameters for filtering, pagination, etc.
 
         Returns:
             List of guides.
         """
-        params = {}
-        if limit is not None:
-            params['limit'] = limit
-        if offset is not None:
-            params['offset'] = offset
         return self._request('GET', '/guides', params=params)
 
     def get_all_guides(self, page_size: int = 100) -> List[Dict]:

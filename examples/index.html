@@ -197,8 +197,7 @@
             <p class="mt-2 text-cyan-400 font-mono">Developer Dashboard Edition</p>
         </div>
         <div class="glass-card p-4 text-gray-200 max-w-md">
-            <p class="text-sm mb-2"><strong>The officially unofficial listing of iFixit's repairability scores.</strong>
-            </p>
+            <p class="text-sm mb-2"><strong>The officially unofficial listing of iFixit's repairability scores.</strong></p>
             <p class="text-xs">
                 Inspired by
                 <a href="https://github.com/xiongchiamiov/ifixit-repairability-scores" target="_blank"
@@ -268,8 +267,7 @@
                     </thead>
                     <tbody id="deviceTable" class="divide-y divide-slate-800">
                     <tr>
-                        <td colspan="4" class="px-6 py-4 text-center"><span class="loading-spinner"></span> Loading...
-                        </td>
+                        <td colspan="4" class="px-6 py-4 text-center"><span class="loading-spinner"></span> Loading...</td>
                     </tr>
                     </tbody>
                 </table>
@@ -377,9 +375,9 @@
             if (d.teardown_urls && d.teardown_urls.length > 0) {
                 teardownHtml = `<span class="teardown-toggle" data-index="${index}">[Teardowns]</span>
                     <div class="teardown-dropdown" data-index="${index}">
-                        ${d.teardown_urls.map(g =>
-                    `<a href="${g.url}" target="_blank">${g.title}</a>`
-                ).join('')}
+                        ${d.teardown_urls.map(g => 
+                            `<a href="${g.url}" target="_blank">${g.title}</a>`
+                        ).join('')}
                     </div>`;
             }
 

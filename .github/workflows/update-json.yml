@@ -108,7 +108,6 @@ jobs:
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add devices_with_scores.json
-          # Optional: HTML-Datei hinzufügen, falls vorhanden
           if [ -f index.html ]; then
             git add index.html
           fi

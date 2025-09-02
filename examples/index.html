@@ -19,6 +19,7 @@
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
             inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            transition: box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .neon-glow {
@@ -45,6 +46,66 @@
         .sort-icon {
             transition: transform .15s ease, color .15s ease;
         }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #67e8f9;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        tr[tabindex="0"]:focus {
+            outline: 2px solid #67e8f9;
+            outline-offset: -2px;
+        }
+
+        #deviceTable tr:hover {
+            background: rgba(30, 41, 59, 0.7);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+            transition: background 0.3s ease, box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chart-error {
+            color: #ef4444;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .glass-card.chart-section:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
+            0 0 40px rgba(34, 211, 238, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .glass-card.table-section:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
+            0 0 40px rgba(139, 92, 246, 0.33),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        #searchInput:focus, #brandFilter:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(34, 211, 238, 0.3);
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(34, 211, 238, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(34, 211, 238, 0.7), 0 0 25px rgba(34, 211, 238, 0.4);
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-gray-100 overflow-x-hidden">
@@ -57,7 +118,6 @@
             <h1 class="text-4xl font-bold neon-glow">iFixit Repairability Scores</h1>
             <p class="mt-2 text-cyan-400 font-mono">Developer Dashboard Edition</p>
         </div>
-
         <div class="glass-card p-4 text-gray-200 max-w-md">
             <p class="text-sm mb-2"><strong>The officially unofficial listing of iFixit's repairability scores.</strong>
             </p>
@@ -75,32 +135,43 @@
 
 <main class="container mx-auto px-6 py-12 space-y-16">
     <section>
-        <div class="glass-card p-10 w-full max-w-6xl mx-auto transition hover:shadow-[0_0_40px_rgba(34,211,238,0.28)]">
+        <div class="glass-card chart-section p-10 w-full max-w-6xl mx-auto">
             <h2 class="text-2xl font-semibold mb-6 text-cyan-300 font-mono">Score Distribution</h2>
             <div style="height: 460px;">
                 <canvas id="repairabilityChart" class="w-full h-full"></canvas>
+                <div id="chartError" class="chart-error hidden">Failed to load chart</div>
             </div>
         </div>
     </section>
 
     <section>
-        <div class="glass-card p-10 w-full max-w-6xl mx-auto transition hover:shadow-[0_0_40px_rgba(139,92,246,0.26)]">
-
+        <div class="glass-card table-section p-10 w-full max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-semibold text-violet-300 font-mono">Device Details</h2>
                 <span id="deviceCount" class="text-sm text-cyan-400 font-mono"></span>
             </div>
-
-            <!-- Search & Filter -->
             <div class="flex flex-col sm:flex-row justify-between mb-6 gap-4">
-                <input type="text" id="searchInput" placeholder="Search device..."
-                       class="px-4 py-2 rounded-lg bg-slate-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400 flex-1"/>
-                <select id="brandFilter"
-                        class="px-4 py-2 rounded-lg bg-slate-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search device..."
+                        aria-label="Search devices by name"
+                        class="px-4 py-2 rounded-lg bg-slate-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400 flex-1"
+                />
+                <select
+                        id="brandFilter"
+                        aria-label="Filter by manufacturer"
+                        class="px-4 py-2 rounded-lg bg-slate-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                >
                     <option value="">All manufacturers</option>
                 </select>
+                <button
+                        id="resetFilters"
+                        class="px-4 py-2 rounded-lg bg-slate-800 text-gray-100 hover:bg-cyan-400 hover:text-black transition"
+                >
+                    Reset
+                </button>
             </div>
-
             <div class="overflow-x-auto rounded-xl">
                 <table class="min-w-full divide-y divide-slate-700">
                     <thead class="bg-slate-800/80 sticky top-0 z-10">
@@ -119,7 +190,12 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody id="deviceTable" class="divide-y divide-slate-800"></tbody>
+                    <tbody id="deviceTable" class="divide-y divide-slate-800">
+                    <tr>
+                        <td colspan="3" class="px-6 py-4 text-center"><span class="loading-spinner"></span> Loading...
+                        </td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -134,24 +210,53 @@
 
 <script>
     let devicesData = [];
-    let currentSort = {key: 'name', direction: 'asc'}; // Default A-Z
+    let currentSort = {key: 'name', direction: 'asc'};
+    let myChart = null;
 
     async function loadData() {
-        const res = await fetch('devices_with_scores.json');
-        if (!res.ok) throw new Error('Failed to fetch data');
-        devicesData = await res.json();
-        renderTable();
-        populateBrandFilter();
+        const tbody = document.getElementById('deviceTable');
+        const chartError = document.getElementById('chartError');
+        tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center"><span class="loading-spinner"></span> Loading...</td></tr>';
+        chartError.classList.add('hidden');
+
+        const cachedData = localStorage.getItem('devicesData');
+        if (cachedData) {
+            devicesData = JSON.parse(cachedData);
+            renderTable();
+            populateBrandFilter();
+            try {
+                renderChart(devicesData);
+            } catch (e) {
+                console.error('Chart rendering failed with cached data:', e);
+                chartError.classList.remove('hidden');
+            }
+        }
+
+        try {
+            const res = await fetch('devices_with_scores.json');
+            if (!res.ok) throw new Error('Failed to fetch data');
+            devicesData = await res.json();
+            localStorage.setItem('devicesData', JSON.stringify(devicesData));
+            renderTable();
+            populateBrandFilter();
+            renderChart(devicesData);
+        } catch (error) {
+            console.error('Data fetch failed:', error);
+            tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-rose-500">Failed to load data</td></tr>';
+            chartError.classList.remove('hidden');
+        }
     }
 
     function getFilteredData() {
         const searchValue = document.getElementById('searchInput').value.toLowerCase();
         const brandValue = document.getElementById('brandFilter').value;
+        const scoreFilter = document.getElementById('scoreFilter')?.value || '';
 
         return devicesData.filter(d => {
             const matchesSearch = d.name.toLowerCase().includes(searchValue);
             const matchesBrand = !brandValue || d.brand === brandValue;
-            return matchesSearch && matchesBrand;
+            const matchesScore = !scoreFilter || d.repairability_score === parseInt(scoreFilter);
+            return matchesSearch && matchesBrand && matchesScore;
         });
     }
 
@@ -176,7 +281,14 @@
         let data = getFilteredData();
         data = sortData(data);
         populateTable(data);
-        renderChart(data);
+        if (typeof Chart !== 'undefined') {
+            try {
+                renderChart(data);
+            } catch (e) {
+                console.error('Chart rendering failed:', e);
+                document.getElementById('chartError').classList.remove('hidden');
+            }
+        }
         updateSortIndicators();
     }
 
@@ -193,9 +305,14 @@
     function populateTable(data) {
         const tbody = document.getElementById('deviceTable');
         tbody.innerHTML = '';
-        data.forEach(d => {
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">No devices found</td></tr>';
+            return;
+        }
+        data.forEach((d, index) => {
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-slate-800/70 transition';
+            tr.tabIndex = 0;
             tr.innerHTML = `
                 <td class="px-6 py-4 font-medium">
                     <a href="${d.link}" target="_blank" class="text-cyan-400 underline">${d.name}</a>
@@ -209,6 +326,18 @@
             tbody.appendChild(tr);
         });
         document.getElementById('deviceCount').textContent = `${data.length} Devices`;
+
+        tbody.querySelectorAll('tr').forEach((row, index) => {
+            row.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    row.querySelector('a')?.click();
+                } else if (e.key === 'ArrowDown' && index < data.length - 1) {
+                    tbody.children[index + 1].focus();
+                } else if (e.key === 'ArrowUp' && index > 0) {
+                    tbody.children[index - 1].focus();
+                }
+            });
+        });
     }
 
     function badge(score) {
@@ -221,6 +350,7 @@
     function populateBrandFilter() {
         const brands = [...new Set(devicesData.map(d => d.brand).filter(Boolean))].sort();
         const select = document.getElementById('brandFilter');
+        select.innerHTML = '<option value="">All manufacturers</option>';
         brands.forEach(b => {
             const opt = document.createElement('option');
             opt.value = b;
@@ -247,9 +377,16 @@
         });
     }
 
-    let myChart = null;
-
     function renderChart(data) {
+        const chartError = document.getElementById('chartError');
+        chartError.classList.add('hidden');
+
+        if (!data || data.length === 0) {
+            chartError.textContent = 'No data available for chart';
+            chartError.classList.remove('hidden');
+            return;
+        }
+
         const buckets = Array(11).fill(0);
         data.forEach(d => {
             const s = d.repairability_score;
@@ -257,6 +394,12 @@
         });
 
         const ctx = document.getElementById('repairabilityChart').getContext('2d');
+        if (!ctx) {
+            chartError.textContent = 'Chart canvas not found';
+            chartError.classList.remove('hidden');
+            return;
+        }
+
         if (myChart) myChart.destroy();
 
         const gradient = ctx.createLinearGradient(0, 0, 0, 460);
@@ -266,7 +409,8 @@
         myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], datasets: [{
+                labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                datasets: [{
                     data: buckets,
                     backgroundColor: gradient,
                     borderRadius: 14,
@@ -275,7 +419,8 @@
                 }]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {display: false},
                     tooltip: {
@@ -303,10 +448,29 @@
                         beginAtZero: true,
                         ticks: {stepSize: 1, color: '#94a3b8'},
                         grid: {color: 'rgba(255,255,255,0.05)'},
-                        title: {display: true, text: 'Device count', color: '#67e8f9', font: {size: 14, weight: 'bold'}}
+                        title: {
+                            display: true,
+                            text: 'Device count',
+                            color: '#67e8f9',
+                            font: {size: 14, weight: 'bold'}
+                        }
                     }
                 },
-                animation: {duration: 1200, easing: 'easeOutExpo'}
+                animation: {duration: 1200, easing: 'easeOutExpo'},
+                onClick: (event, elements) => {
+                    if (elements.length) {
+                        const score = elements[0].index;
+                        document.getElementById('searchInput').value = '';
+                        document.getElementById('brandFilter').value = '';
+                        document.getElementById('scoreFilter')?.remove();
+                        const scoreFilter = document.createElement('input');
+                        scoreFilter.type = 'hidden';
+                        scoreFilter.id = 'scoreFilter';
+                        scoreFilter.value = score;
+                        document.getElementById('deviceTable').parentElement.appendChild(scoreFilter);
+                        renderTable();
+                    }
+                }
             }
         });
     }
@@ -330,6 +494,8 @@
     function tickBG() {
         g.clearRect(0, 0, bg.width, bg.height);
         g.fillStyle = 'rgba(34,211,238,0.7)';
+        g.strokeStyle = 'rgba(34,211,238,0.2)';
+        g.lineWidth = 1;
         P.forEach(p => {
             g.beginPath();
             g.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -339,6 +505,17 @@
             if (p.x < 0 || p.x > bg.width) p.dx *= -1;
             if (p.y < 0 || p.y > bg.height) p.dy *= -1;
         });
+        P.forEach((p1, i) => {
+            P.slice(i + 1).forEach(p2 => {
+                const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                if (dist < 100) {
+                    g.beginPath();
+                    g.moveTo(p1.x, p1.y);
+                    g.lineTo(p2.x, p2.y);
+                    g.stroke();
+                }
+            });
+        });
         requestAnimationFrame(tickBG);
     }
 
@@ -347,9 +524,16 @@
     tickBG();
 
     document.addEventListener('DOMContentLoaded', () => {
-        loadData()
+        loadData();
         document.getElementById('searchInput').addEventListener('input', renderTable);
         document.getElementById('brandFilter').addEventListener('change', renderTable);
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('brandFilter').value = '';
+            document.getElementById('scoreFilter')?.remove();
+            currentSort = {key: 'name', direction: 'asc'};
+            loadData();
+        });
         document.querySelectorAll('th[data-sort-key]').forEach(th => {
             th.addEventListener('click', () => toggleSort(th.dataset.sortKey));
         });

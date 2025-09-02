@@ -1,11 +1,3 @@
-"""Fetches and processes iFixit device data, including repairability scores.
-
-This script retrieves device hierarchies for specified categories, collects leaf
-device names, and fetches repairability scores concurrently with a progress bar.
-Non-critical errors (e.g., 404s) are suppressed to maintain clean output.
-Results are written to JSON files.
-"""
-
 import argparse
 import json
 import logging
@@ -237,14 +229,83 @@ def _to_ifixit_title(name: str) -> str:
     return s
 
 
+def fetch_teardown_guides(client: IFixitAPIClient) -> List[Dict[str, str | int]]:
+    """Fetches all teardown guide IDs and categories from iFixit API.
+
+    Iteratively retrieves guides from offset=0 until no more entries are found,
+    collecting guideid (int) and category (string) in a thread-safe manner.
+
+    Args:
+        client: The IFixitAPIClient instance.
+
+    Returns:
+        List of dictionaries, each containing 'guideid' (int) and 'category' (str).
+
+    Raises:
+        Exception: If an API request fails critically.
+    """
+    params = {"filter": "teardown", "limit": 200}
+    results: List[Dict[str, str | int]] = []
+    lock = __import__("threading").Lock()
+    offset = 0
+    max_workers = 8
+    batch_size = 200
+
+    def fetch_page(page_offset: int) -> List[Dict[str, str | int]]:
+        """Fetches a single page of guides for the given offset."""
+        try:
+            page_params = params.copy()
+            page_params["offset"] = page_offset
+            guides = client.get_guides(params=page_params)
+            return [
+                {"guideid": guide["guideid"], "category": guide["category"]}
+                for guide in guides
+                if guide.get("guideid") is not None and guide.get("category")
+            ]
+        except Exception as e:
+            status = getattr(getattr(e, "response", None), "status_code", None)
+            logger.error("Failed to fetch offset %d: %s", page_offset, e)
+            return []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        while True:
+            offsets = list(range(offset, offset + batch_size * max_workers, batch_size))
+            futures = {executor.submit(fetch_page, off): off for off in offsets}
+            page_results = []
+
+            for future in tqdm.tqdm(
+                    as_completed(futures),
+                    total=len(futures),
+                    desc=f"Fetching guides (offset {offset})",
+                    unit="page",
+                    dynamic_ncols=True,
+            ):
+                page_guides = future.result()
+                with lock:
+                    page_results.extend(page_guides)
+
+            if not page_results:
+                break
+
+            with lock:
+                results.extend(page_results)
+
+            offset += batch_size * max_workers
+            logger.debug("Processed batch, new offset: %d", offset)
+
+    logger.info("Fetched %d teardown guides", len(results))
+    return results
+
+
 def print_device_data(
         client: IFixitAPIClient,
         devices: List[str],
         output_file: Optional[str] = None,
 ) -> None:
-    """Fetches and prints device repairability scores concurrently.
+    """Fetches and prints device repairability scores and guide IDs concurrently.
 
     Uses a thread pool with rate limiting to fetch data for each device.
+    Matches devices with teardown guides by name=category to include guideid.
     Displays a progress bar using tqdm. Non-critical errors (e.g., 404) are
     suppressed from console output. Optionally writes devices with scores to a JSON file.
 
@@ -252,8 +313,15 @@ def print_device_data(
         client: The IFixitAPIClient instance.
         devices: List of human-readable device names.
         output_file: Optional path to write devices with scores as JSON.
-            Format: [{"name": str, "title": str, "repairability_score": number, "brand": str, "link": str}, ...]
+            Format: [{"name": str, "title": str, "repairability_score": number,
+                      "brand": str, "link": str, "guideid": number}, ...]
     """
+    # Fetch teardown guides
+    logger.info("Fetching teardown guides for matching...")
+    teardown_guides = fetch_teardown_guides(client)
+    # Create a mapping of category (device name) to guideid
+    guideid_map = {guide["category"]: guide["guideid"] for guide in teardown_guides}
+
     # Deduplicate while preserving order
     seen: Set[str] = set()
     unique_devices = [d for d in devices if not (d in seen or seen.add(d))]
@@ -311,18 +379,19 @@ def print_device_data(
                 repair_link = f"https://www.ifixit.com/Device/{ifixit_title}"
                 return device_name, ifixit_title, repairability_score, manufacturer, repair_link, None
             except Exception as e:
-                status = getattr(getattr(e, "response", None), "status_code", None)
-                retry_after = getattr(getattr(e, "response", None), "headers", {}).get("Retry-After")
+                # Check for HTTP status code
+                response = getattr(e, "response", None)
+                status_code = getattr(response, "status_code", None) if response else None
+                retry_after = getattr(response, "headers", {}).get("Retry-After") if response else None
                 sleep_s = float(retry_after) if retry_after else base_backoff * (2 ** attempt)
-                transient = status in {429, 500, 502, 503, 504} or status is None
-
-                if status == 404:
-                    return device_name, ifixit_title, None, None, None, str(e)
-
-                if attempt < max_retries - 1 and transient:
+                # Retry on transient errors (429, 500, 502, 503, 504)
+                if status_code in {429, 500, 502, 503, 504} and attempt < max_retries - 1:
                     time.sleep(sleep_s)
                     continue
-
+                # Handle 404 specifically
+                if status_code == 404:
+                    return device_name, ifixit_title, None, None, None, str(e)
+                # Log other errors and return failure
                 logger.error(
                     "Failed to fetch repairability score",
                     exc_info=e,
@@ -361,16 +430,26 @@ def print_device_data(
 
     print("\nRepairability scores for devices:")
     for name, title, score, brand, link in with_score:
-        print(f"- {name} ({title}): {score}")
+        guideid = guideid_map.get(name)
+        guide_str = f", Guide ID: {guideid}" if guideid is not None else ""
+        print(f"- {name} ({title}): {score}{guide_str}")
 
     print("\nSummary:")
     print(f"- Devices with a repairability score: {len(with_score)}")
     print(f"- Total devices processed: {len(results)}")
+    print(f"- Devices with matched guide IDs: {sum(1 for name, _, _, _, _ in with_score if name in guideid_map)}")
 
     if output_file:
         try:
             payload = [
-                {"name": name, "title": title, "repairability_score": score, "brand": brand, "link": link}
+                {
+                    "name": name,
+                    "title": title,
+                    "repairability_score": score,
+                    "brand": brand,
+                    "link": link,
+                    "guideid": guideid_map.get(name)
+                }
                 for name, title, score, brand, link in with_score
             ]
             with open(output_file, "w", encoding="utf-8") as f:
@@ -391,8 +470,11 @@ def main() -> None:
 
     client = IFixitAPIClient(log_level=log_level)
     exclude_subtrees = {"iPhone": {"iPhone Accessories"}}
+
+    # Fetch and save child devices
     get_child_devices_for_categories(client, args.categories, args.output, exclude_subtrees)
 
+    # Fetch and process demo devices
     try:
         with open(args.output, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -404,11 +486,10 @@ def main() -> None:
         return
 
     demo_devices = list(dict.fromkeys(data.get("iPhone", []) + data.get("Android Phone", [])))
-    if not demo_devices:
+    if demo_devices:
+        print_device_data(client, demo_devices, args.scores_output)
+    else:
         print("No demo devices found.")
-        return
-
-    print_device_data(client, demo_devices, args.scores_output)
 
 
 if __name__ == "__main__":

@@ -468,7 +468,7 @@ def main() -> None:
     parser.add_argument("--scores-output", default="devices_with_scores.json", help="Output file for scores")
     args = parser.parse_args()
 
-    client = IFixitAPIClient(log_level=log_level)
+    client = IFixitAPIClient(log_level=log_level, proxy=True, raise_for_status=False)
     exclude_subtrees = {"iPhone": {"iPhone Accessories"}}
 
     # Fetch and save child devices

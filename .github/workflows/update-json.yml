@@ -98,9 +98,8 @@ jobs:
         run: |
           mkdir -p gh-pages
           cp examples/devices_with_scores.json gh-pages/devices_with_scores.json
-          if [ -f examples/index.html ]; then
-            cp examples/index.html gh-pages/index.html
-          fi
+          cp examples/index.html gh-pages/index.html
+          cp examples/favicon.png gh-pages/favicon.png
 
       - name: Commit and push to gh-pages
         run: |
@@ -108,9 +107,8 @@ jobs:
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add devices_with_scores.json
-          if [ -f index.html ]; then
-            git add index.html
-          fi
+          git add index.html
+          git add favicon.png
           if git diff --staged --quiet; then
             echo "No changes to commit in gh-pages"
             exit 0

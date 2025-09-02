@@ -107,6 +107,17 @@
                 box-shadow: 0 0 15px rgba(34, 211, 238, 0.7), 0 0 25px rgba(34, 211, 238, 0.4);
             }
         }
+
+        @media (max-width: 640px) {
+            #fileAge {
+                right: 2rem;
+            }
+        }
+
+        #fileAge {
+            color: #67e8f9;
+            font-size: 0.75rem;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-gray-100 overflow-x-hidden">
@@ -201,9 +212,10 @@
     </section>
 </main>
 
-<footer class="bg-slate-950/80 text-gray-500 py-6 border-t border-slate-800">
-    <div class="container mx-auto px-6 text-center text-sm font-mono">
-        Data from iFixit API · Built with Tailwind + Chart.js · Neon Dark · Version 1.0.0
+<footer class="bg-slate-950/80 text-gray-500 py-6 border-t border-slate-800 relative">
+    <div class="container mx-auto px-6 flex items-center justify-center text-sm font-mono relative">
+        <div class="text-center">Data from iFixit API · Built with Tailwind + Chart.js · Neon Dark · Version 1.0.1</div>
+        <div id="fileAge" class="absolute right-2 text-sm text-gray-500 font-mono"></div>
     </div>
 </footer>
 
@@ -525,7 +537,33 @@
     resizeBG();
     tickBG();
 
+    async function updateFileAge() {
+        try {
+            const res = await fetch('devices_with_scores.json', {method: 'HEAD'});
+            const lastModified = res.headers.get('Last-Modified');
+            if (lastModified) {
+                const fileDate = new Date(lastModified);
+                const now = new Date();
+                const diffMs = now - fileDate;
+                const diffMin = Math.floor(diffMs / 60000);
+                const diffH = Math.floor(diffMin / 60);
+                const diffD = Math.floor(diffH / 24);
+                let ageStr = '';
+                if (diffD > 0) ageStr = `${diffD} day(s)`;
+                else if (diffH > 0) ageStr = `${diffH} hour(s)`;
+                else if (diffMin > 0) ageStr = `${diffMin} minute(s)`;
+                else ageStr = 'less than 1 minute';
+                document.getElementById('fileAge').textContent = `Last datasource update: ${ageStr} ago (${fileDate.toLocaleString()})`;
+            } else {
+                document.getElementById('fileAge').textContent = 'File age not available';
+            }
+        } catch (e) {
+            document.getElementById('fileAge').textContent = 'File age not available';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        updateFileAge()
         loadData();
         document.getElementById('searchInput').addEventListener('input', renderTable);
         document.getElementById('brandFilter').addEventListener('change', renderTable);

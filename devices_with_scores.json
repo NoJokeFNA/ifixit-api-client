@@ -5,7 +5,12 @@
     "repairability_score": 3,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Amazon_Fire_Phone",
-    "teardown_url": "https://www.ifixit.com/Teardown/Amazon+Fire+Phone+Teardown/27458"
+    "teardown_urls": [
+      {
+        "title": "Amazon Fire Phone Teardown",
+        "url": "https://www.ifixit.com/Teardown/Amazon+Fire+Phone+Teardown/27458"
+      }
+    ]
   },
   {
     "name": "Asus Zenfone 3 Max",
@@ -13,7 +18,7 @@
     "repairability_score": 6,
     "brand": "Asus",
     "link": "https://www.ifixit.com/Device/Asus_Zenfone_3_Max",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Coolpad 3300A",
@@ -21,7 +26,7 @@
     "repairability_score": 5,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Coolpad_3300A",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Essential Phone",
@@ -29,7 +34,12 @@
     "repairability_score": 1,
     "brand": "Essential",
     "link": "https://www.ifixit.com/Device/Essential_Phone",
-    "teardown_url": "https://www.ifixit.com/Teardown/Essential+Phone+Teardown/96764"
+    "teardown_urls": [
+      {
+        "title": "Essential Phone Teardown",
+        "url": "https://www.ifixit.com/Teardown/Essential+Phone+Teardown/96764"
+      }
+    ]
   },
   {
     "name": "Fairphone 1",
@@ -37,7 +47,12 @@
     "repairability_score": 7,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Fairphone_1",
-    "teardown_url": "https://www.ifixit.com/Teardown/Fairphone+1+Teardown/20527"
+    "teardown_urls": [
+      {
+        "title": "Fairphone 1 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Fairphone+1+Teardown/20527"
+      }
+    ]
   },
   {
     "name": "Fairphone 2",
@@ -45,7 +60,12 @@
     "repairability_score": 10,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Fairphone_2",
-    "teardown_url": "https://www.ifixit.com/Teardown/Fairphone+2+Teardown/52523"
+    "teardown_urls": [
+      {
+        "title": "Fairphone 2 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Fairphone+2+Teardown/52523"
+      }
+    ]
   },
   {
     "name": "Fairphone 3",
@@ -53,7 +73,12 @@
     "repairability_score": 10,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Fairphone_3",
-    "teardown_url": "https://www.ifixit.com/Teardown/Fairphone+3+Teardown/125573"
+    "teardown_urls": [
+      {
+        "title": "Fairphone 3 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Fairphone+3+Teardown/125573"
+      }
+    ]
   },
   {
     "name": "Fairphone 4",
@@ -61,7 +86,7 @@
     "repairability_score": 10,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Fairphone_4",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Fairphone 5",
@@ -69,7 +94,7 @@
     "repairability_score": 10,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Fairphone_5",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Galaxy Note10 Plus",
@@ -77,7 +102,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Galaxy_Note10_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/Galaxy+Note10++Teardown/125616"
+    "teardown_urls": [
+      {
+        "title": "Galaxy Note10+ Teardown",
+        "url": "https://www.ifixit.com/Teardown/Galaxy+Note10++Teardown/125616"
+      }
+    ]
   },
   {
     "name": "Google Pixel",
@@ -85,7 +115,7 @@
     "repairability_score": 7,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 2 XL",
@@ -93,7 +123,12 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_2_XL",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+2+XL+Teardown/98093"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 2 XL Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+2+XL+Teardown/98093"
+      }
+    ]
   },
   {
     "name": "Google Pixel 3",
@@ -101,7 +136,12 @@
     "repairability_score": 4,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_3",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+3+Teardown/113763"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 3 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+3+Teardown/113763"
+      }
+    ]
   },
   {
     "name": "Google Pixel 3 XL",
@@ -109,7 +149,12 @@
     "repairability_score": 4,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_3_XL",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+3+XL+Teardown/113656"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 3 XL Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+3+XL+Teardown/113656"
+      }
+    ]
   },
   {
     "name": "Google Pixel 3a",
@@ -117,7 +162,12 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_3a",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+3a+Teardown/123256"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 3a Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+3a+Teardown/123256"
+      }
+    ]
   },
   {
     "name": "Google Pixel 3a XL",
@@ -125,7 +175,12 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_3a_XL",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+3a+XL+Teardown/123297"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 3a XL Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+3a+XL+Teardown/123297"
+      }
+    ]
   },
   {
     "name": "Google Pixel 4",
@@ -133,7 +188,7 @@
     "repairability_score": 4,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_4",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 4 XL",
@@ -141,7 +196,12 @@
     "repairability_score": 4,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_4_XL",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+4+XL+Teardown/127320"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 4 XL Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+4+XL+Teardown/127320"
+      }
+    ]
   },
   {
     "name": "Google Pixel 4a",
@@ -149,7 +209,7 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_4a",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 5",
@@ -157,7 +217,7 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_5",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 5a",
@@ -165,7 +225,7 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_5a",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 6",
@@ -173,7 +233,7 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_6",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 6 Pro",
@@ -181,7 +241,7 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_6_Pro",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 6a",
@@ -189,7 +249,7 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_6a",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 7",
@@ -197,7 +257,7 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_7",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 7 Pro",
@@ -205,7 +265,7 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_7_Pro",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 7a",
@@ -213,7 +273,7 @@
     "repairability_score": 4,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_7a",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 8",
@@ -221,7 +281,7 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_8",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 8 Pro",
@@ -229,7 +289,7 @@
     "repairability_score": 6,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_8_Pro",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 9",
@@ -237,7 +297,7 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_9",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 9 Pro",
@@ -245,7 +305,7 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 9 Pro Fold",
@@ -253,7 +313,7 @@
     "repairability_score": 4,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro_Fold",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel 9 Pro XL",
@@ -261,7 +321,12 @@
     "repairability_score": 5,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_9_Pro_XL",
-    "teardown_url": "https://www.ifixit.com/Guide/Google+Pixel+9+Pro+XL+Chip+ID/176196"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel 9 Pro XL Chip ID",
+        "url": "https://www.ifixit.com/Guide/Google+Pixel+9+Pro+XL+Chip+ID/176196"
+      }
+    ]
   },
   {
     "name": "Google Pixel Fold",
@@ -269,7 +334,7 @@
     "repairability_score": 3,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_Fold",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Google Pixel XL",
@@ -277,7 +342,12 @@
     "repairability_score": 7,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Google_Pixel_XL",
-    "teardown_url": "https://www.ifixit.com/Teardown/Google+Pixel+XL+Teardown/71237"
+    "teardown_urls": [
+      {
+        "title": "Google Pixel XL Teardown",
+        "url": "https://www.ifixit.com/Teardown/Google+Pixel+XL+Teardown/71237"
+      }
+    ]
   },
   {
     "name": "HMD Fusion",
@@ -285,7 +355,7 @@
     "repairability_score": 9,
     "brand": null,
     "link": "https://www.ifixit.com/Device/HMD_Fusion",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HMD Skyline",
@@ -293,7 +363,7 @@
     "repairability_score": 9,
     "brand": null,
     "link": "https://www.ifixit.com/Device/HMD_Skyline",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HMD Skyline Business",
@@ -301,7 +371,7 @@
     "repairability_score": 9,
     "brand": null,
     "link": "https://www.ifixit.com/Device/HMD_Skyline_Business",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HTC Desire 700 Dual Sim",
@@ -309,7 +379,7 @@
     "repairability_score": 8,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_Desire_700_Dual_Sim",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HTC MyTouch 4G",
@@ -317,7 +387,7 @@
     "repairability_score": 6,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_MyTouch_4G",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HTC One",
@@ -325,7 +395,12 @@
     "repairability_score": 1,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_One",
-    "teardown_url": "https://www.ifixit.com/Teardown/HTC+One+Teardown/13494"
+    "teardown_urls": [
+      {
+        "title": "HTC One Teardown",
+        "url": "https://www.ifixit.com/Teardown/HTC+One+Teardown/13494"
+      }
+    ]
   },
   {
     "name": "HTC One M8",
@@ -333,7 +408,12 @@
     "repairability_score": 2,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_One_M8",
-    "teardown_url": "https://www.ifixit.com/Teardown/HTC+One+(M8)+Teardown/23615"
+    "teardown_urls": [
+      {
+        "title": "HTC One (M8) Teardown",
+        "url": "https://www.ifixit.com/Teardown/HTC+One+(M8)+Teardown/23615"
+      }
+    ]
   },
   {
     "name": "HTC One M9",
@@ -341,7 +421,12 @@
     "repairability_score": 2,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_One_M9",
-    "teardown_url": "https://www.ifixit.com/Teardown/HTC+One+M9+Teardown/39166"
+    "teardown_urls": [
+      {
+        "title": "HTC One M9 Teardown",
+        "url": "https://www.ifixit.com/Teardown/HTC+One+M9+Teardown/39166"
+      }
+    ]
   },
   {
     "name": "HTC One Mini 2",
@@ -349,7 +434,7 @@
     "repairability_score": 5,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_One_Mini_2",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HTC One X",
@@ -357,7 +442,7 @@
     "repairability_score": 3,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_One_X",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "HTC Surround",
@@ -365,7 +450,12 @@
     "repairability_score": 5,
     "brand": "HTC",
     "link": "https://www.ifixit.com/Device/HTC_Surround",
-    "teardown_url": "https://www.ifixit.com/Teardown/HTC+Surround+Teardown/4469"
+    "teardown_urls": [
+      {
+        "title": "HTC Surround Teardown",
+        "url": "https://www.ifixit.com/Teardown/HTC+Surround+Teardown/4469"
+      }
+    ]
   },
   {
     "name": "Huawei Ascend W1",
@@ -373,7 +463,7 @@
     "repairability_score": 7,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Ascend_W1",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Huawei Mate 10 Pro",
@@ -381,7 +471,12 @@
     "repairability_score": 4,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_10_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+10+Pro+Teardown/100096"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 10 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+10+Pro+Teardown/100096"
+      }
+    ]
   },
   {
     "name": "Huawei Mate 20 Pro",
@@ -389,7 +484,12 @@
     "repairability_score": 4,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_20_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+20+Pro+Teardown/114159"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 20 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+20+Pro+Teardown/114159"
+      }
+    ]
   },
   {
     "name": "Huawei Mate 20 X 5G",
@@ -397,7 +497,12 @@
     "repairability_score": 4,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_20_X_5G",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+20+X+5G+Teardown/124808"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 20 X 5G Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+20+X+5G+Teardown/124808"
+      }
+    ]
   },
   {
     "name": "Huawei Mate 30 Pro",
@@ -405,7 +510,12 @@
     "repairability_score": 5,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_30_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+30+Pro+Teardown/129894"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 30 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+30+Pro+Teardown/129894"
+      }
+    ]
   },
   {
     "name": "Huawei Mate 40 Pro",
@@ -413,7 +523,12 @@
     "repairability_score": 4,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_40_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+40+Pro+Teardown/138729"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 40 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+40+Pro+Teardown/138729"
+      }
+    ]
   },
   {
     "name": "Huawei Mate 8",
@@ -421,7 +536,16 @@
     "repairability_score": 6,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_8",
-    "teardown_url": "https://www.ifixit.com/Guide/How+to+reassemble+Huawei+Mate+8-/64920"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 8 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+8+Teardown/64819"
+      },
+      {
+        "title": "How to reassemble Huawei Mate 8?",
+        "url": "https://www.ifixit.com/Guide/How+to+reassemble+Huawei+Mate+8-/64920"
+      }
+    ]
   },
   {
     "name": "Huawei Mate 9",
@@ -429,7 +553,12 @@
     "repairability_score": 5,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_9",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+9+Teardown/98335"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate 9 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+9+Teardown/98335"
+      }
+    ]
   },
   {
     "name": "Huawei Mate Xs",
@@ -437,7 +566,12 @@
     "repairability_score": 2,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Mate_Xs",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+Mate+Xs+Teardown/132809"
+    "teardown_urls": [
+      {
+        "title": "Huawei Mate Xs Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+Mate+Xs+Teardown/132809"
+      }
+    ]
   },
   {
     "name": "Huawei P20 Pro",
@@ -445,7 +579,12 @@
     "repairability_score": 4,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_P20_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+P20+Pro+Teardown/104605"
+    "teardown_urls": [
+      {
+        "title": "Huawei P20 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+P20+Pro+Teardown/104605"
+      }
+    ]
   },
   {
     "name": "Huawei P30 Pro",
@@ -453,7 +592,12 @@
     "repairability_score": 4,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_P30_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+P30+Pro+Teardown/122028"
+    "teardown_urls": [
+      {
+        "title": "Huawei P30 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+P30+Pro+Teardown/122028"
+      }
+    ]
   },
   {
     "name": "Huawei P9",
@@ -461,7 +605,16 @@
     "repairability_score": 7,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_P9",
-    "teardown_url": "https://www.ifixit.com/Teardown/Huawei+P9+Teardown+Complete/64558"
+    "teardown_urls": [
+      {
+        "title": "Huawei P9 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Huawei+P9+Teardown/62348"
+      },
+      {
+        "title": "Huawei P9 Teardown Complete",
+        "url": "https://www.ifixit.com/Teardown/Huawei+P9+Teardown+Complete/64558"
+      }
+    ]
   },
   {
     "name": "Huawei Union",
@@ -469,7 +622,7 @@
     "repairability_score": 8,
     "brand": "Huawei",
     "link": "https://www.ifixit.com/Device/Huawei_Union",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "LG G4",
@@ -477,7 +630,12 @@
     "repairability_score": 8,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/LG_G4",
-    "teardown_url": "https://www.ifixit.com/Teardown/LG+G4+Teardown/42705"
+    "teardown_urls": [
+      {
+        "title": "LG G4 Teardown",
+        "url": "https://www.ifixit.com/Teardown/LG+G4+Teardown/42705"
+      }
+    ]
   },
   {
     "name": "LG G5",
@@ -485,7 +643,12 @@
     "repairability_score": 8,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/LG_G5",
-    "teardown_url": "https://www.ifixit.com/Teardown/LG+G5+Teardown/61205"
+    "teardown_urls": [
+      {
+        "title": "LG G5 Teardown",
+        "url": "https://www.ifixit.com/Teardown/LG+G5+Teardown/61205"
+      }
+    ]
   },
   {
     "name": "LG G6",
@@ -493,7 +656,7 @@
     "repairability_score": 5,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/LG_G6",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "LG G7 Thin Q",
@@ -501,7 +664,12 @@
     "repairability_score": 4,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/LG_G7_Thin_Q",
-    "teardown_url": "https://www.ifixit.com/Teardown/LG+G7+ThinQ+Teardown/110419"
+    "teardown_urls": [
+      {
+        "title": "LG G7 ThinQ Teardown",
+        "url": "https://www.ifixit.com/Teardown/LG+G7+ThinQ+Teardown/110419"
+      }
+    ]
   },
   {
     "name": "Lenovo K5 Note",
@@ -509,7 +677,7 @@
     "repairability_score": 6,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Lenovo_K5_Note",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Meizu MX6",
@@ -517,7 +685,12 @@
     "repairability_score": 7,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Meizu_MX6",
-    "teardown_url": "https://www.ifixit.com/Teardown/Meizu+MX6+Teardown/65393"
+    "teardown_urls": [
+      {
+        "title": "Meizu MX6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Meizu+MX6+Teardown/65393"
+      }
+    ]
   },
   {
     "name": "Mi 11",
@@ -525,7 +698,12 @@
     "repairability_score": 4,
     "brand": "Xiaomi",
     "link": "https://www.ifixit.com/Device/Mi_11",
-    "teardown_url": "https://www.ifixit.com/Teardown/Xiaomi+Mi+11+Teardown/141047"
+    "teardown_urls": [
+      {
+        "title": "Xiaomi Mi 11 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Xiaomi+Mi+11+Teardown/141047"
+      }
+    ]
   },
   {
     "name": "Micromax Canvas A1",
@@ -533,7 +711,7 @@
     "repairability_score": 8,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Micromax_Canvas_A1",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Microsoft Surface Duo",
@@ -541,7 +719,12 @@
     "repairability_score": 2,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Microsoft_Surface_Duo",
-    "teardown_url": "https://www.ifixit.com/Teardown/Microsoft+Surface+Duo+Teardown/136576"
+    "teardown_urls": [
+      {
+        "title": "Microsoft Surface Duo Teardown",
+        "url": "https://www.ifixit.com/Teardown/Microsoft+Surface+Duo+Teardown/136576"
+      }
+    ]
   },
   {
     "name": "Moto Z",
@@ -549,7 +732,12 @@
     "repairability_score": 7,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Moto_Z",
-    "teardown_url": "https://www.ifixit.com/Teardown/2016+Moto+Z+Teardown/144150"
+    "teardown_urls": [
+      {
+        "title": "2016 Moto Z Teardown",
+        "url": "https://www.ifixit.com/Teardown/2016+Moto+Z+Teardown/144150"
+      }
+    ]
   },
   {
     "name": "Motorola Atrix 4G",
@@ -557,7 +745,12 @@
     "repairability_score": 9,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Atrix_4G",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Atrix+4G+Teardown/4964"
+    "teardown_urls": [
+      {
+        "title": "Motorola Atrix 4G Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Atrix+4G+Teardown/4964"
+      }
+    ]
   },
   {
     "name": "Motorola Droid 3",
@@ -565,7 +758,12 @@
     "repairability_score": 6,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Droid_3",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Droid+3+Teardown/6108"
+    "teardown_urls": [
+      {
+        "title": "Motorola Droid 3 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Droid+3+Teardown/6108"
+      }
+    ]
   },
   {
     "name": "Motorola Droid 4",
@@ -573,7 +771,12 @@
     "repairability_score": 4,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Droid_4",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Droid+4+Teardown/7759"
+    "teardown_urls": [
+      {
+        "title": "Motorola Droid 4 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Droid+4+Teardown/7759"
+      }
+    ]
   },
   {
     "name": "Motorola Droid Bionic",
@@ -581,7 +784,12 @@
     "repairability_score": 9,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Droid_Bionic",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Droid+Bionic+Teardown/6449"
+    "teardown_urls": [
+      {
+        "title": "Motorola Droid Bionic Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Droid+Bionic+Teardown/6449"
+      }
+    ]
   },
   {
     "name": "Motorola Droid Mini",
@@ -589,7 +797,7 @@
     "repairability_score": 8,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Droid_Mini",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Motorola Droid RAZR",
@@ -597,7 +805,12 @@
     "repairability_score": 4,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Droid_RAZR",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Droid+RAZR+Teardown/7048"
+    "teardown_urls": [
+      {
+        "title": "Motorola Droid RAZR Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Droid+RAZR+Teardown/7048"
+      }
+    ]
   },
   {
     "name": "Motorola Moto X 1st Generation",
@@ -605,7 +818,12 @@
     "repairability_score": 7,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Moto_X_1st_Generation",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Moto+X+Teardown/16867"
+    "teardown_urls": [
+      {
+        "title": "Motorola Moto X Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Moto+X+Teardown/16867"
+      }
+    ]
   },
   {
     "name": "Motorola Photon 4G MB855",
@@ -613,7 +831,7 @@
     "repairability_score": 7,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_Photon_4G_MB855",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Motorola razr",
@@ -621,7 +839,12 @@
     "repairability_score": 1,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Motorola_razr",
-    "teardown_url": "https://www.ifixit.com/Teardown/Motorola+Razr+Teardown/130414"
+    "teardown_urls": [
+      {
+        "title": "Motorola Razr Teardown",
+        "url": "https://www.ifixit.com/Teardown/Motorola+Razr+Teardown/130414"
+      }
+    ]
   },
   {
     "name": "Nexus 4",
@@ -629,7 +852,12 @@
     "repairability_score": 7,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/Nexus_4",
-    "teardown_url": "https://www.ifixit.com/Teardown/Nexus+4+Teardown/11781"
+    "teardown_urls": [
+      {
+        "title": "Nexus 4 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Nexus+4+Teardown/11781"
+      }
+    ]
   },
   {
     "name": "Nexus 5",
@@ -637,7 +865,12 @@
     "repairability_score": 8,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/Nexus_5",
-    "teardown_url": "https://www.ifixit.com/Teardown/Nexus+5+Teardown/19016"
+    "teardown_urls": [
+      {
+        "title": "Nexus 5 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Nexus+5+Teardown/19016"
+      }
+    ]
   },
   {
     "name": "Nexus 5X",
@@ -645,7 +878,12 @@
     "repairability_score": 7,
     "brand": "LG",
     "link": "https://www.ifixit.com/Device/Nexus_5X",
-    "teardown_url": "https://www.ifixit.com/Teardown/Nexus+5X+Teardown/54403"
+    "teardown_urls": [
+      {
+        "title": "Nexus 5X Teardown",
+        "url": "https://www.ifixit.com/Teardown/Nexus+5X+Teardown/54403"
+      }
+    ]
   },
   {
     "name": "Nexus 6",
@@ -653,7 +891,12 @@
     "repairability_score": 7,
     "brand": "Motorola",
     "link": "https://www.ifixit.com/Device/Nexus_6",
-    "teardown_url": "https://www.ifixit.com/Teardown/Nexus+6+Teardown/32877"
+    "teardown_urls": [
+      {
+        "title": "Nexus 6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Nexus+6+Teardown/32877"
+      }
+    ]
   },
   {
     "name": "Nexus 6P",
@@ -661,7 +904,12 @@
     "repairability_score": 2,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Nexus_6P",
-    "teardown_url": "https://www.ifixit.com/Teardown/Nexus+6P+Teardown/53965"
+    "teardown_urls": [
+      {
+        "title": "Nexus 6P Teardown",
+        "url": "https://www.ifixit.com/Teardown/Nexus+6P+Teardown/53965"
+      }
+    ]
   },
   {
     "name": "Nexus S",
@@ -669,7 +917,12 @@
     "repairability_score": 7,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Nexus_S",
-    "teardown_url": "https://www.ifixit.com/Teardown/Nexus+S+Teardown/4365"
+    "teardown_urls": [
+      {
+        "title": "Nexus S Teardown",
+        "url": "https://www.ifixit.com/Teardown/Nexus+S+Teardown/4365"
+      }
+    ]
   },
   {
     "name": "Nokia G22",
@@ -677,7 +930,7 @@
     "repairability_score": 8,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Nokia_G22",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "OnePlus 2",
@@ -685,7 +938,12 @@
     "repairability_score": 7,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_2",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+2+Teardown/45352"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 2 Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+2+Teardown/45352"
+      }
+    ]
   },
   {
     "name": "OnePlus 5",
@@ -693,7 +951,12 @@
     "repairability_score": 7,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_5",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+5+Teardown/94173"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 5 Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+5+Teardown/94173"
+      }
+    ]
   },
   {
     "name": "OnePlus 6",
@@ -701,7 +964,12 @@
     "repairability_score": 5,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_6",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+6+Teardown/109826"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+6+Teardown/109826"
+      }
+    ]
   },
   {
     "name": "OnePlus 6T",
@@ -709,7 +977,12 @@
     "repairability_score": 5,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_6T",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+6T+Teardown/115698"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 6T Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+6T+Teardown/115698"
+      }
+    ]
   },
   {
     "name": "OnePlus 7 Pro",
@@ -717,7 +990,12 @@
     "repairability_score": 4,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_7_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+7+Pro+Teardown/123656"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 7 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+7+Pro+Teardown/123656"
+      }
+    ]
   },
   {
     "name": "OnePlus 7T",
@@ -725,7 +1003,12 @@
     "repairability_score": 5,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_7T",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+7T+Teardown/127509"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 7T Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+7T+Teardown/127509"
+      }
+    ]
   },
   {
     "name": "OnePlus 8 Pro",
@@ -733,7 +1016,12 @@
     "repairability_score": 4,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_8_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+8+Pro+Teardown/133351"
+    "teardown_urls": [
+      {
+        "title": "OnePlus 8 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+8+Pro+Teardown/133351"
+      }
+    ]
   },
   {
     "name": "OnePlus Nord",
@@ -741,7 +1029,12 @@
     "repairability_score": 6,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_Nord",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+Nord+Teardown/135734"
+    "teardown_urls": [
+      {
+        "title": "OnePlus Nord Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+Nord+Teardown/135734"
+      }
+    ]
   },
   {
     "name": "OnePlus One",
@@ -749,7 +1042,12 @@
     "repairability_score": 5,
     "brand": "OnePlus",
     "link": "https://www.ifixit.com/Device/OnePlus_One",
-    "teardown_url": "https://www.ifixit.com/Teardown/OnePlus+One+Teardown/26484"
+    "teardown_urls": [
+      {
+        "title": "OnePlus One Teardown",
+        "url": "https://www.ifixit.com/Teardown/OnePlus+One+Teardown/26484"
+      }
+    ]
   },
   {
     "name": "Oppo R9m",
@@ -757,7 +1055,7 @@
     "repairability_score": 7,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Oppo_R9m",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Project Tango",
@@ -765,7 +1063,12 @@
     "repairability_score": 9,
     "brand": "Google",
     "link": "https://www.ifixit.com/Device/Project_Tango",
-    "teardown_url": "https://www.ifixit.com/Teardown/Project+Tango+Teardown/23835"
+    "teardown_urls": [
+      {
+        "title": "Project Tango Teardown",
+        "url": "https://www.ifixit.com/Teardown/Project+Tango+Teardown/23835"
+      }
+    ]
   },
   {
     "name": "Samsung Epic 4G Touch",
@@ -773,7 +1076,12 @@
     "repairability_score": 7,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Epic_4G_Touch",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Epic+4G+Touch+Teardown/6481"
+    "teardown_urls": [
+      {
+        "title": "Samsung Epic 4G Touch Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Epic+4G+Touch+Teardown/6481"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy A51",
@@ -781,7 +1089,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_A51",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+A51+Teardown/131053"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy A51 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+A51+Teardown/131053"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Alpha",
@@ -789,7 +1102,12 @@
     "repairability_score": 5,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Alpha",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Alpha+Teardown/29604"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Alpha Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Alpha+Teardown/29604"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Centura",
@@ -797,7 +1115,12 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Centura",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Centura+Teardown/44393"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Centura Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Centura+Teardown/44393"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Fold",
@@ -805,7 +1128,12 @@
     "repairability_score": 2,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Fold",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Fold+Teardown/122600"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Fold Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Fold+Teardown/122600"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy J6",
@@ -813,7 +1141,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_J6",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+J6+Teardown/112383"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy J6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+J6+Teardown/112383"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Nexus",
@@ -821,7 +1154,12 @@
     "repairability_score": 7,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Nexus",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Nexus+Teardown/7182"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Nexus Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Nexus+Teardown/7182"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note",
@@ -829,7 +1167,7 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Samsung Galaxy Note 20 Ultra",
@@ -837,7 +1175,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_20_Ultra",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note+20+and+Note+20+Ultra+Teardown/136102"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note 20 and Note 20 Ultra Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note+20+and+Note+20+Ultra+Teardown/136102"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note 3",
@@ -845,7 +1188,12 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_3",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note+3+Teardown/19209"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note 3 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note+3+Teardown/19209"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note Fan Edition",
@@ -853,7 +1201,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_Fan_Edition",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note+Fan+Edition+Teardown/95451"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note Fan Edition Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note+Fan+Edition+Teardown/95451"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note II",
@@ -861,7 +1214,7 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note_II",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Samsung Galaxy Note10 Plus 5G",
@@ -869,7 +1222,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note10_Plus_5G",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note10++5G+Teardown/125590"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note10+ 5G Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note10++5G+Teardown/125590"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note7",
@@ -877,7 +1235,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note7",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note7+Teardown/66389"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note7 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note7+Teardown/66389"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note8",
@@ -885,7 +1248,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note8",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note8+Teardown/97071"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note8 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note8+Teardown/97071"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Note9",
@@ -893,7 +1261,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Note9",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note9+Teardown/112412"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Note9 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Note9+Teardown/112412"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S 4G",
@@ -901,7 +1274,12 @@
     "repairability_score": 6,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_4G",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S+4G+Teardown/4977"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S 4G Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S+4G+Teardown/4977"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S II",
@@ -909,7 +1287,12 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_II",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S+II+Teardown/73002"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S II Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S+II+Teardown/73002"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S III",
@@ -917,7 +1300,12 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S_III",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S+III+Teardown/73106"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S III Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S+III+Teardown/73106"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S10",
@@ -925,7 +1313,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S10+and+S10e+Teardown/120331"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S10 and S10e Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S10+and+S10e+Teardown/120331"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S10 Plus",
@@ -933,7 +1326,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S10++Teardown/120436"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S10+ Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S10++Teardown/120436"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S10e",
@@ -941,7 +1339,7 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S10e",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Samsung Galaxy S20 Ultra",
@@ -949,7 +1347,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S20_Ultra",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S20+Ultra+Teardown/131607"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S20 Ultra Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S20+Ultra+Teardown/131607"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S21",
@@ -957,7 +1360,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S21",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S21+Teardown/140337"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S21 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S21+Teardown/140337"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S21 Ultra",
@@ -965,7 +1373,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S21_Ultra",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S21+Ultra+Teardown/141188"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S21 Ultra Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S21+Ultra+Teardown/141188"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S22",
@@ -973,7 +1386,16 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S22",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S22+Teardown/148710"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S22 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S22+Teardown/148710"
+      },
+      {
+        "title": "Samsung Galaxy S22 Chip ID",
+        "url": "https://www.ifixit.com/Guide/Samsung+Galaxy+S22+Chip+ID/148072"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S22 Ultra",
@@ -981,7 +1403,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S22_Ultra",
-    "teardown_url": "https://www.ifixit.com/Guide/Samsung+Galaxy+S22+Ultra+Chip+ID/148073"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S22 Ultra Chip ID",
+        "url": "https://www.ifixit.com/Guide/Samsung+Galaxy+S22+Ultra+Chip+ID/148073"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S4",
@@ -989,7 +1416,12 @@
     "repairability_score": 8,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S4",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S4+Teardown/13947"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S4 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S4+Teardown/13947"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S5",
@@ -997,7 +1429,16 @@
     "repairability_score": 5,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+Teardown/24016"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S5 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+Teardown/24016"
+      },
+      {
+        "title": "Samsung Galaxy S5 camera Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+camera+Teardown/53645"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S5 Active",
@@ -1005,7 +1446,7 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5_Active",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Samsung Galaxy S5 Mini",
@@ -1013,7 +1454,12 @@
     "repairability_score": 5,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S5_Mini",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+Mini+Teardown/27579"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S5 Mini Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S5+Mini+Teardown/27579"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S6",
@@ -1021,7 +1467,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S6",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S6+Teardown/39174"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S6+Teardown/39174"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S6 Edge",
@@ -1029,7 +1480,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S6_Edge",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S6+Edge+Teardown/39158"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S6 Edge Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S6+Edge+Teardown/39158"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S7",
@@ -1037,7 +1493,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S7",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S7+Teardown/56686"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S7 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S7+Teardown/56686"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S7 Edge",
@@ -1045,7 +1506,12 @@
     "repairability_score": 3,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S7_Edge",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S7+Edge+Teardown/56845"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S7 Edge Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S7+Edge+Teardown/56845"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S8",
@@ -1053,7 +1519,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S8",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S8+Teardown/87136"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S8 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S8+Teardown/87136"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S8 Plus",
@@ -1061,7 +1532,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S8_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S8++Teardown/87086"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S8+ Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S8++Teardown/87086"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S9",
@@ -1069,7 +1545,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S9",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S9+Teardown/104322"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S9 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S9+Teardown/104322"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy S9 Plus",
@@ -1077,7 +1558,12 @@
     "repairability_score": 4,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_S9_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S9++Teardown/104308"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy S9+ Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+S9++Teardown/104308"
+      }
+    ]
   },
   {
     "name": "Samsung Galaxy Z Flip",
@@ -1085,7 +1571,12 @@
     "repairability_score": 2,
     "brand": "Samsung",
     "link": "https://www.ifixit.com/Device/Samsung_Galaxy_Z_Flip",
-    "teardown_url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Z+Flip+Teardown/131002"
+    "teardown_urls": [
+      {
+        "title": "Samsung Galaxy Z Flip Teardown",
+        "url": "https://www.ifixit.com/Teardown/Samsung+Galaxy+Z+Flip+Teardown/131002"
+      }
+    ]
   },
   {
     "name": "Shift 6m",
@@ -1093,7 +1584,7 @@
     "repairability_score": 9,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Shift_6m",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Sony Xperia X Compact",
@@ -1101,7 +1592,7 @@
     "repairability_score": 6,
     "brand": "Sony Ericsson",
     "link": "https://www.ifixit.com/Device/Sony_Xperia_X_Compact",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Vivo X7",
@@ -1109,7 +1600,7 @@
     "repairability_score": 6,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Vivo_X7",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Vivo X7 Plus",
@@ -1117,7 +1608,7 @@
     "repairability_score": 7,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Vivo_X7_Plus",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Wiko Pulp 4G Phone",
@@ -1125,7 +1616,12 @@
     "repairability_score": 7,
     "brand": null,
     "link": "https://www.ifixit.com/Device/Wiko_Pulp_4G_Phone",
-    "teardown_url": "https://www.ifixit.com/Teardown/Wiko+Pulp+4G+Teardown/64584"
+    "teardown_urls": [
+      {
+        "title": "Wiko Pulp 4G Teardown",
+        "url": "https://www.ifixit.com/Teardown/Wiko+Pulp+4G+Teardown/64584"
+      }
+    ]
   },
   {
     "name": "Xiaomi Mi 5",
@@ -1133,7 +1629,7 @@
     "repairability_score": 6,
     "brand": "Xiaomi",
     "link": "https://www.ifixit.com/Device/Xiaomi_Mi_5",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "Xiaomi Redmi Note 3",
@@ -1141,7 +1637,7 @@
     "repairability_score": 8,
     "brand": "Xiaomi",
     "link": "https://www.ifixit.com/Device/Xiaomi_Redmi_Note_3",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "ZTE Blade Z Max",
@@ -1149,7 +1645,7 @@
     "repairability_score": 4,
     "brand": "ZTE",
     "link": "https://www.ifixit.com/Device/ZTE_Blade_Z_Max",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "ZTE ZFive G LTE",
@@ -1157,7 +1653,7 @@
     "repairability_score": 6,
     "brand": "ZTE",
     "link": "https://www.ifixit.com/Device/ZTE_ZFive_G_LTE",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "ZTE ZMax Pro",
@@ -1165,7 +1661,7 @@
     "repairability_score": 5,
     "brand": "ZTE",
     "link": "https://www.ifixit.com/Device/ZTE_ZMax_Pro",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 11",
@@ -1173,7 +1669,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_11",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+11+Teardown/126192"
+    "teardown_urls": [
+      {
+        "title": "iPhone 11 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+11+Teardown/126192"
+      }
+    ]
   },
   {
     "name": "iPhone 11 Pro Max",
@@ -1181,7 +1682,16 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_11_Pro_Max",
-    "teardown_url": "https://www.ifixit.com/Guide/iPhone+11+Pro+Max+Connector+ID/173388"
+    "teardown_urls": [
+      {
+        "title": "iPhone 11 Pro Max Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+11+Pro+Max+Teardown/126000"
+      },
+      {
+        "title": "iPhone 11 Pro Max Connector ID",
+        "url": "https://www.ifixit.com/Guide/iPhone+11+Pro+Max+Connector+ID/173388"
+      }
+    ]
   },
   {
     "name": "iPhone 12",
@@ -1189,7 +1699,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_12",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+12++Teardown/152903"
+    "teardown_urls": [
+      {
+        "title": "iPhone 12  Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+12++Teardown/152903"
+      }
+    ]
   },
   {
     "name": "iPhone 12 Pro",
@@ -1197,7 +1712,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_12_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+12+and+12+Pro+Teardown/137669"
+    "teardown_urls": [
+      {
+        "title": "iPhone 12 and 12 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+12+and+12+Pro+Teardown/137669"
+      }
+    ]
   },
   {
     "name": "iPhone 12 Pro Max",
@@ -1205,7 +1725,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_12_Pro_Max",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+12+Pro+Max+Teardown/138640"
+    "teardown_urls": [
+      {
+        "title": "iPhone 12 Pro Max Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+12+Pro+Max+Teardown/138640"
+      }
+    ]
   },
   {
     "name": "iPhone 12 mini",
@@ -1213,7 +1738,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_12_mini",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+12+mini+Teardown/138505"
+    "teardown_urls": [
+      {
+        "title": "iPhone 12 mini Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+12+mini+Teardown/138505"
+      }
+    ]
   },
   {
     "name": "iPhone 13 Pro",
@@ -1221,7 +1751,16 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_13_Pro",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+13+Pro+Teardown/145019"
+    "teardown_urls": [
+      {
+        "title": "iPhone 13 Pro Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+13+Pro+Teardown/145019"
+      },
+      {
+        "title": "iPhone 13 Pro Full Chip ID",
+        "url": "https://www.ifixit.com/Guide/iPhone+13+Pro+Full+Chip+ID/144993"
+      }
+    ]
   },
   {
     "name": "iPhone 14",
@@ -1229,7 +1768,7 @@
     "repairability_score": 4,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_14",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 15",
@@ -1237,7 +1776,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_15",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 15 Plus",
@@ -1245,7 +1784,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_15_Plus",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 15 Pro",
@@ -1253,7 +1792,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_15_Pro",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 15 Pro Max",
@@ -1261,7 +1800,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_15_Pro_Max",
-    "teardown_url": "https://www.ifixit.com/Guide/iPhone+15+Pro+Max+Chip+ID/165320"
+    "teardown_urls": [
+      {
+        "title": "iPhone 15 Pro Max Chip ID",
+        "url": "https://www.ifixit.com/Guide/iPhone+15+Pro+Max+Chip+ID/165320"
+      }
+    ]
   },
   {
     "name": "iPhone 16",
@@ -1269,7 +1813,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_16",
-    "teardown_url": "https://www.ifixit.com/Guide/iPhone+16+Chip+ID/177222"
+    "teardown_urls": [
+      {
+        "title": "iPhone 16 Chip ID",
+        "url": "https://www.ifixit.com/Guide/iPhone+16+Chip+ID/177222"
+      }
+    ]
   },
   {
     "name": "iPhone 16 Plus",
@@ -1277,7 +1826,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_16_Plus",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 16 Pro",
@@ -1285,7 +1834,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_16_Pro",
-    "teardown_url": "https://www.ifixit.com/Guide/iPhone+16+Pro+Chip+ID/177358"
+    "teardown_urls": [
+      {
+        "title": "iPhone 16 Pro Chip ID",
+        "url": "https://www.ifixit.com/Guide/iPhone+16+Pro+Chip+ID/177358"
+      }
+    ]
   },
   {
     "name": "iPhone 16 Pro Max",
@@ -1293,7 +1847,7 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_16_Pro_Max",
-    "teardown_url": null
+    "teardown_urls": []
   },
   {
     "name": "iPhone 1st Generation",
@@ -1301,7 +1855,12 @@
     "repairability_score": 2,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_1st_Generation",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+1st+Generation+Teardown/599"
+    "teardown_urls": [
+      {
+        "title": "iPhone 1st Generation Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+1st+Generation+Teardown/599"
+      }
+    ]
   },
   {
     "name": "iPhone 3G",
@@ -1309,7 +1868,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_3G",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+3G+Teardown/600"
+    "teardown_urls": [
+      {
+        "title": "iPhone 3G Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+3G+Teardown/600"
+      }
+    ]
   },
   {
     "name": "iPhone 3GS",
@@ -1317,7 +1881,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_3GS",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+3GS+Teardown/817"
+    "teardown_urls": [
+      {
+        "title": "iPhone 3GS Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+3GS+Teardown/817"
+      }
+    ]
   },
   {
     "name": "iPhone 4",
@@ -1325,7 +1894,20 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_4",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+4+Teardown/73133"
+    "teardown_urls": [
+      {
+        "title": "iPhone 4 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+4+Teardown/73133"
+      },
+      {
+        "title": "iPhone 4 Gyroscope Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+4+Gyroscope+Teardown/3156"
+      },
+      {
+        "title": "iPhone 4 Microphone Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+4+Microphone+Teardown/3473"
+      }
+    ]
   },
   {
     "name": "iPhone 4 Verizon",
@@ -1333,7 +1915,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_4_Verizon",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+4+Verizon+Teardown/4693"
+    "teardown_urls": [
+      {
+        "title": "iPhone 4 Verizon Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+4+Verizon+Teardown/4693"
+      }
+    ]
   },
   {
     "name": "iPhone 4S",
@@ -1341,7 +1928,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_4S",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+4S+Teardown/6610"
+    "teardown_urls": [
+      {
+        "title": "iPhone 4S Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+4S+Teardown/6610"
+      }
+    ]
   },
   {
     "name": "iPhone 5",
@@ -1349,7 +1941,16 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_5",
-    "teardown_url": "https://www.ifixit.com/Teardown/Apple+A6+Teardown/10528"
+    "teardown_urls": [
+      {
+        "title": "iPhone 5 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+5+Teardown/42582"
+      },
+      {
+        "title": "Apple A6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Apple+A6+Teardown/10528"
+      }
+    ]
   },
   {
     "name": "iPhone 5c",
@@ -1357,7 +1958,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_5c",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+5c+Teardown/17382"
+    "teardown_urls": [
+      {
+        "title": "iPhone 5c Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+5c+Teardown/17382"
+      }
+    ]
   },
   {
     "name": "iPhone 5s",
@@ -1365,7 +1971,16 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_5s",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+5s+Teardown/73010"
+    "teardown_urls": [
+      {
+        "title": "iPhone 5s Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+5s+Teardown/73010"
+      },
+      {
+        "title": "Apple A7 Teardown",
+        "url": "https://www.ifixit.com/Teardown/Apple+A7+Teardown/17682"
+      }
+    ]
   },
   {
     "name": "iPhone 6",
@@ -1373,7 +1988,16 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_6",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+6+Teardown/131237"
+    "teardown_urls": [
+      {
+        "title": "iPhone 6 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+6+Teardown/131237"
+      },
+      {
+        "title": "Apple iPhone 6 Teardown by X-ray",
+        "url": "https://www.ifixit.com/Teardown/Apple+iPhone+6+Teardown+by+X-ray/29640"
+      }
+    ]
   },
   {
     "name": "iPhone 6 Plus",
@@ -1381,7 +2005,20 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_6_Plus",
-    "teardown_url": "https://www.ifixit.com/Guide/Smontaggio+iPhone+6+Plus+(Italiano)/29211"
+    "teardown_urls": [
+      {
+        "title": "iPhone 6 Plus Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+6+Plus+Teardown/29206"
+      },
+      {
+        "title": "Smontaggio iPhone 6 Plus (Italiano)",
+        "url": "https://www.ifixit.com/Guide/Smontaggio+iPhone+6+Plus+(Italiano)/29211"
+      },
+      {
+        "title": "iPhone 6 Plus 拆解",
+        "url": "https://www.ifixit.com/Guide/iPhone+6+Plus+%E6%8B%86%E8%A7%A3/29208"
+      }
+    ]
   },
   {
     "name": "iPhone 6s",
@@ -1389,7 +2026,16 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_6s",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+6s+Display+Teardown/49951"
+    "teardown_urls": [
+      {
+        "title": "iPhone 6s Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+6s+Teardown/48170"
+      },
+      {
+        "title": "iPhone 6s Display Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+6s+Display+Teardown/49951"
+      }
+    ]
   },
   {
     "name": "iPhone 6s Plus",
@@ -1397,7 +2043,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_6s_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+6s+Plus+Teardown/48171"
+    "teardown_urls": [
+      {
+        "title": "iPhone 6s Plus Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+6s+Plus+Teardown/48171"
+      }
+    ]
   },
   {
     "name": "iPhone 7",
@@ -1405,7 +2056,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_7",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+7+Teardown/67382"
+    "teardown_urls": [
+      {
+        "title": "iPhone 7 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+7+Teardown/67382"
+      }
+    ]
   },
   {
     "name": "iPhone 7 Plus",
@@ -1413,7 +2069,12 @@
     "repairability_score": 7,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_7_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+7+Plus+Teardown/67384"
+    "teardown_urls": [
+      {
+        "title": "iPhone 7 Plus Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+7+Plus+Teardown/67384"
+      }
+    ]
   },
   {
     "name": "iPhone 8",
@@ -1421,7 +2082,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_8",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+8+Teardown/97481"
+    "teardown_urls": [
+      {
+        "title": "iPhone 8 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+8+Teardown/97481"
+      }
+    ]
   },
   {
     "name": "iPhone 8 Plus",
@@ -1429,7 +2095,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_8_Plus",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+8+Plus+Teardown/97482"
+    "teardown_urls": [
+      {
+        "title": "iPhone 8 Plus Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+8+Plus+Teardown/97482"
+      }
+    ]
   },
   {
     "name": "iPhone SE",
@@ -1437,7 +2108,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_SE",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+SE+Teardown/60902"
+    "teardown_urls": [
+      {
+        "title": "iPhone SE Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+SE+Teardown/60902"
+      }
+    ]
   },
   {
     "name": "iPhone SE 2020",
@@ -1445,7 +2121,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_SE_2020",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+SE+2020+Teardown/133066"
+    "teardown_urls": [
+      {
+        "title": "iPhone SE 2020 Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+SE+2020+Teardown/133066"
+      }
+    ]
   },
   {
     "name": "iPhone X",
@@ -1453,7 +2134,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_X",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+X+Teardown/98975"
+    "teardown_urls": [
+      {
+        "title": "iPhone X Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+X+Teardown/98975"
+      }
+    ]
   },
   {
     "name": "iPhone XR",
@@ -1461,7 +2147,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_XR",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+XR+Teardown/114123"
+    "teardown_urls": [
+      {
+        "title": "iPhone XR Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+XR+Teardown/114123"
+      }
+    ]
   },
   {
     "name": "iPhone XS",
@@ -1469,7 +2160,12 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_XS",
-    "teardown_url": "https://www.ifixit.com/Teardown/iPhone+XS+and+XS+Max+Teardown/113021"
+    "teardown_urls": [
+      {
+        "title": "iPhone XS and XS Max Teardown",
+        "url": "https://www.ifixit.com/Teardown/iPhone+XS+and+XS+Max+Teardown/113021"
+      }
+    ]
   },
   {
     "name": "iPhone XS Max",
@@ -1477,6 +2173,6 @@
     "repairability_score": 6,
     "brand": "Apple",
     "link": "https://www.ifixit.com/Device/iPhone_XS_Max",
-    "teardown_url": null
+    "teardown_urls": []
   }
 ]

@@ -1,8 +1,6 @@
-name: Update Devices JSON
+name: Update Devices JSON to gh-pages
 
 on:
-  schedule:
-    - cron: '0 0 * * 0' # Every Sunday at midnight
   push:
     branches: [ master ]
   workflow_dispatch:
@@ -62,21 +60,55 @@ jobs:
           name: script-logs
           path: examples/example_categories.log
 
-      - name: Commit changes
+      - name: Initialize gh-pages branch if it does not exist
         run: |
+          git fetch origin
+          if ! git ls-remote --heads origin gh-pages | grep -q "gh-pages"; then
+            echo "gh-pages branch does not exist, creating it..."
+            git checkout --orphan gh-pages
+            git rm -rf .
+            touch README.md
+            echo "# GitHub Pages Branch" > README.md
+            git add README.md
+            git commit -m "Initialize gh-pages branch"
+            git push origin gh-pages
+            echo "gh-pages branch created"
+          else
+            echo "gh-pages branch already exists"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          path: gh-pages
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+      - name: Copy JSON to gh-pages branch
+        run: |
+          mkdir -p gh-pages
+          cp examples/devices_with_scores.json gh-pages/devices_with_scores.json
+          if [ -f examples/index.html ]; then
+            cp examples/index.html gh-pages/index.html
+          fi
+
+      - name: Commit and push to gh-pages
+        run: |
+          cd gh-pages
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-          git add examples/devices_with_scores.json
+          git add devices_with_scores.json
+          # Optional: HTML-Datei hinzufügen, falls vorhanden
+          if [ -f index.html ]; then
+            git add index.html
+          fi
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "No changes to commit in gh-pages"
             exit 0
           fi
-          git commit -m "change(datasource): update devices_with_scores.json"
-          if ! git pull --rebase origin master; then
-            echo "Rebase failed, resetting changes and skipping push"
-            git rebase --abort || true
-            exit 0
-          fi
-          git push
+          git commit -m "change(datasource): update devices_with_scores.json in gh-pages"
+          git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}

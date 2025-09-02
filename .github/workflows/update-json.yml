@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * *' # Daily at midnight UTC
   push:
-    branches: [ master ]
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: 'master'
+          ref: 'develop'
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       - name: Set up Python
@@ -69,13 +69,16 @@ jobs:
           git fetch origin
           if ! git ls-remote --heads origin gh-pages | grep -q "gh-pages"; then
             echo "gh-pages branch does not exist, creating it..."
-            git checkout --orphan gh-pages
-            git rm -rf .
-            touch README.md
+            mkdir temp_dir
+            cd temp_dir
+            git init
             echo "# GitHub Pages Branch" > README.md
             git add README.md
             git commit -m "Initialize gh-pages branch"
-            git push origin gh-pages
+            git remote add origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+            git push -u origin HEAD:gh-pages
+            cd ..
+            rm -rf temp_dir
             echo "gh-pages branch created"
           else
             echo "gh-pages branch already exists"

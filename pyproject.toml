@@ -1,0 +1,88 @@
+[build-system]
+requires = [
+    "setuptools>=62.6,<=80.9.0",
+    "setuptools-scm>=6.2,<=9.2.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ifixit-api-client"
+authors = [
+    {name = "NoJokeFNA"}
+]
+description = "A Python client for the iFixit API v2.0"
+readme = {content-type = "text/x-rst", file = "README.rst"}
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+classifiers = [
+    "Development Status :: 1 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/NoJokeFNA/ifixit-api-client"
+Source = "https://github.com/NoJokeFNA/ifixit-api-client"
+Documentation = "https://nojokefna.github.io/ifixit-api-client/"
+Tracker = "https://github.com/NoJokeFNA/ifixit-api-client/issues"
+
+[tool.setuptools]
+packages = [
+    "src",
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+readme = {content-type = "text/x-rst", file = "README.rst"}
+
+[tool.setuptools_scm]
+
+[tool.black]
+target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+namespace_packages = true
+install_types = true
+strict = true
+show_error_codes = true
+ignore_errors = true
+
+[tool.pylint.main]
+extension-pkg-whitelist = [
+    "pydantic",
+    "ujson"
+]
+py-version = 3.9
+
+[tool.pylint.messages_control]
+enable = [
+    "bad-indentation",
+    "line-too-long"
+]
+disable = [
+    "protected-access",
+    "fixme"
+]
+
+[tool.pylint.format]
+indent-string = '    '
+max-line-length = 120
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

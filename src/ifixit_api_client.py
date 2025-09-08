@@ -1,13 +1,55 @@
 import logging
 import os
-from typing import Any, Dict, List, Optional
+import warnings
+from functools import wraps
+from typing import Any, Dict, List, Optional, Callable, TypeVar, cast
 
 import requests
 import urllib3
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
+F = TypeVar("F", bound=Callable[..., Any])
+
 logger = logging.getLogger(__name__)
+
+
+def beta(func: F) -> F:
+    """Decorator to mark a method as BETA.
+
+    Emits a UserWarning each time the decorated function is called to signal
+    that the API surface is experimental and may change without notice.
+    """
+
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any):
+        warnings.warn(
+            f"{func.__name__} is in BETA and may change without notice.",
+            UserWarning,
+            stacklevel=2,
+        )
+        return func(*args, **kwargs)
+
+    return cast(F, wrapper)
+
+
+def requires_token(func: F) -> F:
+    """Decorator to ensure an instance has an auth token before calling.
+
+    Assumes the decorated function is a bound method whose first argument is
+    `self` and that the instance has an `auth_token` attribute.
+
+    Raises:
+        ValueError: If no auth token is present.
+    """
+
+    @wraps(func)
+    def wrapper(self, *args: Any, **kwargs: Any):
+        if not getattr(self, "auth_token", None):
+            raise ValueError(f"{func.__name__} requires an API token.")
+        return func(self, *args, **kwargs)
+
+    return cast(F, wrapper)
 
 
 class IFixitAPIClient:
@@ -81,10 +123,9 @@ class IFixitAPIClient:
 
         adapter = HTTPAdapter(max_retries=retry_strategy)
         if self.proxy:
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
             self.session.mount('https://', adapter)
             if allow_http:
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
                 self.session.mount('http://', adapter)
             self.session.proxies = {
                 "http": os.getenv("HTTP_PROXY"),
@@ -549,6 +590,8 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/guides/{guideid}/releases')
 
+    @beta
+    @requires_token
     def create_guide_release(self, data: Dict) -> Dict:
         """Create a guide release.
 
@@ -883,6 +926,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/users/{userid}/completions')
 
+    @requires_token
     def get_current_user(self) -> Dict:
         """Get the current authenticated user.
 
@@ -891,6 +935,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user')
 
+    @requires_token
     def get_current_user_badges(self) -> List[Dict]:
         """Get badges for the current user.
 
@@ -899,6 +944,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/badges')
 
+    @requires_token
     def get_current_user_favorite_guides(self) -> List[Dict]:
         """Get favorite guides for the current user.
 
@@ -907,6 +953,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/favorites/guides')
 
+    @requires_token
     def favorite_guide(self, guideid: int) -> Dict:
         """Favorite a guide for the current user.
 
@@ -918,6 +965,7 @@ class IFixitAPIClient:
         """
         return self._request('PUT', f'/user/favorites/guides/{guideid}')
 
+    @requires_token
     def unfavorite_guide(self, guideid: int) -> None:
         """Unfavorite a guide for the current user.
 
@@ -926,6 +974,7 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/user/favorites/guides/{guideid}')
 
+    @requires_token
     def get_current_user_guides(self) -> List[Dict]:
         """Get guides for the current user.
 
@@ -934,6 +983,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/guides')
 
+    @requires_token
     def get_current_user_flags(self) -> List[Dict]:
         """Get flags for the current user.
 
@@ -942,6 +992,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/flags')
 
+    @requires_token
     def get_current_user_completions(self) -> List[Dict]:
         """Get completions for the current user.
 
@@ -950,6 +1001,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/completions')
 
+    @requires_token
     def get_current_user_images(self) -> List[Dict]:
         """Get images for the current user.
 
@@ -958,6 +1010,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/media/images')
 
+    @requires_token
     def upload_user_image(self, data: Dict) -> Dict:
         """Upload an image for the current user.
 
@@ -969,6 +1022,7 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/user/media/images', json=data)
 
+    @requires_token
     def delete_user_images(self, imageids: str) -> None:
         """Delete images for the current user.
 
@@ -977,6 +1031,7 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/user/media/images/{imageids}')
 
+    @requires_token
     def update_user_image(self, imageid: str, data: Dict) -> Dict:
         """Update a user image.
 
@@ -990,6 +1045,7 @@ class IFixitAPIClient:
         return self._request('POST', f'/user/media/images/{imageid}',
                              json=data)
 
+    @requires_token
     def get_current_user_videos(self) -> List[Dict]:
         """Get videos for the current user.
 
@@ -998,6 +1054,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/media/videos')
 
+    @requires_token
     def update_user(self, userid: int, data: Dict) -> Dict:
         """Update a user.
 
@@ -1177,6 +1234,7 @@ class IFixitAPIClient:
 
     # --- Documents Endpoints ---
 
+    @beta
     def get_document(self, id_or_guid: str) -> Dict:
         """Get a document.
 

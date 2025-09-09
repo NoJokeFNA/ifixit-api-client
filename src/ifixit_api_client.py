@@ -1,6 +1,7 @@
 import logging
 import os
 import warnings
+from enum import Enum
 from functools import wraps
 from typing import Any, Dict, List, Optional, Callable, TypeVar, cast
 
@@ -33,6 +34,7 @@ def beta(func: F) -> F:
     return cast(F, wrapper)
 
 
+
 def requires_token(func: F) -> F:
     """Decorator to ensure an instance has an auth token before calling.
 
@@ -50,6 +52,41 @@ def requires_token(func: F) -> F:
         return func(self, *args, **kwargs)
 
     return cast(F, wrapper)
+
+
+def requires_admin(func: F) -> F:
+    """Decorator to mark a method as requiring admin access.
+
+    Notes:
+        - This is primarily a semantic marker so tools and callers can detect
+          admin-only methods via the attribute `requires_admin = True` on the
+          wrapped function.
+        - It enforces presence of an API token (like requires_token) but does
+          not attempt to validate actual admin privileges at runtime, since that
+          depends on server-side roles and tokens.
+
+    Raises:
+        ValueError: If no auth token is present on the client instance.
+    """
+
+    @wraps(func)
+    def wrapper(self, *args: Any, **kwargs: Any):
+        if not getattr(self, "auth_token", None):
+            raise ValueError(f"{func.__name__} requires admin privileges and an API token.")
+        return func(self, *args, **kwargs)
+
+    # Semantic marker for introspection
+    setattr(wrapper, "requires_admin", True)
+    return cast(F, wrapper)
+
+
+class Namespace(Enum):
+    CATEGORY = "CATEGORY"
+    ITEM = "ITEM"
+    TEAM = "TEAM"
+    USER = "USER"
+    INFO = "INFO"
+    WIKI = "WIKI"
 
 
 class IFixitAPIClient:
@@ -147,6 +184,16 @@ class IFixitAPIClient:
         if self.app_id:
             headers['X-App-Id'] = self.app_id
         return headers
+
+    def _namespace_to_str(self, namespace: Namespace) -> str:
+        """Return the string value for a Namespace enum.
+
+        Raises:
+            TypeError: if the provided object is not a Namespace enum.
+        """
+        if not isinstance(namespace, Namespace):
+            raise TypeError("namespace must be a Namespace enum")
+        return namespace.value
 
     def _request(
             self,
@@ -761,30 +808,29 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/tags')
 
-    def add_wiki_tag(self, namespace: str, title: str, data: Dict) -> Dict:
+    def add_wiki_tag(self, namespace: Namespace, title: str, tag: str) -> Dict:
         """Add a tag to a wiki.
 
         Args:
-            namespace: Wiki namespace.
-            title: Wiki title.
-            data: Tag payload.
+            namespace: Wiki namespace. Possible values: WIKI, CATEGORY, INFO, ITEM, USER, TEAM.
+            title: Display title of the wiki to tag.
+            tag: The name of the tag to add.
 
         Returns:
             Response details.
         """
-        return self._request('PUT', f'/wikis/{namespace}/{title}/tag',
-                             json=data)
+        return self._request('PUT', f"/wikis/{self._namespace_to_str(namespace)}/{title}/tag", json={"tag": tag})
 
-    def remove_wiki_tag(self, namespace: str, title: str, data: Dict) -> None:
+    @requires_token
+    def remove_wiki_tag(self, namespace: Namespace, title: str, tag: str) -> None:
         """Remove a tag from a wiki.
 
         Args:
-            namespace: Wiki namespace.
-            title: Wiki title.
-            data: Tag payload.
+            namespace: Wiki namespace. Possible values: WIKI, CATEGORY, INFO, ITEM, USER, TEAM.
+            title: Display title of the wiki to remove the tag from.
+            tag: The name of the tag to remove.
         """
-        return self._request('DELETE', f'/wikis/{namespace}/{title}/tag',
-                             json=data)
+        return self._request('DELETE', f"/wikis/{self._namespace_to_str(namespace)}/{title}/tag", json={"tag": tag})
 
     # --- Teams Endpoints ---
 
@@ -1086,7 +1132,7 @@ class IFixitAPIClient:
             params = {'display': 'hierarchy'}
         return self._request('GET', endpoint, params=params)
 
-    def get_wikis(self, namespace: str) -> List[Dict]:
+    def get_wikis(self, namespace: Namespace) -> List[Dict]:
         """Get wikis in a namespace.
 
         Args:
@@ -1095,9 +1141,9 @@ class IFixitAPIClient:
         Returns:
             List of wikis.
         """
-        return self._request('GET', f'/wikis/{namespace}')
+        return self._request('GET', f"/wikis/{self._namespace_to_str(namespace)}")
 
-    def get_wiki(self, namespace: str, title: str) -> Dict:
+    def get_wiki(self, namespace: Namespace, title: str) -> Dict:
         """Get a specific wiki.
 
         Args:
@@ -1107,9 +1153,9 @@ class IFixitAPIClient:
         Returns:
             Wiki details.
         """
-        return self._request('GET', f'/wikis/{namespace}/{title}')
+        return self._request('GET', f"/wikis/{self._namespace_to_str(namespace)}/{title}")
 
-    def get_wiki_tags(self, namespace: str, title: str) -> List[str]:
+    def get_wiki_tags(self, namespace: Namespace, title: str) -> List[str]:
         """Get tags for a wiki.
 
         Args:
@@ -1119,7 +1165,7 @@ class IFixitAPIClient:
         Returns:
             List of tags.
         """
-        return self._request('GET', f'/wikis/{namespace}/{title}/tags')
+        return self._request('GET', f"/wikis/{self._namespace_to_str(namespace)}/{title}/tags")
 
     def get_category_children(self, title: str) -> List[Dict]:
         """Get children of a category.
@@ -1132,14 +1178,18 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/wikis/CATEGORY/{title}/children')
 
+    @beta
     def get_category_identification(self, title: str) -> str:
-        """Get identification for a category.
+        """Get the HTML source of the identification section of a device wiki.
 
         Args:
-            title: Category title.
+            title: Title of the device wiki to retrieve the identification section from. The identification section
+            of a wiki contains 'Identification' in the heading. If there are multiple headings containing
+            'Identification', the first match is selected. Output contains all content AFTER the matched heading and
+            BEFORE the next heading of the same level (h2, h3, etc.) or the end of the wiki, whichever comes first.
 
         Returns:
-            Identification string.
+            HTML content of the identification section.
         """
         return self._request('GET', f'/wikis/CATEGORY/{title}/identification')
 
@@ -1154,7 +1204,7 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/wikis', json=data)
 
-    def update_wiki(self, namespace: str, title: str, data: Dict,
+    def update_wiki(self, namespace: Namespace, title: str, data: Dict,
                     revisionid: Optional[int] = None) -> Dict:
         """Update a wiki.
 
@@ -1168,19 +1218,19 @@ class IFixitAPIClient:
             Updated wiki details.
         """
         params = {'revisionid': revisionid} if revisionid else None
-        return self._request('PATCH', f'/wikis/{namespace}/{title}',
+        return self._request('PATCH', f"/wikis/{self._namespace_to_str(namespace)}/{title}",
                              json=data, params=params)
 
-    def delete_wiki(self, namespace: str, title: str) -> None:
+    def delete_wiki(self, namespace: Namespace, title: str) -> None:
         """Delete a wiki.
 
         Args:
             namespace: Wiki namespace.
             title: Wiki title.
         """
-        return self._request('DELETE', f'/wikis/{namespace}/{title}')
+        return self._request('DELETE', f"/wikis/{self._namespace_to_str(namespace)}/{title}")
 
-    def revert_wiki(self, namespace: str, title: str, data: Dict) -> Dict:
+    def revert_wiki(self, namespace: Namespace, title: str, data: Dict) -> Dict:
         """Revert a wiki to a previous state.
 
         Args:
@@ -1191,7 +1241,7 @@ class IFixitAPIClient:
         Returns:
             Response details.
         """
-        return self._request('POST', f'/wikis/{namespace}/{title}/revert',
+        return self._request('POST', f"/wikis/{self._namespace_to_str(namespace)}/{title}/revert",
                              json=data)
 
     def set_wiki_parent(self, title: str, data: Dict) -> Dict:

@@ -1,7 +1,7 @@
 """Example usage of the iFixit API Client."""
 import logging
 
-from ifixit_api_client import IFixitAPIClient
+from ifixit_api_client import IFixitAPIClient, Namespace
 
 
 def main():
@@ -43,11 +43,7 @@ def main():
     suggest = client.suggest(query='Pro', doctypes='device')
     # print('Suggest:', json.dumps(suggest, indent=2, ensure_ascii=False))
 
-    # Example: Durability score
-    device_data = client.get_category(device_name='Samsung_Galaxy_S22_Ultra', params=None)
-    score = device_data.get("repairability_score", None)
-    # print('Device data:', json.dumps(device_data, indent=2, ensure_ascii=False))
-    # print('Repairability Score:', score)
+    # client.remove_wiki_tag(namespace=Namespace.WIKI, title='test', tag='asd')
 
     # Example: Get current user (requires auth)
     # current_user = client.get_current_user()

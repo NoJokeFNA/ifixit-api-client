@@ -1,5 +1,6 @@
-from pydantic import BaseModel, HttpUrl
 from typing import Optional
+
+from pydantic import BaseModel, HttpUrl
 
 
 class Image(BaseModel):
@@ -7,14 +8,16 @@ class Image(BaseModel):
 
     id: int
     guid: str
-    mini: HttpUrl
-    thumbnail: HttpUrl
-    standard: HttpUrl
-    medium: HttpUrl
-    large: HttpUrl
-    huge: HttpUrl
-    original: HttpUrl
+    mini: Optional[HttpUrl] = None
+    thumbnail: Optional[HttpUrl] = None
+    standard: Optional[HttpUrl] = None
+    medium: Optional[HttpUrl] = None
+    large: Optional[HttpUrl] = None
+    huge: Optional[HttpUrl] = None
+    original: Optional[HttpUrl] = None
 
+
+# ... existing code ...
 
 class Guide(BaseModel):
     """Guide model from iFixit API."""
@@ -23,8 +26,8 @@ class Guide(BaseModel):
     title: str
     category: str
     difficulty: str
-    conclusion_raw: str
-    conclusion_rendered: str
+    conclusion_raw: Optional[str] = None
+    conclusion_rendered: Optional[str] = None
     image: Optional[Image] = None
     revisionid: int
     modified_date: float

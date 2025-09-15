@@ -226,7 +226,7 @@ class IFixitAPIClient:
                 params=params,
                 json=json,
                 timeout=self.timeout,
-                verify=kwargs.pop("verify", True),
+                verify=not self.proxy,  # Skip SSL verify if using a proxy
                 **kwargs,
             )
             if self.raise_for_status:
@@ -376,6 +376,7 @@ class IFixitAPIClient:
     def get_all_guides(
             self,
             page_size: int = 100,
+            limit: int = None,
             raw: bool = False,
             parser: Optional[Callable[[Dict[str, Any]], Any]] = None,
         ) -> Generator[Any, None, None]:
@@ -417,7 +418,7 @@ class IFixitAPIClient:
                 len(batch),
                 offset,
             )
-            if len(batch) < page_size:
+            if len(batch) < page_size or (limit is not None and offset >= limit):
                 break
 
     def get_guide(self, guideid: int) -> Dict:

@@ -13,7 +13,7 @@ from urllib3 import Retry
 F = TypeVar("F", bound=Callable[..., Any])
 
 logger = logging.getLogger(__name__)
-
+__version__ = "0.0.1"
 
 def beta(func: F) -> F:
     """Decorator to mark a method as BETA.
@@ -32,7 +32,6 @@ def beta(func: F) -> F:
         return func(*args, **kwargs)
 
     return cast(F, wrapper)
-
 
 
 def requires_token(func: F) -> F:
@@ -92,27 +91,16 @@ class Namespace(Enum):
 class IFixitAPIClient:
     """A Python client for the iFixit API v2.0.
 
-    This client provides methods to interact with all documented endpoints as per
-    the iFixit API v2.0 documentation. It handles authentication, pagination,
-    error handling, retries, and logging.
-
-    Args:
-        auth_token: Optional authentication token for authorized requests.
-        app_id: Optional app ID for the X-App-Id header.
-        retries: Number of retries for failed requests (default: 3).
-        backoff_factor: Backoff factor for retries (default: 0.5).
-        timeout: Request timeout in seconds (default: 30).
-        log_level: Logging level (default: logging.INFO).
-        allow_http: Allow HTTP requests when using a proxy (default: False).
-        raise_for_status: Raise exceptions for HTTP error responses (default: True).
+    Provides authenticated, retried, and logged access to the iFixit API v2.0.
 
     Usage:
-        client = IFixitAPIClient(auth_token='your_token', app_id='your_app_id')
-        guides = client.get_guides(limit=10, offset=0)
+        client = IFixitAPIClient(auth_token="...", app_id="...")
+        guides = client.get_guides(params={"limit": 10, "offset": 0})
 
-    Note: Rate limits are not explicitly documented, but the client includes
-    retries with backoff. Always check the API documentation for updates:
-    https://www.ifixit.com/api/2.0/doc/
+    Notes:
+        - Official docs: https://www.ifixit.com/api/2.0/doc/
+        - This client retries transient failures (429, 5xx) with backoff.
+        - Responses are not schema-validated; consult the API docs for shapes.
     """
 
     BASE_URL = 'https://www.ifixit.com/api/2.0'
@@ -125,7 +113,7 @@ class IFixitAPIClient:
             backoff_factor: float = 0.5,
             timeout: int = 30,
             log_level: int = logging.INFO,
-            proxy=False,
+            proxy: bool = False,
             allow_http: bool = False,
             raise_for_status: bool = True,
     ):
@@ -140,7 +128,6 @@ class IFixitAPIClient:
             log_level: Logging level (e.g., logging.DEBUG).
             allow_http: Allow HTTP requests when using a proxy.
             raise_for_status: Raise exceptions for HTTP error responses.
-            prox: Use proxy settings from environment variables.
         """
         self.auth_token = auth_token
         self.app_id = app_id
@@ -154,26 +141,26 @@ class IFixitAPIClient:
             total=retries,
             backoff_factor=backoff_factor,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT',
-                             'DELETE']
+            allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT', 'DELETE']
         )
 
         adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount('https://', adapter)
+
         if self.proxy:
-            self.session.mount('https://', adapter)
+            self.session.mount('http://', adapter)
             if allow_http:
                 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-                self.session.mount('http://', adapter)
             self.session.proxies = {
                 "http": os.getenv("HTTP_PROXY"),
                 "https": os.getenv("HTTPS_PROXY")
             }
 
     def _build_headers(self) -> Dict[str, str]:
-        """Build headers for API requests.
+        """Construct default HTTP headers for API requests.
 
         Returns:
-            Dict of headers.
+            A dictionary containing content-type, accept, and optional auth headers.
         """
         headers = {
             'Content-Type': 'application/json',
@@ -187,6 +174,9 @@ class IFixitAPIClient:
 
     def _namespace_to_str(self, namespace: Namespace) -> str:
         """Return the string value for a Namespace enum.
+
+        Args:
+            namespace: Namespace enum.
 
         Raises:
             TypeError: if the provided object is not a Namespace enum.
@@ -232,7 +222,7 @@ class IFixitAPIClient:
                 params=params,
                 json=json,
                 timeout=self.timeout,
-                verify=not self.proxy,
+                verify=kwargs.pop("verify", True),
                 **kwargs,
             )
             if self.raise_for_status:
@@ -248,17 +238,29 @@ class IFixitAPIClient:
 
     # --- Cart Endpoints ---
 
-    def get_cart_product(self, itemcode: str, langid: str) -> Dict:
-        """Get a product from the cart.
+    @beta
+    def get_cart_product(self, item_code: str, language_id: str) -> Dict:
+        """Retrieve content linked to a store product.
+
+        Fetches editorial content (repair guides and wikis) associated with a cart
+        product.
 
         Args:
-            itemcode: Item code.
-            langid: Language ID.
+            item_code: Canonical numeric product code as used by the cart service
+                (e.g., "1800041"). If you start from a human-facing iFixit Part Number
+                (e.g., "IF180-004-1"), convert it to the numeric code before calling this
+                method; conversion is intentionally left to the caller.
+            language_id: Preferred language code for related content (e.g., "en",
+                "de", "fr"). If localized content is unavailable, the API may return a
+                fallback language or empty lists.
 
         Returns:
-            Product details.
+            Returns all guides and wikis associated with the product, along with information about those guides and wikis.
+
+        Examples:
+            client.get_cart_product("1800041", "en")
         """
-        return self._request('GET', f'/cart/product/{itemcode}/{langid}')
+        return self._request('GET', f'/cart/product/{item_code}/{language_id}')
 
     # --- Authentication Endpoints ---
 
@@ -379,7 +381,7 @@ class IFixitAPIClient:
         all_guides: List[Dict] = []
         offset = 0
         while True:
-            batch = self.get_guides(limit=page_size, offset=offset)
+            batch = self.get_guides(params={"limit": page_size, "offset": offset})
             if not batch:
                 break
             all_guides.extend(batch)

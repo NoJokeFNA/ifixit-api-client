@@ -8,12 +8,16 @@ from typing import Any, Dict, List, Optional, Callable, TypeVar, cast
 import requests
 import urllib3
 from requests.adapters import HTTPAdapter
+from typing_extensions import Generator
 from urllib3 import Retry
+
+from .models import Guide
 
 F = TypeVar("F", bound=Callable[..., Any])
 
 logger = logging.getLogger(__name__)
 __version__ = "0.0.1"
+
 
 def beta(func: F) -> F:
     """Decorator to mark a method as BETA.
@@ -369,27 +373,52 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/guides', params=params)
 
-    def get_all_guides(self, page_size: int = 100) -> List[Dict]:
-        """Get all guides by handling pagination.
+    def get_all_guides(
+            self,
+            page_size: int = 100,
+            raw: bool = False,
+            parser: Optional[Callable[[Dict[str, Any]], Any]] = None,
+        ) -> Generator[Any, None, None]:
+        """Stream all guides by handling pagination, with optional parsing control.
+
+        Iterates through pages from GET /guides and yields one item at a time to
+        keep memory usage low. By default, each item is parsed into a Guide model.
+
+        Performance tuning:
+        - Set raw=True to yield raw dicts (skips Pydantic parsing for speed).
+        - Provide a custom parser callable to transform each dict (takes precedence
+          over ``raw``), e.g., parser=lambda d: MyGuide.from_dict(d).
 
         Args:
-            page_size: Number of results per page.
+            page_size: Number of results per page ("limit" query parameter).
+            raw: If True, yield raw dicts instead of Guide models.
+            parser: Optional callable to transform each guide dict before yielding.
 
-        Returns:
-            List of all guides.
+        Yields:
+            - Guide models by default.
+            - Raw dicts if raw=True.
+            - Results of parser(dict) if parser is provided.
         """
-        all_guides: List[Dict] = []
         offset = 0
         while True:
             batch = self.get_guides(params={"limit": page_size, "offset": offset})
             if not batch:
                 break
-            all_guides.extend(batch)
+            for guide_dict in batch:
+                if parser is not None:
+                    yield parser(guide_dict)
+                elif raw:
+                    yield guide_dict
+                else:
+                    yield Guide(**guide_dict)
             offset += len(batch)
-            logger.info("Fetched %d guides, total so far: %d", len(batch), len(all_guides))
+            logger.info(
+                "Fetched %d guides (streamed), total offset now: %d",
+                len(batch),
+                offset,
+            )
             if len(batch) < page_size:
                 break
-        return all_guides
 
     def get_guide(self, guideid: int) -> Dict:
         """Get a specific guide.
@@ -424,29 +453,40 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/guides', json=data)
 
-    def update_guide(self, guideid: int, data: Dict,
-                     revisionid: Optional[int] = None) -> Dict:
-        """Update a guide.
+    def update_guide(self, guideid: int, data: Dict, revisionid: int) -> Dict:
+        """Update an existing guide.
+
+        PATCH /guides/{guideid}
+
+        Updates only the provided fields of an existing guide. The current
+        revision ID must be supplied via the revisionid query parameter per API.
 
         Args:
-            guideid: Guide ID.
-            data: Update payload.
-            revisionid: Optional revision ID.
+            guideid: Guide to update (numeric guide ID).
+            data: JSON body containing only the fields to update. See API docs
+                for supported fields such as category, type, title, introduction,
+                flags, conclusion, time_required, difficulty, image,
+                prerequisites, prerequisite_releases, documents,
+                featured_documentid, public, parts, tools, author.
+            revisionid: Current revision ID of the guide (required by the API).
 
         Returns:
-            Updated guide details.
+            The updated guide object.
         """
-        params = {'revisionid': revisionid} if revisionid else None
-        return self._request('PATCH', f'/guides/{guideid}', json=data,
-                             params=params)
+        params = {'revisionid': revisionid}
+        return self._request('PATCH', f'/guides/{guideid}', json=data, params=params)
 
-    def delete_guide(self, guideid: int) -> None:
-        """Delete a guide.
+    def delete_guide(self, guideid: int, revisionid: int) -> None:
+        """Permanently delete a guide.
+
+        DELETE /guides/{guideid}
 
         Args:
-            guideid: Guide ID.
+            guideid: Numeric guide ID.
+            revisionid: Current revision ID of the guide (required by the API).
         """
-        return self._request('DELETE', f'/guides/{guideid}')
+        params = {'revisionid': revisionid}
+        return self._request('DELETE', f'/guides/{guideid}', params=params)
 
     def restore_guide(self, guideid: int, langid: str) -> Dict:
         """Restore a guide.
@@ -490,6 +530,7 @@ class IFixitAPIClient:
         """
         return self._request('PUT', f'/guides/{guideid}/public')
 
+    @requires_token
     def make_guide_private(self, guideid: int) -> Dict:
         """Make a guide private.
 

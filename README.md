@@ -34,7 +34,7 @@ pip install .
 Initialize the client with your API token (required for authenticated endpoints):
 
 ```python
-from ifixit_api_client import IFixitAPIClient
+from ifixit_client.client import IFixitAPIClient
 
 client = IFixitAPIClient(auth_token='your_api_token', app_id='your_app_id')
 ```

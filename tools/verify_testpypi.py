@@ -15,6 +15,8 @@ expected = {
     for path in Path("dist").iterdir()
     if path.is_file()
 }
+if len(expected) != 2:
+    raise ValueError("Expected the tested wheel and source distribution")
 for attempt in range(12):
     try:
         with urlopen(url, timeout=30) as response:

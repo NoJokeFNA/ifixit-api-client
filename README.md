@@ -2,6 +2,8 @@
 
 A Python client for the iFixit API v2.0.
 
+Requires Python 3.11 or newer.
+
 This README describes `develop` (pre-release). `master` is the stable release
 branch; use its README for the stable interface. Feature changes and routine
 Dependabot updates target `develop`. Promotion to `master` happens through a
@@ -113,7 +115,7 @@ are not automatically repeated. `get_all_guides` streams results and supports
 ## Development checks
 
 CI builds and installs a wheel, then runs unit and local HTTPS integration tests
-on Python 3.9 and 3.13. The tests generate temporary test certificates with
+on Python 3.11 and 3.13. The tests generate temporary test certificates with
 OpenSSL; no production API calls, tokens, or private certificates are required.
 
 ```sh

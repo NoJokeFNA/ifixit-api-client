@@ -7,7 +7,7 @@ convenience methods or the documented OpenAPI operation names. The client suppor
 personal API keys, legacy session tokens, optional proxies, custom CA certificates
 and SHA-256 certificate pinning.
 
-The [compatibility report](docs/api-compatibility.md) describes the verified
+The [compatibility report](https://github.com/NoJokeFNA/ifixit-api-client/blob/master/docs/api-compatibility.md) describes the verified
 snapshot of 143 operations, known limitations and deprecated methods.
 
 ## Installation
@@ -133,7 +133,7 @@ Guide/wiki update and delete methods, guide steps and guide publication changes
 require the current `revisionid`. A conflict
 (HTTP 409) requires fetching the current revision and reviewing the edit before
 resubmitting it. Deprecated methods retain their existing request behavior and
-emit `DeprecationWarning`; see the [migration guidance](docs/api-compatibility.md).
+emit `DeprecationWarning`; see the [migration guidance](https://github.com/NoJokeFNA/ifixit-api-client/blob/master/docs/api-compatibility.md).
 
 ## Proxy settings
 
@@ -218,17 +218,18 @@ messages omit request bodies and authentication headers.
 
 ## Examples and documentation
 
-After installing the client and setting `IFIXIT_TOKEN`, run the read-only example:
+From a repository checkout, install the client and set `IFIXIT_TOKEN`, then run
+the read-only example:
 
 ```sh
 python examples/example_usage.py
 ```
 
 - [Official iFixit API documentation](https://www.ifixit.com/api-docs)
-- [API compatibility and migration guidance](docs/api-compatibility.md)
-- [Contributing](CONTRIBUTING.md)
+- [API compatibility and migration guidance](https://github.com/NoJokeFNA/ifixit-api-client/blob/master/docs/api-compatibility.md)
+- [Contributing](https://github.com/NoJokeFNA/ifixit-api-client/blob/master/CONTRIBUTING.md)
 - [Issue tracker](https://github.com/NoJokeFNA/ifixit-api-client/issues)
 
 ## License
 
-[MIT](LICENSE).
+[MIT](https://github.com/NoJokeFNA/ifixit-api-client/blob/master/LICENSE).

@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools>=62.6,<=80.9.0",
+    "setuptools>=77,<=80.9.0",
     "setuptools-scm>=6.2,<=9.2.0",
 ]
 build-backend = "setuptools.build_meta"
@@ -11,17 +11,15 @@ authors = [
     {name = "NoJokeFNA"}
 ]
 description = "A Python client for the iFixit API v2.0"
-readme = {content-type = "text/x-rst", file = "README.rst"}
-requires-python = ">=3.9"
+readme = {content-type = "text/markdown", file = "README.md"}
+requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 classifiers = [
-    "Development Status :: 1 - Production/Stable",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -31,7 +29,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dynamic = ["version", "dependencies", "optional-dependencies"]
+dynamic = ["version", "dependencies"]
 
 [project.urls]
 Homepage = "https://github.com/NoJokeFNA/ifixit-api-client"
@@ -40,18 +38,18 @@ Documentation = "https://nojokefna.github.io/ifixit-api-client/"
 Tracker = "https://github.com/NoJokeFNA/ifixit-api-client/issues"
 
 [tool.setuptools]
-packages = [
-    "src",
-]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = "requirements.txt"}
-readme = {content-type = "text/x-rst", file = "README.rst"}
 
 [tool.setuptools_scm]
 
 [tool.black]
-target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
+target-version = ['py311', 'py312', 'py313']
 
 [tool.isort]
 profile = "black"
@@ -68,7 +66,7 @@ extension-pkg-whitelist = [
     "pydantic",
     "ujson"
 ]
-py-version = 3.9
+py-version = "3.11"
 
 [tool.pylint.messages_control]
 enable = [

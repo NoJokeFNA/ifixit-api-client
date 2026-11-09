@@ -1,54 +1,193 @@
+import hashlib
+import hmac
 import logging
 import os
-from typing import Any, Dict, List, Optional
+import re
+import warnings
+from enum import Enum
+from functools import wraps
+from typing import Any, Callable, Dict, Generator, List, Optional, TypeVar, Union, cast
 
 import requests
-import urllib3
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
+from urllib3.connection import HTTPSConnection
+from urllib3.connectionpool import HTTPSConnectionPool
+from urllib3.exceptions import SSLError as Urllib3SSLError
+
+from .models import Guide
+
+F = TypeVar("F", bound=Callable[..., Any])
 
 logger = logging.getLogger(__name__)
+
+
+def beta(func: F) -> F:
+    """Decorator to mark a method as BETA.
+
+    Emits a UserWarning each time the decorated function is called to signal
+    that the API surface is experimental and may change without notice.
+    """
+
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any):
+        warnings.warn(
+            f"{func.__name__} is in BETA and may change without notice.",
+            UserWarning,
+            stacklevel=2,
+        )
+        return func(*args, **kwargs)
+
+    return cast(F, wrapper)
+
+
+def requires_token(func: F) -> F:
+    """Decorator to ensure an instance has an auth token before calling.
+
+    Assumes the decorated function is a bound method whose first argument is
+    `self` and that the instance has an `auth_token` attribute.
+
+    Raises:
+        ValueError: If no auth token is present.
+    """
+
+    @wraps(func)
+    def wrapper(self, *args: Any, **kwargs: Any):
+        if not getattr(self, "auth_token", None):
+            raise ValueError(f"{func.__name__} requires an API token.")
+        return func(self, *args, **kwargs)
+
+    return cast(F, wrapper)
+
+
+def requires_admin(func: F) -> F:
+    """Decorator to mark a method as requiring admin access.
+
+    Notes:
+        - This is primarily a semantic marker so tools and callers can detect
+          admin-only methods via the attribute `requires_admin = True` on the
+          wrapped function.
+        - It enforces presence of an API token (like requires_token) but does
+          not attempt to validate actual admin privileges at runtime, since that
+          depends on server-side roles and tokens.
+
+    Raises:
+        ValueError: If no auth token is present on the client instance.
+    """
+
+    @wraps(func)
+    def wrapper(self, *args: Any, **kwargs: Any):
+        if not getattr(self, "auth_token", None):
+            raise ValueError(f"{func.__name__} requires admin privileges and an API token.")
+        return func(self, *args, **kwargs)
+
+    # Semantic marker for introspection
+    setattr(wrapper, "requires_admin", True)
+    return cast(F, wrapper)
+
+
+class Namespace(Enum):
+    CATEGORY = "CATEGORY"
+    ITEM = "ITEM"
+    TEAM = "TEAM"
+    USER = "USER"
+    INFO = "INFO"
+    WIKI = "WIKI"
+
+
+def _normalize_fingerprint(value: str) -> str:
+    """Accept an SHA-256 fingerprint, with optional colon separators."""
+    if not isinstance(value, str):
+        raise TypeError("certificate_fingerprint must be a SHA-256 string")
+    normalized = value.strip().lower()
+    if normalized.startswith("sha256:"):
+        normalized = normalized[len("sha256:") :]
+    normalized = normalized.replace(":", "")
+    if not re.fullmatch(r"[0-9a-f]{64}", normalized):
+        raise ValueError("certificate_fingerprint must contain 64 SHA-256 hex digits")
+    return normalized
+
+
+def _pinned_pool_class(fingerprint: str):
+    """Add a pin check after ordinary TLS validation, before an API HTTP request."""
+
+    class PinnedConnection(HTTPSConnection):
+        def connect(self):
+            super().connect()
+            actual = hashlib.sha256(self.sock.getpeercert(binary_form=True)).hexdigest()
+            if not hmac.compare_digest(actual, fingerprint):
+                self.close()
+                raise Urllib3SSLError(
+                    "Server certificate SHA-256 fingerprint does not match the configured pin"
+                )
+
+    class PinnedPool(HTTPSConnectionPool):
+        ConnectionCls = PinnedConnection
+
+    return PinnedPool
+
+
+class _CertificatePinAdapter(HTTPAdapter):
+    def __init__(self, fingerprint: str, **kwargs):
+        self._pinned_pool = _pinned_pool_class(fingerprint)
+        super().__init__(**kwargs)
+
+    def _configure_manager(self, manager):
+        # urllib3's default scheme mapping is shared; never modify it in place.
+        manager.pool_classes_by_scheme = dict(manager.pool_classes_by_scheme)
+        manager.pool_classes_by_scheme["https"] = self._pinned_pool
+
+    def init_poolmanager(self, *args, **kwargs):
+        super().init_poolmanager(*args, **kwargs)
+        self._configure_manager(self.poolmanager)
+
+    def proxy_manager_for(self, *args, **kwargs):
+        manager = super().proxy_manager_for(*args, **kwargs)
+        self._configure_manager(manager)
+        return manager
+
+    def send(self, request, **kwargs):
+        if not request.url.lower().startswith("https://"):
+            raise requests.exceptions.SSLError(
+                "Certificate pinning requires HTTPS, including redirects"
+            )
+        if not kwargs.get("verify", True):
+            raise ValueError(
+                "Certificate pinning requires TLS verification; supply ca_bundle for a private CA"
+            )
+        return super().send(request, **kwargs)
 
 
 class IFixitAPIClient:
     """A Python client for the iFixit API v2.0.
 
-    This client provides methods to interact with all documented endpoints as per
-    the iFixit API v2.0 documentation. It handles authentication, pagination,
-    error handling, retries, and logging.
-
-    Args:
-        auth_token: Optional authentication token for authorized requests.
-        app_id: Optional app ID for the X-App-Id header.
-        retries: Number of retries for failed requests (default: 3).
-        backoff_factor: Backoff factor for retries (default: 0.5).
-        timeout: Request timeout in seconds (default: 30).
-        log_level: Logging level (default: logging.INFO).
-        allow_http: Allow HTTP requests when using a proxy (default: False).
-        raise_for_status: Raise exceptions for HTTP error responses (default: True).
+    Provides authenticated, retried, and logged access to the iFixit API v2.0.
 
     Usage:
-        client = IFixitAPIClient(auth_token='your_token', app_id='your_app_id')
-        guides = client.get_guides(limit=10, offset=0)
+        client = IFixitAPIClient(auth_token="...", app_id="...")
+        guides = client.get_guides(params={"limit": 10, "offset": 0})
 
-    Note: Rate limits are not explicitly documented, but the client includes
-    retries with backoff. Always check the API documentation for updates:
-    https://www.ifixit.com/api/2.0/doc/
+    Notes:
+        - Official docs: https://www.ifixit.com/api/2.0/doc/
+        - This client retries transient failures (429, 5xx) with backoff.
+        - Responses are not schema-validated; consult the API docs for shapes.
     """
 
     BASE_URL = 'https://www.ifixit.com/api/2.0'
 
     def __init__(
-            self,
-            auth_token: Optional[str] = None,
-            app_id: Optional[str] = None,
-            retries: int = 3,
-            backoff_factor: float = 0.5,
-            timeout: int = 30,
-            log_level: int = logging.INFO,
-            proxy=False,
-            allow_http: bool = False,
-            raise_for_status: bool = True,
+        self,
+        auth_token: Optional[str] = None,
+        app_id: Optional[str] = None,
+        retries: int = 3,
+        backoff_factor: float = 0.5,
+        timeout: int = 30,
+        log_level: int = logging.INFO,
+        proxy=False,
+        allow_http: bool = False,
+        raise_for_status: bool = True,
+        ca_bundle: Optional[Union[str, os.PathLike]] = None,
+        certificate_fingerprint: Optional[str] = None,
     ):
         """Initialize the client.
 
@@ -61,41 +200,54 @@ class IFixitAPIClient:
             log_level: Logging level (e.g., logging.DEBUG).
             allow_http: Allow HTTP requests when using a proxy.
             raise_for_status: Raise exceptions for HTTP error responses.
-            prox: Use proxy settings from environment variables.
+            proxy: Opt in to environment proxy settings (default: False).
+            ca_bundle: PEM CA bundle file or hashed CA directory for server verification.
+            certificate_fingerprint: Optional SHA-256 pin for the server's leaf certificate.
+                The CA chain and hostname must also be valid. A renewed certificate
+                requires updating its pin.
         """
         self.auth_token = auth_token
         self.app_id = app_id
         self.timeout = timeout
         self.proxy = proxy
         self.raise_for_status = raise_for_status
+        self.ca_bundle = os.fspath(ca_bundle) if ca_bundle is not None else None
+        if self.ca_bundle is not None and not os.path.exists(self.ca_bundle):
+            raise FileNotFoundError(
+                "CA bundle path does not exist: %s" % self.ca_bundle
+            )
+        self.certificate_fingerprint = (
+            _normalize_fingerprint(certificate_fingerprint)
+            if certificate_fingerprint is not None
+            else None
+        )
         logging.basicConfig(level=log_level)
 
         self.session = requests.Session()
+        self.session.trust_env = bool(proxy)
+        self.session.verify = self.ca_bundle if self.ca_bundle is not None else True
         retry_strategy = Retry(
             total=retries,
             backoff_factor=backoff_factor,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT',
-                             'DELETE']
+            allowed_methods=["HEAD", "GET", "OPTIONS"],
         )
 
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        if self.proxy:
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-            self.session.mount('https://', adapter)
-            if allow_http:
-                self.session.mount('http://', adapter)
-            self.session.proxies = {
-                "http": os.getenv("HTTP_PROXY"),
-                "https": os.getenv("HTTPS_PROXY")
-            }
+        if self.certificate_fingerprint is not None:
+            adapter = _CertificatePinAdapter(
+                self.certificate_fingerprint, max_retries=retry_strategy
+            )
+        else:
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount("https://", adapter)
+        if allow_http or self.certificate_fingerprint is not None:
+            self.session.mount("http://", adapter)
 
     def _build_headers(self) -> Dict[str, str]:
-        """Build headers for API requests.
+        """Construct default HTTP headers for API requests.
 
         Returns:
-            Dict of headers.
+            A dictionary containing content-type, accept, and optional auth headers.
         """
         headers = {
             'Content-Type': 'application/json',
@@ -107,13 +259,26 @@ class IFixitAPIClient:
             headers['X-App-Id'] = self.app_id
         return headers
 
+    def _namespace_to_str(self, namespace: Namespace) -> str:
+        """Return the string value for a Namespace enum.
+
+        Args:
+            namespace: Namespace enum.
+
+        Raises:
+            TypeError: if the provided object is not a Namespace enum.
+        """
+        if not isinstance(namespace, Namespace):
+            raise TypeError("namespace must be a Namespace enum")
+        return namespace.value
+
     def _request(
-            self,
-            method: str,
-            endpoint: str,
-            params: Optional[Dict[str, Any]] = None,
-            json: Optional[Dict[str, Any]] = None,
-            **kwargs,
+        self,
+        method: str,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        json: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Make an API request.
 
@@ -133,8 +298,14 @@ class IFixitAPIClient:
         """
         url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
-        logger.debug(f'Making {method} request to {url} with params={params}, '
-                     f'json={json}')
+        logger.debug(
+            f"Making {method} request to {url} with params={params}, " f"json={json}"
+        )
+
+        request_options = dict(kwargs)
+        request_options.setdefault("timeout", self.timeout)
+        if self.ca_bundle is not None:
+            request_options.setdefault("verify", self.ca_bundle)
 
         try:
             response = self.session.request(
@@ -143,34 +314,45 @@ class IFixitAPIClient:
                 headers=headers,
                 params=params,
                 json=json,
-                timeout=self.timeout,
-                verify=not self.proxy,
-                **kwargs,
+                **request_options,
             )
             if self.raise_for_status:
                 response.raise_for_status()
             return response.json() if response.content else None
         except requests.exceptions.HTTPError as e:
-            logger.error(f'HTTP error: {e.response.status_code} - '
-                         f'{e.response.text}')
+            logger.error(
+                f"HTTP error: {e.response.status_code} - " f"{e.response.text}"
+            )
             raise
         except requests.exceptions.RequestException as e:
-            logger.error(f'Request failed: {str(e)}')
+            logger.error(f"Request failed: {str(e)}")
             raise
 
     # --- Cart Endpoints ---
 
-    def get_cart_product(self, itemcode: str, langid: str) -> Dict:
-        """Get a product from the cart.
+    @beta
+    def get_cart_product(self, item_code: str, language_id: str) -> Dict:
+        """Retrieve content linked to a store product.
+
+        Fetches editorial content (repair guides and wikis) associated with a cart
+        product.
 
         Args:
-            itemcode: Item code.
-            langid: Language ID.
+            item_code: Canonical numeric product code as used by the cart service
+                (e.g., "1800041"). If you start from a human-facing iFixit Part Number
+                (e.g., "IF180-004-1"), convert it to the numeric code before calling this
+                method; conversion is intentionally left to the caller.
+            language_id: Preferred language code for related content (e.g., "en",
+                "de", "fr"). If localized content is unavailable, the API may return a
+                fallback language or empty lists.
 
         Returns:
-            Product details.
+            Returns all guides and wikis associated with the product, along with information about those guides and wikis.
+
+        Examples:
+            client.get_cart_product("1800041", "en")
         """
-        return self._request('GET', f'/cart/product/{itemcode}/{langid}')
+        return self._request('GET', f'/cart/product/{item_code}/{language_id}')
 
     # --- Authentication Endpoints ---
 
@@ -268,38 +450,93 @@ class IFixitAPIClient:
 
     # --- Guides Endpoints ---
 
-    def get_guides(self, params: Optional[Dict] = None) -> List[Dict]:
+    def get_guides(
+        self,
+        params: Optional[Dict] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+    ) -> List[Dict]:
         """Get a list of guides.
 
         Args:
             params: Query parameters for filtering, pagination, etc.
+            limit: Optional page size, overriding params['limit'].
+            offset: Optional offset, overriding params['offset'].
 
         Returns:
             List of guides.
         """
-        return self._request('GET', '/guides', params=params)
+        query = dict(params) if params is not None else None
+        for name, value, minimum in [("limit", limit, 1), ("offset", offset, 0)]:
+            if value is not None:
+                if (
+                    not isinstance(value, int)
+                    or isinstance(value, bool)
+                    or value < minimum
+                ):
+                    raise ValueError("%s must be an integer >= %d" % (name, minimum))
+                if query is None:
+                    query = {}
+                query[name] = value
+        return self._request("GET", "/guides", params=query)
 
-    def get_all_guides(self, page_size: int = 100) -> List[Dict]:
-        """Get all guides by handling pagination.
+    def get_all_guides(
+        self,
+        page_size: int = 100,
+        limit: Optional[int] = None,
+        raw: bool = False,
+        parser: Optional[Callable[[Dict[str, Any]], Any]] = None,
+    ) -> Generator[Any, None, None]:
+        """Stream all guides by handling pagination, with optional parsing control.
+
+        Iterates through pages from GET /guides and yields one item at a time to
+        keep memory usage low. By default, each item is parsed into a Guide model.
+
+        Performance tuning:
+        - Set raw=True to yield raw dicts (skips Pydantic parsing for speed).
+        - Provide a custom parser callable to transform each dict (takes precedence
+          over ``raw``), e.g., parser=lambda d: MyGuide.from_dict(d).
 
         Args:
-            page_size: Number of results per page.
+            page_size: Number of results per page ("limit" query parameter).
+            limit: Maximum number of guides to yield; zero makes no request.
+            raw: If True, yield raw dicts instead of Guide models.
+            parser: Optional callable to transform each guide dict before yielding.
 
-        Returns:
-            List of all guides.
+        Yields:
+            - Guide models by default.
+            - Raw dicts if raw=True.
+            - Results of parser(dict) if parser is provided.
         """
-        all_guides: List[Dict] = []
+        if (
+            not isinstance(page_size, int)
+            or isinstance(page_size, bool)
+            or page_size < 1
+        ):
+            raise ValueError("page_size must be a positive integer")
+        if limit is not None and (
+            not isinstance(limit, int) or isinstance(limit, bool) or limit < 0
+        ):
+            raise ValueError("limit must be a non-negative integer or None")
         offset = 0
-        while True:
-            batch = self.get_guides(limit=page_size, offset=offset)
+        while limit is None or offset < limit:
+            requested = page_size if limit is None else min(page_size, limit - offset)
+            batch = self.get_guides(params={"limit": requested, "offset": offset})
             if not batch:
                 break
-            all_guides.extend(batch)
+            for index, guide_dict in enumerate(batch):
+                if limit is not None and offset + index >= limit:
+                    return
+                if parser is not None:
+                    yield parser(guide_dict)
+                elif raw:
+                    yield guide_dict
+                else:
+                    yield Guide(**guide_dict)
             offset += len(batch)
-            logger.info("Fetched %d guides, total so far: %d", len(batch), len(all_guides))
-            if len(batch) < page_size:
-                break
-        return all_guides
+            logger.info(
+                "Fetched %d guides (streamed), total offset now: %d", len(batch), offset
+            )
 
     def get_guide(self, guideid: int) -> Dict:
         """Get a specific guide.
@@ -334,29 +571,40 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/guides', json=data)
 
-    def update_guide(self, guideid: int, data: Dict,
-                     revisionid: Optional[int] = None) -> Dict:
-        """Update a guide.
+    def update_guide(self, guideid: int, data: Dict, revisionid: int) -> Dict:
+        """Update an existing guide.
+
+        PATCH /guides/{guideid}
+
+        Updates only the provided fields of an existing guide. The current
+        revision ID must be supplied via the revisionid query parameter per API.
 
         Args:
-            guideid: Guide ID.
-            data: Update payload.
-            revisionid: Optional revision ID.
+            guideid: Guide to update (numeric guide ID).
+            data: JSON body containing only the fields to update. See API docs
+                for supported fields such as category, type, title, introduction,
+                flags, conclusion, time_required, difficulty, image,
+                prerequisites, prerequisite_releases, documents,
+                featured_documentid, public, parts, tools, author.
+            revisionid: Current revision ID of the guide (required by the API).
 
         Returns:
-            Updated guide details.
+            The updated guide object.
         """
-        params = {'revisionid': revisionid} if revisionid else None
-        return self._request('PATCH', f'/guides/{guideid}', json=data,
-                             params=params)
+        params = {'revisionid': revisionid}
+        return self._request('PATCH', f'/guides/{guideid}', json=data, params=params)
 
-    def delete_guide(self, guideid: int) -> None:
-        """Delete a guide.
+    def delete_guide(self, guideid: int, revisionid: int) -> None:
+        """Permanently delete a guide.
+
+        DELETE /guides/{guideid}
 
         Args:
-            guideid: Guide ID.
+            guideid: Numeric guide ID.
+            revisionid: Current revision ID of the guide (required by the API).
         """
-        return self._request('DELETE', f'/guides/{guideid}')
+        params = {'revisionid': revisionid}
+        return self._request('DELETE', f'/guides/{guideid}', params=params)
 
     def restore_guide(self, guideid: int, langid: str) -> Dict:
         """Restore a guide.
@@ -400,6 +648,7 @@ class IFixitAPIClient:
         """
         return self._request('PUT', f'/guides/{guideid}/public')
 
+    @requires_token
     def make_guide_private(self, guideid: int) -> Dict:
         """Make a guide private.
 
@@ -549,6 +798,8 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/guides/{guideid}/releases')
 
+    @beta
+    @requires_token
     def create_guide_release(self, data: Dict) -> Dict:
         """Create a guide release.
 
@@ -718,30 +969,29 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/tags')
 
-    def add_wiki_tag(self, namespace: str, title: str, data: Dict) -> Dict:
+    def add_wiki_tag(self, namespace: Namespace, title: str, tag: str) -> Dict:
         """Add a tag to a wiki.
 
         Args:
-            namespace: Wiki namespace.
-            title: Wiki title.
-            data: Tag payload.
+            namespace: Wiki namespace. Possible values: WIKI, CATEGORY, INFO, ITEM, USER, TEAM.
+            title: Display title of the wiki to tag.
+            tag: The name of the tag to add.
 
         Returns:
             Response details.
         """
-        return self._request('PUT', f'/wikis/{namespace}/{title}/tag',
-                             json=data)
+        return self._request('PUT', f"/wikis/{self._namespace_to_str(namespace)}/{title}/tag", json={"tag": tag})
 
-    def remove_wiki_tag(self, namespace: str, title: str, data: Dict) -> None:
+    @requires_token
+    def remove_wiki_tag(self, namespace: Namespace, title: str, tag: str) -> None:
         """Remove a tag from a wiki.
 
         Args:
-            namespace: Wiki namespace.
-            title: Wiki title.
-            data: Tag payload.
+            namespace: Wiki namespace. Possible values: WIKI, CATEGORY, INFO, ITEM, USER, TEAM.
+            title: Display title of the wiki to remove the tag from.
+            tag: The name of the tag to remove.
         """
-        return self._request('DELETE', f'/wikis/{namespace}/{title}/tag',
-                             json=data)
+        return self._request('DELETE', f"/wikis/{self._namespace_to_str(namespace)}/{title}/tag", json={"tag": tag})
 
     # --- Teams Endpoints ---
 
@@ -883,6 +1133,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/users/{userid}/completions')
 
+    @requires_token
     def get_current_user(self) -> Dict:
         """Get the current authenticated user.
 
@@ -891,6 +1142,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user')
 
+    @requires_token
     def get_current_user_badges(self) -> List[Dict]:
         """Get badges for the current user.
 
@@ -899,6 +1151,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/badges')
 
+    @requires_token
     def get_current_user_favorite_guides(self) -> List[Dict]:
         """Get favorite guides for the current user.
 
@@ -907,6 +1160,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/favorites/guides')
 
+    @requires_token
     def favorite_guide(self, guideid: int) -> Dict:
         """Favorite a guide for the current user.
 
@@ -918,6 +1172,7 @@ class IFixitAPIClient:
         """
         return self._request('PUT', f'/user/favorites/guides/{guideid}')
 
+    @requires_token
     def unfavorite_guide(self, guideid: int) -> None:
         """Unfavorite a guide for the current user.
 
@@ -926,6 +1181,7 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/user/favorites/guides/{guideid}')
 
+    @requires_token
     def get_current_user_guides(self) -> List[Dict]:
         """Get guides for the current user.
 
@@ -934,6 +1190,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/guides')
 
+    @requires_token
     def get_current_user_flags(self) -> List[Dict]:
         """Get flags for the current user.
 
@@ -942,6 +1199,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/flags')
 
+    @requires_token
     def get_current_user_completions(self) -> List[Dict]:
         """Get completions for the current user.
 
@@ -950,6 +1208,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/completions')
 
+    @requires_token
     def get_current_user_images(self) -> List[Dict]:
         """Get images for the current user.
 
@@ -958,6 +1217,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/media/images')
 
+    @requires_token
     def upload_user_image(self, data: Dict) -> Dict:
         """Upload an image for the current user.
 
@@ -969,6 +1229,7 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/user/media/images', json=data)
 
+    @requires_token
     def delete_user_images(self, imageids: str) -> None:
         """Delete images for the current user.
 
@@ -977,6 +1238,7 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/user/media/images/{imageids}')
 
+    @requires_token
     def update_user_image(self, imageid: str, data: Dict) -> Dict:
         """Update a user image.
 
@@ -990,6 +1252,7 @@ class IFixitAPIClient:
         return self._request('POST', f'/user/media/images/{imageid}',
                              json=data)
 
+    @requires_token
     def get_current_user_videos(self) -> List[Dict]:
         """Get videos for the current user.
 
@@ -998,6 +1261,7 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/media/videos')
 
+    @requires_token
     def update_user(self, userid: int, data: Dict) -> Dict:
         """Update a user.
 
@@ -1012,7 +1276,9 @@ class IFixitAPIClient:
 
     # --- Wikis Endpoints ---
 
-    def get_category(self, device_name: Optional[str] = None, params: Optional[dict] = None) -> Dict:
+    def get_category(
+        self, device_name: Optional[str] = None, params: Optional[dict] = None
+    ) -> Dict:
         """Get the category hierarchy.
 
         Args:
@@ -1022,14 +1288,14 @@ class IFixitAPIClient:
         Returns:
             Hierarchy details.
         """
-        endpoint = '/wikis/CATEGORY'
+        endpoint = "/wikis/CATEGORY"
         if device_name:
-            endpoint += f'/{device_name}'
-        if not params:
-            params = {'display': 'hierarchy'}
-        return self._request('GET', endpoint, params=params)
+            endpoint += f"/{device_name}"
+        if params is None and not device_name:
+            params = {"display": "hierarchy"}
+        return self._request("GET", endpoint, params=params)
 
-    def get_wikis(self, namespace: str) -> List[Dict]:
+    def get_wikis(self, namespace: Namespace) -> List[Dict]:
         """Get wikis in a namespace.
 
         Args:
@@ -1038,9 +1304,9 @@ class IFixitAPIClient:
         Returns:
             List of wikis.
         """
-        return self._request('GET', f'/wikis/{namespace}')
+        return self._request('GET', f"/wikis/{self._namespace_to_str(namespace)}")
 
-    def get_wiki(self, namespace: str, title: str) -> Dict:
+    def get_wiki(self, namespace: Namespace, title: str) -> Dict:
         """Get a specific wiki.
 
         Args:
@@ -1050,9 +1316,9 @@ class IFixitAPIClient:
         Returns:
             Wiki details.
         """
-        return self._request('GET', f'/wikis/{namespace}/{title}')
+        return self._request('GET', f"/wikis/{self._namespace_to_str(namespace)}/{title}")
 
-    def get_wiki_tags(self, namespace: str, title: str) -> List[str]:
+    def get_wiki_tags(self, namespace: Namespace, title: str) -> List[str]:
         """Get tags for a wiki.
 
         Args:
@@ -1062,7 +1328,7 @@ class IFixitAPIClient:
         Returns:
             List of tags.
         """
-        return self._request('GET', f'/wikis/{namespace}/{title}/tags')
+        return self._request('GET', f"/wikis/{self._namespace_to_str(namespace)}/{title}/tags")
 
     def get_category_children(self, title: str) -> List[Dict]:
         """Get children of a category.
@@ -1075,14 +1341,18 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/wikis/CATEGORY/{title}/children')
 
+    @beta
     def get_category_identification(self, title: str) -> str:
-        """Get identification for a category.
+        """Get the HTML source of the identification section of a device wiki.
 
         Args:
-            title: Category title.
+            title: Title of the device wiki to retrieve the identification section from. The identification section
+            of a wiki contains 'Identification' in the heading. If there are multiple headings containing
+            'Identification', the first match is selected. Output contains all content AFTER the matched heading and
+            BEFORE the next heading of the same level (h2, h3, etc.) or the end of the wiki, whichever comes first.
 
         Returns:
-            Identification string.
+            HTML content of the identification section.
         """
         return self._request('GET', f'/wikis/CATEGORY/{title}/identification')
 
@@ -1097,7 +1367,7 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/wikis', json=data)
 
-    def update_wiki(self, namespace: str, title: str, data: Dict,
+    def update_wiki(self, namespace: Namespace, title: str, data: Dict,
                     revisionid: Optional[int] = None) -> Dict:
         """Update a wiki.
 
@@ -1111,19 +1381,19 @@ class IFixitAPIClient:
             Updated wiki details.
         """
         params = {'revisionid': revisionid} if revisionid else None
-        return self._request('PATCH', f'/wikis/{namespace}/{title}',
+        return self._request('PATCH', f"/wikis/{self._namespace_to_str(namespace)}/{title}",
                              json=data, params=params)
 
-    def delete_wiki(self, namespace: str, title: str) -> None:
+    def delete_wiki(self, namespace: Namespace, title: str) -> None:
         """Delete a wiki.
 
         Args:
             namespace: Wiki namespace.
             title: Wiki title.
         """
-        return self._request('DELETE', f'/wikis/{namespace}/{title}')
+        return self._request('DELETE', f"/wikis/{self._namespace_to_str(namespace)}/{title}")
 
-    def revert_wiki(self, namespace: str, title: str, data: Dict) -> Dict:
+    def revert_wiki(self, namespace: Namespace, title: str, data: Dict) -> Dict:
         """Revert a wiki to a previous state.
 
         Args:
@@ -1134,7 +1404,7 @@ class IFixitAPIClient:
         Returns:
             Response details.
         """
-        return self._request('POST', f'/wikis/{namespace}/{title}/revert',
+        return self._request('POST', f"/wikis/{self._namespace_to_str(namespace)}/{title}/revert",
                              json=data)
 
     def set_wiki_parent(self, title: str, data: Dict) -> Dict:
@@ -1177,6 +1447,7 @@ class IFixitAPIClient:
 
     # --- Documents Endpoints ---
 
+    @beta
     def get_document(self, id_or_guid: str) -> Dict:
         """Get a document.
 

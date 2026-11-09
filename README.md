@@ -21,9 +21,21 @@ python -m pip install "git+https://github.com/NoJokeFNA/ifixit-api-client.git@ma
 For development or pre-release changes, use `@develop` instead. To install a local
 checkout, run `python -m pip install .` in the repository directory.
 
-There is no production PyPI release yet. A
-[TestPyPI candidate](https://test.pypi.org/project/ifixit-api-client/0.1.0rc1/)
-is available for evaluation.
+### Install the TestPyPI candidate
+
+There is no production PyPI release yet. To try
+[`0.1.0rc1` from TestPyPI](https://test.pypi.org/project/ifixit-api-client/0.1.0rc1/),
+install its dependencies from regular PyPI first, then the client from TestPyPI:
+
+```sh
+python -m pip install --index-url https://pypi.org/simple/ \
+  requests urllib3 "pydantic>=2,<3" "typing_extensions>=4.9"
+python -m pip install --index-url https://test.pypi.org/simple/ \
+  --no-deps "ifixit-api-client==0.1.0rc1"
+```
+
+TestPyPI may not contain the client's dependencies. The exact version also
+selects this pre-release explicitly. This candidate is intended for evaluation.
 
 ## Quick start
 

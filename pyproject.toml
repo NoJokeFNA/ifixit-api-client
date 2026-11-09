@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools>=62.6,<=80.9.0",
+    "setuptools>=77,<=80.9.0",
     "setuptools-scm>=6.2,<=9.2.0",
 ]
 build-backend = "setuptools.build_meta"
@@ -11,12 +11,12 @@ authors = [
     {name = "NoJokeFNA"}
 ]
 description = "A Python client for the iFixit API v2.0"
-readme = {content-type = "text/x-rst", file = "README.rst"}
+readme = {content-type = "text/markdown", file = "README.md"}
 requires-python = ">=3.9"
 license = "MIT"
 license-files = ["LICENSE"]
 classifiers = [
-    "Development Status :: 1 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Operating System :: OS Independent",
@@ -31,7 +31,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dynamic = ["version", "dependencies", "optional-dependencies"]
+dynamic = ["version", "dependencies"]
 
 [project.urls]
 Homepage = "https://github.com/NoJokeFNA/ifixit-api-client"
@@ -40,13 +40,13 @@ Documentation = "https://nojokefna.github.io/ifixit-api-client/"
 Tracker = "https://github.com/NoJokeFNA/ifixit-api-client/issues"
 
 [tool.setuptools]
-packages = [
-    "src",
-]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = "requirements.txt"}
-readme = {content-type = "text/x-rst", file = "README.rst"}
 
 [tool.setuptools_scm]
 

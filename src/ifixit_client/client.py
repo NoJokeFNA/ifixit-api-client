@@ -1,22 +1,25 @@
+import hashlib
+import hmac
 import logging
 import os
+import re
 import warnings
 from enum import Enum
 from functools import wraps
-from typing import Any, Dict, List, Optional, Callable, TypeVar, cast
+from typing import Any, Callable, Dict, Generator, List, Optional, TypeVar, Union, cast
 
 import requests
-import urllib3
 from requests.adapters import HTTPAdapter
-from typing_extensions import Generator
 from urllib3 import Retry
+from urllib3.connection import HTTPSConnection
+from urllib3.connectionpool import HTTPSConnectionPool
+from urllib3.exceptions import SSLError as Urllib3SSLError
 
 from .models import Guide
 
 F = TypeVar("F", bound=Callable[..., Any])
 
 logger = logging.getLogger(__name__)
-__version__ = "0.0.1"
 
 
 def beta(func: F) -> F:
@@ -92,6 +95,69 @@ class Namespace(Enum):
     WIKI = "WIKI"
 
 
+def _normalize_fingerprint(value: str) -> str:
+    """Accept an SHA-256 fingerprint, with optional colon separators."""
+    if not isinstance(value, str):
+        raise TypeError("certificate_fingerprint must be a SHA-256 string")
+    normalized = value.strip().lower()
+    if normalized.startswith("sha256:"):
+        normalized = normalized[len("sha256:") :]
+    normalized = normalized.replace(":", "")
+    if not re.fullmatch(r"[0-9a-f]{64}", normalized):
+        raise ValueError("certificate_fingerprint must contain 64 SHA-256 hex digits")
+    return normalized
+
+
+def _pinned_pool_class(fingerprint: str):
+    """Add a pin check after ordinary TLS validation, before an API HTTP request."""
+
+    class PinnedConnection(HTTPSConnection):
+        def connect(self):
+            super().connect()
+            actual = hashlib.sha256(self.sock.getpeercert(binary_form=True)).hexdigest()
+            if not hmac.compare_digest(actual, fingerprint):
+                self.close()
+                raise Urllib3SSLError(
+                    "Server certificate SHA-256 fingerprint does not match the configured pin"
+                )
+
+    class PinnedPool(HTTPSConnectionPool):
+        ConnectionCls = PinnedConnection
+
+    return PinnedPool
+
+
+class _CertificatePinAdapter(HTTPAdapter):
+    def __init__(self, fingerprint: str, **kwargs):
+        self._pinned_pool = _pinned_pool_class(fingerprint)
+        super().__init__(**kwargs)
+
+    def _configure_manager(self, manager):
+        # urllib3's default scheme mapping is shared; never modify it in place.
+        manager.pool_classes_by_scheme = dict(manager.pool_classes_by_scheme)
+        manager.pool_classes_by_scheme["https"] = self._pinned_pool
+
+    def init_poolmanager(self, *args, **kwargs):
+        super().init_poolmanager(*args, **kwargs)
+        self._configure_manager(self.poolmanager)
+
+    def proxy_manager_for(self, *args, **kwargs):
+        manager = super().proxy_manager_for(*args, **kwargs)
+        self._configure_manager(manager)
+        return manager
+
+    def send(self, request, **kwargs):
+        if not request.url.lower().startswith("https://"):
+            raise requests.exceptions.SSLError(
+                "Certificate pinning requires HTTPS, including redirects"
+            )
+        if not kwargs.get("verify", True):
+            raise ValueError(
+                "Certificate pinning requires TLS verification; supply ca_bundle for a private CA"
+            )
+        return super().send(request, **kwargs)
+
+
 class IFixitAPIClient:
     """A Python client for the iFixit API v2.0.
 
@@ -110,16 +176,18 @@ class IFixitAPIClient:
     BASE_URL = 'https://www.ifixit.com/api/2.0'
 
     def __init__(
-            self,
-            auth_token: Optional[str] = None,
-            app_id: Optional[str] = None,
-            retries: int = 3,
-            backoff_factor: float = 0.5,
-            timeout: int = 30,
-            log_level: int = logging.INFO,
-            proxy: bool = False,
-            allow_http: bool = False,
-            raise_for_status: bool = True,
+        self,
+        auth_token: Optional[str] = None,
+        app_id: Optional[str] = None,
+        retries: int = 3,
+        backoff_factor: float = 0.5,
+        timeout: int = 30,
+        log_level: int = logging.INFO,
+        proxy=False,
+        allow_http: bool = False,
+        raise_for_status: bool = True,
+        ca_bundle: Optional[Union[str, os.PathLike]] = None,
+        certificate_fingerprint: Optional[str] = None,
     ):
         """Initialize the client.
 
@@ -132,33 +200,48 @@ class IFixitAPIClient:
             log_level: Logging level (e.g., logging.DEBUG).
             allow_http: Allow HTTP requests when using a proxy.
             raise_for_status: Raise exceptions for HTTP error responses.
+            proxy: Opt in to environment proxy settings (default: False).
+            ca_bundle: PEM CA bundle file or hashed CA directory for server verification.
+            certificate_fingerprint: Optional SHA-256 pin for the server's leaf certificate.
+                The CA chain and hostname must also be valid. A renewed certificate
+                requires updating its pin.
         """
         self.auth_token = auth_token
         self.app_id = app_id
         self.timeout = timeout
         self.proxy = proxy
         self.raise_for_status = raise_for_status
+        self.ca_bundle = os.fspath(ca_bundle) if ca_bundle is not None else None
+        if self.ca_bundle is not None and not os.path.exists(self.ca_bundle):
+            raise FileNotFoundError(
+                "CA bundle path does not exist: %s" % self.ca_bundle
+            )
+        self.certificate_fingerprint = (
+            _normalize_fingerprint(certificate_fingerprint)
+            if certificate_fingerprint is not None
+            else None
+        )
         logging.basicConfig(level=log_level)
 
         self.session = requests.Session()
+        self.session.trust_env = bool(proxy)
+        self.session.verify = self.ca_bundle if self.ca_bundle is not None else True
         retry_strategy = Retry(
             total=retries,
             backoff_factor=backoff_factor,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=['HEAD', 'GET', 'OPTIONS', 'POST', 'PATCH', 'PUT', 'DELETE']
+            allowed_methods=["HEAD", "GET", "OPTIONS"],
         )
 
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        self.session.mount('https://', adapter)
-
-        if self.proxy:
-            self.session.mount('http://', adapter)
-            if allow_http:
-                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            self.session.proxies = {
-                "http": os.getenv("HTTP_PROXY"),
-                "https": os.getenv("HTTPS_PROXY")
-            }
+        if self.certificate_fingerprint is not None:
+            adapter = _CertificatePinAdapter(
+                self.certificate_fingerprint, max_retries=retry_strategy
+            )
+        else:
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount("https://", adapter)
+        if allow_http or self.certificate_fingerprint is not None:
+            self.session.mount("http://", adapter)
 
     def _build_headers(self) -> Dict[str, str]:
         """Construct default HTTP headers for API requests.
@@ -190,12 +273,12 @@ class IFixitAPIClient:
         return namespace.value
 
     def _request(
-            self,
-            method: str,
-            endpoint: str,
-            params: Optional[Dict[str, Any]] = None,
-            json: Optional[Dict[str, Any]] = None,
-            **kwargs,
+        self,
+        method: str,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        json: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> Any:
         """Make an API request.
 
@@ -215,8 +298,14 @@ class IFixitAPIClient:
         """
         url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
-        logger.debug(f'Making {method} request to {url} with params={params}, '
-                     f'json={json}')
+        logger.debug(
+            f"Making {method} request to {url} with params={params}, " f"json={json}"
+        )
+
+        request_options = dict(kwargs)
+        request_options.setdefault("timeout", self.timeout)
+        if self.ca_bundle is not None:
+            request_options.setdefault("verify", self.ca_bundle)
 
         try:
             response = self.session.request(
@@ -225,19 +314,18 @@ class IFixitAPIClient:
                 headers=headers,
                 params=params,
                 json=json,
-                timeout=self.timeout,
-                verify=not self.proxy,  # Skip SSL verify if using a proxy
-                **kwargs,
+                **request_options,
             )
             if self.raise_for_status:
                 response.raise_for_status()
             return response.json() if response.content else None
         except requests.exceptions.HTTPError as e:
-            logger.error(f'HTTP error: {e.response.status_code} - '
-                         f'{e.response.text}')
+            logger.error(
+                f"HTTP error: {e.response.status_code} - " f"{e.response.text}"
+            )
             raise
         except requests.exceptions.RequestException as e:
-            logger.error(f'Request failed: {str(e)}')
+            logger.error(f"Request failed: {str(e)}")
             raise
 
     # --- Cart Endpoints ---
@@ -362,24 +450,43 @@ class IFixitAPIClient:
 
     # --- Guides Endpoints ---
 
-    def get_guides(self, params: Optional[Dict] = None) -> List[Dict]:
+    def get_guides(
+        self,
+        params: Optional[Dict] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+    ) -> List[Dict]:
         """Get a list of guides.
 
         Args:
             params: Query parameters for filtering, pagination, etc.
+            limit: Optional page size, overriding params['limit'].
+            offset: Optional offset, overriding params['offset'].
 
         Returns:
             List of guides.
         """
-        return self._request('GET', '/guides', params=params)
+        query = dict(params) if params is not None else None
+        for name, value, minimum in [("limit", limit, 1), ("offset", offset, 0)]:
+            if value is not None:
+                if (
+                    not isinstance(value, int)
+                    or isinstance(value, bool)
+                    or value < minimum
+                ):
+                    raise ValueError("%s must be an integer >= %d" % (name, minimum))
+                if query is None:
+                    query = {}
+                query[name] = value
+        return self._request("GET", "/guides", params=query)
 
     def get_all_guides(
-            self,
-            page_size: int = 100,
-            limit: int = None,
-            raw: bool = False,
-            parser: Optional[Callable[[Dict[str, Any]], Any]] = None,
-        ) -> Generator[Any, None, None]:
+        self,
+        page_size: int = 100,
+        limit: Optional[int] = None,
+        raw: bool = False,
+        parser: Optional[Callable[[Dict[str, Any]], Any]] = None,
+    ) -> Generator[Any, None, None]:
         """Stream all guides by handling pagination, with optional parsing control.
 
         Iterates through pages from GET /guides and yields one item at a time to
@@ -392,6 +499,7 @@ class IFixitAPIClient:
 
         Args:
             page_size: Number of results per page ("limit" query parameter).
+            limit: Maximum number of guides to yield; zero makes no request.
             raw: If True, yield raw dicts instead of Guide models.
             parser: Optional callable to transform each guide dict before yielding.
 
@@ -400,12 +508,25 @@ class IFixitAPIClient:
             - Raw dicts if raw=True.
             - Results of parser(dict) if parser is provided.
         """
+        if (
+            not isinstance(page_size, int)
+            or isinstance(page_size, bool)
+            or page_size < 1
+        ):
+            raise ValueError("page_size must be a positive integer")
+        if limit is not None and (
+            not isinstance(limit, int) or isinstance(limit, bool) or limit < 0
+        ):
+            raise ValueError("limit must be a non-negative integer or None")
         offset = 0
-        while True:
-            batch = self.get_guides(params={"limit": page_size, "offset": offset})
+        while limit is None or offset < limit:
+            requested = page_size if limit is None else min(page_size, limit - offset)
+            batch = self.get_guides(params={"limit": requested, "offset": offset})
             if not batch:
                 break
-            for guide_dict in batch:
+            for index, guide_dict in enumerate(batch):
+                if limit is not None and offset + index >= limit:
+                    return
                 if parser is not None:
                     yield parser(guide_dict)
                 elif raw:
@@ -414,12 +535,8 @@ class IFixitAPIClient:
                     yield Guide(**guide_dict)
             offset += len(batch)
             logger.info(
-                "Fetched %d guides (streamed), total offset now: %d",
-                len(batch),
-                offset,
+                "Fetched %d guides (streamed), total offset now: %d", len(batch), offset
             )
-            if len(batch) < page_size or (limit is not None and offset >= limit):
-                break
 
     def get_guide(self, guideid: int) -> Dict:
         """Get a specific guide.
@@ -1159,7 +1276,9 @@ class IFixitAPIClient:
 
     # --- Wikis Endpoints ---
 
-    def get_category(self, device_name: Optional[str] = None, params: Optional[dict] = None) -> Dict:
+    def get_category(
+        self, device_name: Optional[str] = None, params: Optional[dict] = None
+    ) -> Dict:
         """Get the category hierarchy.
 
         Args:
@@ -1169,12 +1288,12 @@ class IFixitAPIClient:
         Returns:
             Hierarchy details.
         """
-        endpoint = '/wikis/CATEGORY'
+        endpoint = "/wikis/CATEGORY"
         if device_name:
-            endpoint += f'/{device_name}'
-        if not params:
-            params = {'display': 'hierarchy'}
-        return self._request('GET', endpoint, params=params)
+            endpoint += f"/{device_name}"
+        if params is None and not device_name:
+            params = {"display": "hierarchy"}
+        return self._request("GET", endpoint, params=params)
 
     def get_wikis(self, namespace: Namespace) -> List[Dict]:
         """Get wikis in a namespace.

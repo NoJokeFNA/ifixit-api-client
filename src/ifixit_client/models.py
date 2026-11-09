@@ -1,9 +1,15 @@
 from typing import Optional
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, ConfigDict, HttpUrl
 
 
-class Image(BaseModel):
+class APIModel(BaseModel):
+    """Preserve new API fields when using typed responses."""
+
+    model_config = ConfigDict(extra="allow")
+
+
+class Image(APIModel):
     """Image model for iFixit resources."""
 
     id: int
@@ -17,9 +23,7 @@ class Image(BaseModel):
     original: Optional[HttpUrl] = None
 
 
-# ... existing code ...
-
-class Guide(BaseModel):
+class Guide(APIModel):
     """Guide model from iFixit API."""
 
     guideid: int
@@ -38,7 +42,7 @@ class Guide(BaseModel):
     username: str
 
 
-class User(BaseModel):
+class User(APIModel):
     """User model from iFixit API."""
 
     userid: int
@@ -47,11 +51,11 @@ class User(BaseModel):
     join_date: float
     image: Optional[Image] = None
     reputation: int
-    url: HttpUrl
+    url: Optional[HttpUrl] = None
     teams: list[int]
 
 
-class Wiki(BaseModel):
+class Wiki(APIModel):
     """Wiki model from iFixit API."""
 
     wikiid: int
@@ -61,4 +65,4 @@ class Wiki(BaseModel):
     modified_date: float
     contents_raw: str
     contents_rendered: str
-    url: HttpUrl
+    url: Optional[HttpUrl] = None

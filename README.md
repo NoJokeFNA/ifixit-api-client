@@ -9,11 +9,12 @@ branch; use its README for the stable interface. Feature changes and routine
 Dependabot updates target `develop`. Promotion to `master` happens through a
 reviewed release PR after CI passes; there is no automatic merge.
 
-This client provides a comprehensive interface to interact with all documented endpoints of the iFixit API, including Guides, Wikis, Users, Teams, Authentication, Media, and more. It features robust error handling, retries with exponential backoff, logging, and support for authentication.
+This client provides convenience methods for Guides, Wikis, Users, Teams and Media, plus OpenAPI operation routing for the current API snapshot. It features robust error handling, retries with exponential backoff, logging, and support for authentication.
 
 ## Features
-- Full coverage of iFixit API v2.0 endpoints.
-- Authentication support via API tokens.
+- Convenience methods plus `call()` routing for all 143 operations in the verified OpenAPI snapshot.
+- See [API compatibility, legacy deprecations and migration guidance](docs/api-compatibility.md).
+- Personal API keys (Bearer), legacy session tokens, and OIDC access tokens.
 - Automatic retries for transient errors (e.g., rate limits, server issues).
 - Detailed logging for debugging.
 - Type hints for better IDE integration.
@@ -43,8 +44,74 @@ Initialize the client with your API token (required for authenticated endpoints)
 ```python
 from ifixit_client import IFixitAPIClient
 
-client = IFixitAPIClient(auth_token='your_api_token', app_id='your_app_id')
+import os
+
+client = IFixitAPIClient(api_key=os.environ["IFIXIT_TOKEN"])
 ```
+
+### Where to get your token
+
+For a script or CI job, sign in to iFixit and open
+[Profile → API keys](https://www.ifixit.com/User/api_keys). Create a named key,
+choose read-only access if you only fetch content, and store it in your environment
+as `IFIXIT_TOKEN`. API keys can last up to one year and are created in the website,
+not over the API. Pass the key with `api_key=...`; the SDK sends **Bearer**.
+The SDK does not load environment credentials implicitly.
+
+The [official documentation](https://www.ifixit.com/api-docs) announces that
+anonymous public reads will end on **January 1, 2027**, with temporary brownouts
+in December 2026. Public reads still work anonymously during the transition.
+
+An older `auth_token` is a different credential: `POST /user/token` returns
+`authToken` after password login. The existing constructor keeps sending it as
+`Authorization: api ...` for compatibility. To obtain one without hardcoding your
+password:
+
+```python
+from getpass import getpass
+from ifixit_client import IFixitAPIClient
+
+login = IFixitAPIClient(app_id="your_registered_app_id")
+result = login.create_user_token({
+    "email": input("iFixit email: "),
+    "password": getpass("iFixit password: "),
+})
+client = IFixitAPIClient(auth_token=result["authToken"])
+```
+
+Do not print or commit the response/token. Password login may end older sessions
+and does not work for an account that only signs in through an identity provider;
+use a personal API key for new scripts. The documentation requires `X-App-Id`
+for legacy login and registration when public registration is enabled. Obtain an
+App ID from iFixit through its [developers page](https://www.ifixit.com/Developers);
+an App ID is separate from your user credential.
+
+An approved OIDC integration obtains an **access token** through iFixit's browser
+sign-in flow and uses `IFixitAPIClient(auth_token=access_token, auth_scheme="Bearer")`.
+An ID token is not an API credential. This SDK accepts existing access tokens;
+it does not implement registration, browser sign-in, PKCE or token refresh.
+Workbench requires its own registered resource and `workbench` scope; a personal
+API key or general `api` grant does not qualify. FixBot chat requires an active
+subscription. A write-capable API key can revoke itself via `delete_user_token()`;
+a read-only key must be revoked through the website.
+
+### Calling newer API operations
+
+Use the exact `operationId` from the official OpenAPI download:
+
+```python
+wiki = client.call("getWiki", path_params={
+    "namespace": "CATEGORY", "title": "Fairphone_5",
+})
+```
+
+`call()` validates required path/query parameters and top-level required JSON
+fields, encodes path segments, supports binary bodies through `body=...` (set a concrete `content_type` for
+`image/*` uploads), and
+uses documented server overrides. It does not perform full schema validation or
+make every operation available to every credential. Streaming operations return
+a `requests.Response`; consume it with `iter_lines()` and close it when finished.
+The manifest is pinned in the package, not fetched or executed at runtime.
 
 ### Fetching Guides
 ```python
@@ -73,6 +140,8 @@ python examples/example_usage.py
 ```
 
 ## Configuration Options
+- `api_key`: Personal API key sent as Bearer.
+- `auth_token`: Legacy session token (`api`), or access token with `auth_scheme="Bearer"`.
 - `retries`: Number of retry attempts (default: 3).
 - `backoff_factor`: Exponential backoff multiplier (default: 0.5).
 - `timeout`: Request timeout in seconds (default: 30).
@@ -130,7 +199,7 @@ Dependabot checks Python dependencies and Actions weekly, opening PRs against
 can discover it. Stable security fixes can be handled as reviewed hotfixes.
 
 ## API Documentation
-Refer to the official iFixit API docs: [https://www.ifixit.com/api/2.0/doc/](https://www.ifixit.com/api/2.0/doc/)
+Refer to the official iFixit API docs: [https://www.ifixit.com/api-docs](https://www.ifixit.com/api-docs)
 
 Note: Always respect iFixit API rate limits and terms of service.
 

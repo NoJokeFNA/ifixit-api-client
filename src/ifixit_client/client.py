@@ -7,15 +7,18 @@ import warnings
 from enum import Enum
 from functools import wraps
 from typing import Any, Callable, Dict, Generator, List, Optional, TypeVar, Union, cast
+from urllib.parse import quote
 
 import requests
 from requests.adapters import HTTPAdapter
+from typing_extensions import deprecated
 from urllib3 import Retry
 from urllib3.connection import HTTPSConnection
 from urllib3.connectionpool import HTTPSConnectionPool
 from urllib3.exceptions import SSLError as Urllib3SSLError
 
 from .models import Guide
+from .operations import OPERATIONS
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -188,11 +191,15 @@ class IFixitAPIClient:
         raise_for_status: bool = True,
         ca_bundle: Optional[Union[str, os.PathLike]] = None,
         certificate_fingerprint: Optional[str] = None,
+        api_key: Optional[str] = None,
+        auth_scheme: str = "api",
     ):
         """Initialize the client.
 
         Args:
-            auth_token: Authentication token for authorized requests.
+            auth_token: Legacy session token, or OIDC access token with auth_scheme="Bearer".
+            api_key: Personal API key sent with the Bearer scheme.
+            auth_scheme: Scheme for auth_token (api by default, or Bearer).
             app_id: Optional app ID for the X-App-Id header.
             retries: Number of retries for failed requests.
             backoff_factor: Backoff factor for retries.
@@ -206,16 +213,19 @@ class IFixitAPIClient:
                 The CA chain and hostname must also be valid. A renewed certificate
                 requires updating its pin.
         """
-        self.auth_token = auth_token
+        if api_key and auth_token:
+            raise ValueError("Use api_key or auth_token, not both")
+        if auth_scheme.lower() not in ("api", "bearer"):
+            raise ValueError("auth_scheme must be api or Bearer")
+        self.auth_token = api_key or auth_token
+        self.auth_scheme = "Bearer" if api_key or auth_scheme.lower() == "bearer" else "api"
         self.app_id = app_id
         self.timeout = timeout
         self.proxy = proxy
         self.raise_for_status = raise_for_status
         self.ca_bundle = os.fspath(ca_bundle) if ca_bundle is not None else None
         if self.ca_bundle is not None and not os.path.exists(self.ca_bundle):
-            raise FileNotFoundError(
-                "CA bundle path does not exist: %s" % self.ca_bundle
-            )
+            raise FileNotFoundError("CA bundle path does not exist: %s" % self.ca_bundle)
         self.certificate_fingerprint = (
             _normalize_fingerprint(certificate_fingerprint)
             if certificate_fingerprint is not None
@@ -250,13 +260,13 @@ class IFixitAPIClient:
             A dictionary containing content-type, accept, and optional auth headers.
         """
         headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            "Accept": "application/json",
         }
         if self.auth_token:
-            headers['Authorization'] = f'api {self.auth_token}'
+            headers["Authorization"] = f"{self.auth_scheme} {self.auth_token}"
         if self.app_id:
-            headers['X-App-Id'] = self.app_id
+            headers["X-App-Id"] = self.app_id
         return headers
 
     def _namespace_to_str(self, namespace: Namespace) -> str:
@@ -296,11 +306,13 @@ class IFixitAPIClient:
             requests.exceptions.HTTPError: For HTTP errors.
             requests.exceptions.RequestException: For other request failures.
         """
-        url = f'{self.BASE_URL}/{endpoint.lstrip("/")}'
+        base_url = kwargs.pop("base_url", self.BASE_URL)
+        raw_response = kwargs.pop("raw_response", False)
+        url = f'{base_url.rstrip("/")}/{endpoint.lstrip("/")}'
         headers = self._build_headers()
-        logger.debug(
-            f"Making {method} request to {url} with params={params}, " f"json={json}"
-        )
+        headers.update(kwargs.pop("headers", {}))
+        # Never log request bodies or query values: these may contain credentials.
+        logger.debug("Making %s request to %s", method, url)
 
         request_options = dict(kwargs)
         request_options.setdefault("timeout", self.timeout)
@@ -318,18 +330,105 @@ class IFixitAPIClient:
             )
             if self.raise_for_status:
                 response.raise_for_status()
-            return response.json() if response.content else None
+            if raw_response:
+                return response
+            if not response.content:
+                return None
+            content_type = response.headers.get("Content-Type", "")
+            if (
+                isinstance(content_type, str)
+                and content_type
+                and "json" not in content_type
+            ):
+                return response.text
+            return response.json()
         except requests.exceptions.HTTPError as e:
-            logger.error(
-                f"HTTP error: {e.response.status_code} - " f"{e.response.text}"
-            )
+            logger.error(f"HTTP error: {e.response.status_code}")
             raise
         except requests.exceptions.RequestException as e:
             logger.error(f"Request failed: {str(e)}")
             raise
 
+    def call(
+        self,
+        operation_id: str,
+        *,
+        path_params=None,
+        params=None,
+        json=None,
+        body=None,
+        raw_response=False,
+        content_type=None,
+    ):
+        """Call an operation from the verified OpenAPI snapshot.
+
+        This checks routing and required parameters, not the full JSON schema.
+        Permissions and OAuth scopes are enforced by iFixit. Streaming operations
+        return a requests.Response which the caller must close.
+        """
+        if operation_id not in OPERATIONS:
+            raise ValueError(f"Unknown operation: {operation_id}")
+        operation = OPERATIONS[operation_id]
+        path_params = dict(path_params or {})
+        endpoint = operation["path"]
+        names = set(re.findall(r"\{([^}]+)\}", endpoint))
+        if set(path_params) != names:
+            raise ValueError(f"Expected path parameters: {sorted(names)}")
+        for name, value in path_params.items():
+            if value is None:
+                raise ValueError(f"Missing path parameter: {name}")
+            value = value.value if isinstance(value, Enum) else value
+            endpoint = endpoint.replace("{" + name + "}", quote(str(value), safe=""))
+        query = dict(params or {})
+        for name in operation["query_required"]:
+            if query.get(name) is None:
+                raise ValueError(f"Missing query parameter: {name}")
+        if json is not None and body is not None:
+            raise ValueError("Supply json or body, not both")
+        if operation["body_required"] and json is None and body is None:
+            raise ValueError("This operation requires a request body")
+        if json is not None:
+            for name in operation["json_required"]:
+                if name not in json:
+                    raise ValueError(f"Missing JSON field: {name}")
+        options = {}
+        if operation["server"]:
+            options["base_url"] = operation["server"]
+        if body is not None:
+            options["data"] = body
+        declared_type = operation["content_type"]
+        if declared_type and "*" in declared_type:
+            if not content_type or not content_type.startswith(declared_type.split("*")[0]):
+                raise ValueError(f"Supply a concrete content_type matching {declared_type}")
+        if content_type or declared_type:
+            options["headers"] = {"Content-Type": content_type or declared_type}
+        if "text/event-stream" in operation["response_types"]:
+            options["stream"] = True
+            raw_response = True
+        return self._request(
+            operation["method"],
+            endpoint,
+            params=query or None,
+            json=json,
+            raw_response=raw_response,
+            **options,
+        )
+
+    @staticmethod
+    def _revision_params(revisionid, data=None):
+        if revisionid is None and data is not None:
+            revisionid = data.get("revisionid")
+        if revisionid is None:
+            raise ValueError("revisionid is required by the current API")
+        return {"revisionid": revisionid}
+
     # --- Cart Endpoints ---
 
+    @deprecated(
+        'get_cart_product is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). No verified direct successor for cart product content. '
+        'See docs/api-compatibility.md.'
+    )
     @beta
     def get_cart_product(self, item_code: str, language_id: str) -> Dict:
         """Retrieve content linked to a store product.
@@ -367,6 +466,11 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/user/token', json=data)
 
+    @deprecated(
+        'reset_password is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). Use the password-reset flow on the iFixit website; no '
+        'replacement API route is documented. See docs/api-compatibility.md.'
+    )
     def reset_password(self, data: Dict) -> Dict:
         """Reset user password.
 
@@ -395,6 +499,12 @@ class IFixitAPIClient:
 
     # --- Badges Endpoints ---
 
+    @deprecated(
+        'get_badges is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). For badges earned by a user, use get_user_badges(userid) '
+        'or get_current_user_badges(); these are not a global badge catalog. See docs/api- '
+        'compatibility.md.'
+    )
     def get_badges(self) -> List[Dict]:
         """Get all badges.
 
@@ -403,6 +513,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/badges')
 
+    @deprecated(
+        'get_badge is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). No verified direct successor for a single global badge. '
+        'See docs/api-compatibility.md.'
+    )
     def get_badge(self, badgeid: int) -> Dict:
         """Get a specific badge.
 
@@ -538,7 +653,7 @@ class IFixitAPIClient:
                 "Fetched %d guides (streamed), total offset now: %d", len(batch), offset
             )
 
-    def get_guide(self, guideid: int) -> Dict:
+    def get_guide(self, guideid: int, params: Optional[Dict] = None) -> Dict:
         """Get a specific guide.
 
         Args:
@@ -547,7 +662,7 @@ class IFixitAPIClient:
         Returns:
             Guide details.
         """
-        return self._request('GET', f'/guides/{guideid}')
+        return self._request("GET", f"/guides/{guideid}", params=params)
 
     def get_guide_tags(self, guideid: int) -> List[str]:
         """Get tags for a guide.
@@ -637,7 +752,7 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/guides/{guideid}/completed')
 
-    def make_guide_public(self, guideid: int) -> Dict:
+    def make_guide_public(self, guideid: int, revisionid: Optional[int] = None) -> Dict:
         """Make a guide public.
 
         Args:
@@ -646,10 +761,12 @@ class IFixitAPIClient:
         Returns:
             Response details.
         """
-        return self._request('PUT', f'/guides/{guideid}/public')
+        return self._request(
+            "PUT", f"/guides/{guideid}/public", params=self._revision_params(revisionid)
+        )
 
     @requires_token
-    def make_guide_private(self, guideid: int) -> Dict:
+    def make_guide_private(self, guideid: int, revisionid: Optional[int] = None) -> Dict:
         """Make a guide private.
 
         Args:
@@ -658,7 +775,9 @@ class IFixitAPIClient:
         Returns:
             Response details.
         """
-        return self._request('DELETE', f'/guides/{guideid}/public')
+        return self._request(
+            "DELETE", f"/guides/{guideid}/public", params=self._revision_params(revisionid)
+        )
 
     def create_guide_step(self, guideid: int, data: Dict) -> Dict:
         """Create a step in a guide.
@@ -672,7 +791,9 @@ class IFixitAPIClient:
         """
         return self._request('POST', f'/guides/{guideid}/steps', json=data)
 
-    def update_guide_step(self, guideid: int, stepid: int, data: Dict) -> Dict:
+    def update_guide_step(
+        self, guideid: int, stepid: int, data: Dict, revisionid: Optional[int] = None
+    ) -> Dict:
         """Update a guide step.
 
         Args:
@@ -683,19 +804,31 @@ class IFixitAPIClient:
         Returns:
             Updated step details.
         """
-        return self._request('PATCH', f'/guides/{guideid}/steps/{stepid}',
-                             json=data)
+        return self._request(
+            "PATCH",
+            f"/guides/{guideid}/steps/{stepid}",
+            json=data,
+            params=self._revision_params(revisionid, data),
+        )
 
-    def delete_guide_step(self, guideid: int, stepid: int) -> None:
+    def delete_guide_step(
+        self, guideid: int, stepid: int, revisionid: Optional[int] = None
+    ) -> None:
         """Delete a guide step.
 
         Args:
             guideid: Guide ID.
             stepid: Step ID.
         """
-        return self._request('DELETE', f'/guides/{guideid}/steps/{stepid}')
+        return self._request(
+            "DELETE",
+            f"/guides/{guideid}/steps/{stepid}",
+            params=self._revision_params(revisionid),
+        )
 
-    def update_guide_step_order(self, guideid: int, data: Dict) -> Dict:
+    def update_guide_step_order(
+        self, guideid: int, data: Dict, revisionid: Optional[int] = None
+    ) -> Dict:
         """Update the order of steps in a guide.
 
         Args:
@@ -705,7 +838,12 @@ class IFixitAPIClient:
         Returns:
             Response details.
         """
-        return self._request('PUT', f'/guides/{guideid}/steporder', json=data)
+        return self._request(
+            "PUT",
+            f"/guides/{guideid}/steporder",
+            json=data,
+            params=self._revision_params(revisionid, data),
+        )
 
     def get_guide_users(self, guideid: int) -> List[Dict]:
         """Get users associated with a guide.
@@ -771,6 +909,11 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/guides/{guideid}/teams/{teamid}')
 
+    @deprecated(
+        'get_guide_releases is deprecated in this SDK: its route is absent from the reviewed '
+        'OpenAPI snapshot (not confirmed removed). No verified direct successor for guide releases. '
+        'See docs/api-compatibility.md.'
+    )
     def get_guide_releases(self) -> List[Dict]:
         """Get all guide releases.
 
@@ -779,6 +922,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/guides/releases')
 
+    @deprecated(
+        'delete_guide_release is deprecated in this SDK: its route is absent from the reviewed '
+        'OpenAPI snapshot (not confirmed removed). No verified direct successor for guide releases. '
+        'See docs/api-compatibility.md.'
+    )
     def delete_guide_release(self, releaseid: int) -> None:
         """Delete a guide release.
 
@@ -787,6 +935,11 @@ class IFixitAPIClient:
         """
         return self._request('DELETE', f'/guides/releases/{releaseid}')
 
+    @deprecated(
+        'get_guide_specific_releases is deprecated in this SDK: its route is absent from the '
+        'reviewed OpenAPI snapshot (not confirmed removed). No verified direct successor for guide '
+        'releases. See docs/api-compatibility.md.'
+    )
     def get_guide_specific_releases(self, guideid: int) -> List[Dict]:
         """Get releases for a specific guide.
 
@@ -798,6 +951,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/guides/{guideid}/releases')
 
+    @deprecated(
+        'create_guide_release is deprecated in this SDK: its route is absent from the reviewed '
+        'OpenAPI snapshot (not confirmed removed). No verified direct successor for guide releases. '
+        'See docs/api-compatibility.md.'
+    )
     @beta
     @requires_token
     def create_guide_release(self, data: Dict) -> Dict:
@@ -811,6 +969,11 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/guides/releases', json=data)
 
+    @deprecated(
+        'update_guide_release is deprecated in this SDK: its route is absent from the reviewed '
+        'OpenAPI snapshot (not confirmed removed). No verified direct successor for guide releases. '
+        'See docs/api-compatibility.md.'
+    )
     def update_guide_release(self, releaseid: int, data: Dict) -> Dict:
         """Update a guide release.
 
@@ -1045,6 +1208,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/users')
 
+    @deprecated(
+        'search_users is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). No verified direct successor for user search; use '
+        'get_user(userid) when the ID is known. See docs/api-compatibility.md.'
+    )
     def search_users(self, search: str) -> List[Dict]:
         """Search for users.
 
@@ -1067,6 +1235,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/users/{userid}')
 
+    @deprecated(
+        'get_user_by_sso is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). Use get_user(userid) when the iFixit user ID is known; '
+        'SSO lookup has no documented successor. See docs/api-compatibility.md.'
+    )
     def get_user_by_sso(self, sso_userid: str) -> Dict:
         """Get a user by SSO ID.
 
@@ -1078,6 +1251,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/users/sso/{sso_userid}')
 
+    @deprecated(
+        'get_user_by_email is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). Use get_user(userid) when the iFixit user ID is known; '
+        'email lookup has no documented successor. See docs/api-compatibility.md.'
+    )
     def get_user_by_email(self, email: str) -> Dict:
         """Get a user by email.
 
@@ -1218,16 +1396,24 @@ class IFixitAPIClient:
         return self._request('GET', '/user/media/images')
 
     @requires_token
-    def upload_user_image(self, data: Dict) -> Dict:
-        """Upload an image for the current user.
+    def upload_user_image(
+        self,
+        data: Any,
+        file: Optional[str] = None,
+        *,
+        content_type: str = "image/jpeg",
+        crop_to_ratio=None
+    ) -> Dict:
+        """Upload raw image bytes (or an open binary file), not a JSON dictionary.
 
-        Args:
-            data: Image payload (e.g., base64-encoded).
-
-        Returns:
-            Uploaded image details.
+        file is the filename with extension. Set content_type to match the image.
         """
-        return self._request('POST', '/user/media/images', json=data)
+        if isinstance(data, dict):
+            raise ValueError("Image upload requires raw bytes or a binary file, not JSON")
+        params = {"file": file}
+        if crop_to_ratio is not None:
+            params["cropToRatio"] = crop_to_ratio
+        return self.call("uploadImage", params=params, body=data, content_type=content_type)
 
     @requires_token
     def delete_user_images(self, imageids: str) -> None:
@@ -1261,6 +1447,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', '/user/media/videos')
 
+    @deprecated(
+        'update_user is deprecated in this SDK: its route is absent from the reviewed OpenAPI '
+        'snapshot (not confirmed removed). No verified direct successor for arbitrary user updates; '
+        'get_user is read-only. See docs/api-compatibility.md.'
+    )
     @requires_token
     def update_user(self, userid: int, data: Dict) -> Dict:
         """Update a user.
@@ -1367,31 +1558,42 @@ class IFixitAPIClient:
         """
         return self._request('POST', '/wikis', json=data)
 
-    def update_wiki(self, namespace: Namespace, title: str, data: Dict,
-                    revisionid: Optional[int] = None) -> Dict:
+    def update_wiki(
+        self, namespace: Namespace, title: str, data: Dict, revisionid: Optional[int] = None
+    ) -> Dict:
         """Update a wiki.
 
         Args:
             namespace: Wiki namespace.
             title: Wiki title.
             data: Update payload.
-            revisionid: Optional revision ID.
+            revisionid: Current revision ID (required, or supplied in data).
 
         Returns:
             Updated wiki details.
         """
-        params = {'revisionid': revisionid} if revisionid else None
-        return self._request('PATCH', f"/wikis/{self._namespace_to_str(namespace)}/{title}",
-                             json=data, params=params)
+        params = self._revision_params(revisionid, data)
+        return self._request(
+            "PATCH",
+            f"/wikis/{self._namespace_to_str(namespace)}/{title}",
+            json=data,
+            params=params,
+        )
 
-    def delete_wiki(self, namespace: Namespace, title: str) -> None:
+    def delete_wiki(
+        self, namespace: Namespace, title: str, revisionid: Optional[int] = None
+    ) -> None:
         """Delete a wiki.
 
         Args:
             namespace: Wiki namespace.
             title: Wiki title.
         """
-        return self._request('DELETE', f"/wikis/{self._namespace_to_str(namespace)}/{title}")
+        return self._request(
+            "DELETE",
+            f"/wikis/{self._namespace_to_str(namespace)}/{title}",
+            params=self._revision_params(revisionid),
+        )
 
     def revert_wiki(self, namespace: Namespace, title: str, data: Dict) -> Dict:
         """Revert a wiki to a previous state.
@@ -1404,8 +1606,15 @@ class IFixitAPIClient:
         Returns:
             Response details.
         """
-        return self._request('POST', f"/wikis/{self._namespace_to_str(namespace)}/{title}/revert",
-                             json=data)
+        params = self._revision_params(None, data)
+        if data.get("to_revisionid") is None:
+            raise ValueError("to_revisionid is required")
+        params["to_revisionid"] = data["to_revisionid"]
+        return self._request(
+            "POST",
+            f"/wikis/{self._namespace_to_str(namespace)}/{title}/revert",
+            params=params,
+        )
 
     def set_wiki_parent(self, title: str, data: Dict) -> Dict:
         """Set the parent for a category wiki.
@@ -1422,6 +1631,11 @@ class IFixitAPIClient:
 
     # --- User View History Endpoints ---
 
+    @deprecated(
+        'get_user_view_history is deprecated in this SDK: its route is absent from the reviewed '
+        'OpenAPI snapshot (not confirmed removed). No verified direct successor for view history. '
+        'See docs/api-compatibility.md.'
+    )
     def get_user_view_history(self, userid: int) -> List[Dict]:
         """Get view history for a user.
 
@@ -1433,6 +1647,11 @@ class IFixitAPIClient:
         """
         return self._request('GET', f'/user_view_history/user/{userid}')
 
+    @deprecated(
+        'get_document_view_history is deprecated in this SDK: its route is absent from the reviewed '
+        'OpenAPI snapshot (not confirmed removed). No verified direct successor for view history. '
+        'See docs/api-compatibility.md.'
+    )
     def get_document_view_history(self, doc_type: str, docid: int) -> List[Dict]:
         """Get view history for a document.
 
@@ -1457,4 +1676,4 @@ class IFixitAPIClient:
         Returns:
             Document details.
         """
-        return self._request('GET', f'/documents/{id_or_guid}')
+        return self._request("GET", f"/media/documents/{id_or_guid}")

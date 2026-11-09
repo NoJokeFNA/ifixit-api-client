@@ -132,6 +132,7 @@ class ContractTests(unittest.TestCase):
             self.request()["url"], "https://fixbot.ifixit.com/api/2.0/chat"
         )
         self.assertTrue(self.request()["stream"])
+        self.assertEqual(self.request()["headers"]["Accept"], "text/event-stream")
         self.assertEqual(self.request()["headers"]["Content-Type"], "application/json")
 
     def test_binary_media_upload_and_required_filename(self):

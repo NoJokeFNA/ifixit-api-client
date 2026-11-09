@@ -398,11 +398,16 @@ class IFixitAPIClient:
             options["data"] = body
         declared_type = operation["content_type"]
         if declared_type and "*" in declared_type:
-            if not content_type or not content_type.startswith(declared_type.split("*")[0]):
+            if (
+                not content_type
+                or "*" in content_type
+                or not content_type.startswith(declared_type.split("*")[0])
+            ):
                 raise ValueError(f"Supply a concrete content_type matching {declared_type}")
         if content_type or declared_type:
             options["headers"] = {"Content-Type": content_type or declared_type}
         if "text/event-stream" in operation["response_types"]:
+            options.setdefault("headers", {})["Accept"] = "text/event-stream"
             options["stream"] = True
             raw_response = True
         return self._request(
